@@ -13,6 +13,20 @@
             <div id="emailCheckResult" class="mt-2"></div>
             비즈니스용 이메일 사용을 권장합니다.
         </div>
+<!-- 휴대폰 번호 입력 및 인증 -->
+<div class="form-group">
+    <label for="phoneNumber">휴대폰 번호</label>
+    <input type="text" class="form-control" id="inputPhoneNumber" name="phoneNumber" placeholder="Enter phone number" required>
+    <button type="button" id="sendPhoneNumber" class="btn btn-secondary mt-2">인증번호 발송</button>
+</div>
+
+<!-- 인증번호 입력 -->
+<div class="form-group">
+    <label for="inputCertifiedNumber">인증번호</label>
+    <input type="text" class="form-control" id="inputCertifiedNumber" name="certifiedNumber" placeholder="Enter certification number" required>
+    <button type="button" id="checkBtn" class="btn btn-secondary mt-2">인증번호 확인</button>
+</div>
+
         <div class="form-group">
             <label for="username">아이디</label>
             <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
@@ -52,6 +66,7 @@
 
 <script>
 let isEmailValid = false; // 이메일 유효성 확인 변수
+let isPhoneNumberVerified = false; // 휴대폰 인증 확인 변수
 
 function setSocialType(type) {
     document.getElementById('socialType').value = type; // 소셜 타입 설정
@@ -110,7 +125,57 @@ document.querySelector('#signUpForm').addEventListener('submit', function(event)
         event.preventDefault(); // 기본 제출 방지
         alert('비밀번호가 일치하지 않습니다.'); // 경고 메시지
     }
+     if (!isPhoneNumberVerified) {
+        event.preventDefault(); // 기본 제출 방지
+        alert('휴대폰 인증이 완료되지 않았습니다. 인증을 완료해 주세요.'); // 경고 메시지
+    }
 });
+
+// sms 인증
+       $('#sendPhoneNumber').click(function(){
+            let phoneNumber = $('#inputPhoneNumber').val();
+            Swal.fire('인증번호 발송 완료!')
+
+
+            $.ajax({
+                type: "GET",
+                url: "/user/sendSms",
+                data: {
+                    "phoneNumber" : phoneNumber
+                },
+                success: function(res){
+                    $('#checkBtn').click(function(){
+                        if($.trim(res) ==$('#inputCertifiedNumber').val()){
+                            Swal.fire(
+                                '인증성공!',
+                                '휴대폰 인증이 정상적으로 완료되었습니다.',
+                                'success'
+                            )
+                            // 휴대폰 인증 완료 상태 설정
+                            isPhoneNumberVerified = true;
+
+                            $.ajax({
+                                type: "GET",
+                                url: "/update/phone",
+                                data: {
+                                    "phoneNumber" : $('#inputPhoneNumber').val()
+                                }
+                            })
+                            document.location.href="/home";
+                        }else{
+                            Swal.fire({
+                                icon: 'error',
+                                title: '인증오류',
+                                text: '인증번호가 올바르지 않습니다!',
+                                footer: ''
+                            })
+                        }
+                    })
+
+
+                }
+            })
+        });
 </script>
 
 {{> layout/footer }}

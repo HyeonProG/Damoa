@@ -1,7 +1,5 @@
 package com.damoa.controller;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,18 +10,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.damoa.dto.UserSignUpDTO;
 import com.damoa.handler.exception.DataDeliveryException;
 import com.damoa.service.UserService;
 
+import java.util.Random;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-
 
 @Controller
 @RequestMapping("/user")
@@ -39,6 +37,7 @@ public class UserController {
     /**
      * 회원가입 방식 선택 페이지
      * http://localhost:8080/user/sign-up-intro
+     * 
      * @return signUpIntro.mustache
      */
     @GetMapping("/sign-up-intro")
@@ -48,6 +47,7 @@ public class UserController {
 
     /**
      * 프리랜서 회원가입 페이지
+     * 
      * @param model
      * @return
      */
@@ -60,6 +60,7 @@ public class UserController {
 
     /**
      * 기업 회원가입 페이지
+     * 
      * @param model
      * @return
      */
@@ -72,6 +73,7 @@ public class UserController {
 
     /**
      * 이메일 중복 체크
+     * 
      * @param email
      * @return
      */
@@ -92,8 +94,25 @@ public class UserController {
 
     }
 
+    // coolSMS 구현 로직 연결
+    @GetMapping("/sendSms")
+    public @ResponseBody String sendSMS(@RequestParam("phoneNumber") String phoneNumber) {
+        Random rand  = new Random();
+        String numStr = "";
+        for(int i=0; i<4; i++) {
+            String ran = Integer.toString(rand.nextInt(10));
+            numStr+=ran;
+        }
+
+        System.out.println("수신자 번호 : " + phoneNumber);
+        System.out.println("인증번호 : " + numStr);
+        userService.certifiedPhoneNumber(phoneNumber,numStr);
+        return numStr;
+    }
+
     /**
      * 회원가입 로직
+     * 
      * @param dto
      * @return
      */
@@ -112,11 +131,10 @@ public class UserController {
         userService.createUser(dto);
         return "redirect:/user/sign-in";
     }
-    
+
     @GetMapping("/sign-in")
     public String signInPage() {
         return "user/signIn";
     }
-    
 
 }
