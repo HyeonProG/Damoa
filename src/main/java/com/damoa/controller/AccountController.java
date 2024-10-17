@@ -44,8 +44,9 @@ public class AccountController {
     // 계좌 인증 페이지 인증 처리
     @PostMapping("/account-request")
     public String registerAccountProc(@ModelAttribute BankAuthDTO reqDto){
+        System.out.println(reqDto+"인증 들어옴");
         accountService.addAccountReq(reqDto);
-        return null;
+        return "success_account";
     }
 
     // 개인사업자 객체

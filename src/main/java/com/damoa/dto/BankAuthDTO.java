@@ -13,9 +13,10 @@ import lombok.*;
 public class BankAuthDTO {
 
     // 은행별 고유 코드
-    private String bankCodeStd;
+    public String bankCodeStd;
     // 계좌번호
-    private String accountNum;
+    public String accountNum;
     // 예금주 명
-    private String bankOwner;
+    public String bankOwner;
+
 }
