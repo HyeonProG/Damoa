@@ -1,11 +1,13 @@
 package com.damoa.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 // 계좌 실명 인증을 위한 DTO
 @Data
-@Getter
-@Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor

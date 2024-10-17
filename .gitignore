@@ -239,4 +239,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+#application-secure
+application-secure.yml
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,eclipse,intellij

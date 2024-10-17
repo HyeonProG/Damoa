@@ -1,4 +1,4 @@
-package com.damoa.dto;
+package com.damoa.dto.user;
 
 import java.sql.Timestamp;
 
