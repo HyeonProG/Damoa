@@ -11,8 +11,8 @@ public class AccountService {
 
     // 계좌 등록 신청하기
     public void addAccountReq(BankAuthDTO reqDto){
-        accountRepository.addBankAccountReq(reqDto.bankCodeStd,
-                reqDto.accountNum, reqDto.bankOwner );
+        accountRepository.addBankAccountReq(reqDto.getBankCodeStd(),
+                reqDto.getAccountNum(), reqDto.getBankOwner());
     }
 
 }
