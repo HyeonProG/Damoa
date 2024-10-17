@@ -12,4 +12,8 @@ public interface UserRepository {
 
     public int checkDuplicateEmail(@Param("email")String email); // 이메일 중복 체크
 
+    public User findByEmail(String email); // 이메일로 유저 확인
+
+    public int findDuplicatePhoneNumber(String phoneNumber); // 휴대폰 번호 중복 확인
+
 }
