@@ -1,0 +1,49 @@
+{{>layout/header}}
+<style type="text/css">
+    .notice-title{
+        width: 90%;
+        height: 20vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .notice-list-container{
+        width: 80%;
+        height: 60vh;
+        border: 1px solid gray;
+        border-radius: 10px;
+        background: white;
+        box-shadow: 2px 2px 5px #dee2e6;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .notice-box{
+        width: 90%;
+        border: 1px solid gray;
+        border-radius: 10px;
+        background: white;
+        box-shadow: 2px 2px 5px #dee2e6;
+        margin: 10px;
+        padding: 10px;
+    }
+</style>
+
+<div class="notice-title">
+    <h3>다모아의 새로운 소식들</h3>
+    <h5>신규 기능, 이벤트, 점검 일정 등 다양한 이야기를 확인해주세요.</h5>
+</div>
+
+<div class="notice-list-container">
+    {{#noticeList}}
+    <div class="notice-box" onclick="location.href='/notice/detail/{{id}}'">
+            <h5>{{title}}</h5>
+            <p>{{createdAt}}</p>
+    </div>
+    {{/noticeList}}
+</div>
+
+{{>layout/footer}}
