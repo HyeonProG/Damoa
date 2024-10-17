@@ -32,13 +32,13 @@ public class AccountController {
 
     @GetMapping("/main")
     public String mainPage(){
-        return "index";
+        return "user/index";
     }
 
     // 계좌 인증 페이지 입장
     @GetMapping("/account-list")
     public String registerAccountPage(){
-        return "register_account";
+        return "user/register_account";
     }
 
     // 계좌 인증 페이지 인증 처리
@@ -46,7 +46,7 @@ public class AccountController {
     public String registerAccountProc(@ModelAttribute BankAuthDTO reqDto){
         System.out.println(reqDto+"인증 들어옴");
         accountService.addAccountReq(reqDto);
-        return "success_account";
+        return "user/success_account";
     }
 
     // 개인사업자 객체

@@ -33,18 +33,20 @@
 </style>
 
 <div class="notice-title">
-    <h3>다모아의 새로운 소식들</h3>
-    <h5>신규 기능, 이벤트, 점검 일정 등 다양한 이야기를 확인해주세요.</h5>
+    <h3>공지사항 더보기</h3>
 </div>
 
 <div class="notice-list-container">
-    {{#noticeList}}
-    <div class="notice-box" onclick="location.href='/notice/detail/{{id}}'">
+    {{#notice}}
+    <div class="notice-box">
             <h5>{{id}}</h5>
             <h5>{{title}}</h5>
             <p>{{createdAt}}</p>
+            <h5>{{content}}</h5>
+        <button onclick="location.href='/notice/1'">목록</button>
     </div>
-    {{/noticeList}}
+    {{/notice}}
+
 </div>
 
 {{>layout/footer}}
