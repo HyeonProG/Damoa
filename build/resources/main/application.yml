@@ -4,8 +4,20 @@ server:
     encoding:
       charset: utf-8 # 서블릿의 응답과 요청 인코딩을 UTF-8로 설정
       force: true # 요청과 응답에 대해 이 인코딩을 강제로 사용하도록 설정
+  error:
+    whitelabel:
+      enabled: true   # 뷰 렌더링 오류 활성화 여부
 
 spring:
+  profiles:
+    active: default
+    include: secure
+  devtools:
+    livereload:
+      enabled: true # 라이브 리로드 활성화
+    restart:
+      enabled: true # 개발 도구 재시작 활성화
+
   mustache:
     servlet:
       expose-session-attributes: true # Mustache 템플릿에서 세션 속성에 접근할 수 있도록 허용

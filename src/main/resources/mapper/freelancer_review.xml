@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.damoa.repository.interfaces.FreelancerReviewRepository">
+
+    <select id="findAllByFreelancerReviews" resultType="com.damoa.repository.model.FreelancerReview">
+        SELECT * FROM freelancers_review ORDER BY id DESC
+    </select>
+
+    <!-- GCP 프리랜서 리뷰 데이터 MySQL로 insert-->
+    <insert id="insertFreelancerReview" parameterType="com.damoa.repository.model.FreelancerReview">
+        INSERT INTO freelancers_review (company_id, freelancer_id, communication_score,
+        timeliness_score, support_score, willingness_score,
+        overall_score, review_date, response_data)
+        VALUES (#{companyId}, #{freelancerId}, #{communicationScore},
+        #{timelinessScore}, #{supportScore}, #{willingnessScore},
+        #{overallScore}, #{reviewDate}, #{responseData})
+    </insert>
+
+</mapper>
