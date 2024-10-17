@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+        namespace="com.damoa.repository.interfaces.ProjectRepository">
+<insert id="insertProject" parameterType="com.damoa.repository.model.Project">
+    INSERT INTO project_tb (
+    user_id, job, skill, min_years, max_years,
+    project_start, expected_period, period,
+    salary_type, working_style, meeting, address,
+    worktime, work_adjust, vacation, progress,
+    main_tasks, detail_task, delivered, files,
+    company, manager_name, contact, email, agree
+    ) VALUES (
+    #{userId}, #{job}, #{skill}, #{minYears}, #{maxYears},
+    #{projectStart}, #{expectedPeriod}, #{period},
+    #{salaryType}, #{workingStyle}, #{meeting}, #{address},
+    #{worktime}, #{workAdjust}, #{vacation}, #{progress},
+    #{mainTasks}, #{detailTask}, #{delivered}, #{files},
+    #{company}, #{managerName}, #{contact}, #{email}, #{agree}
+    )
+</insert>
+</mapper>

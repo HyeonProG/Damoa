@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Project Form</title>
+    <style type="text/css">
+        .second-box, .third-box, .forth-box{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h2>프로젝트 정보 입력</h2>
+
+    <progress id="progressBar" max="100" value="0"></progress>
+    <div class="project-container1">
+        <div class="project-box first-box " id="box1">
+            <form action="/project/save" name="reqDTO" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+                <div class="form-group">
+                    <label for="user_id">사용자 ID</label>
+                    <input type="number" class="form-control" id="userId" name="userId" required>
+                </div>
+                <div class="form-group">
+                    <label for="job">직군/직무</label>
+                    <select name="job" class="form-control" required>
+                        <option value="" disabled selected>선택하세요</option> <!-- 기본 옵션 추가 -->
+                        <option value="full">풀스택</option>
+                        <option value="front">프론트</option>
+                        <option value="back">백</option>
+                        <option value="server">서버</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="skill">기술</label>
+                    <select name="skill" class="form-control" required>
+                        <option value="" disabled selected>선택하세요</option> <!-- 기본 옵션 추가 -->
+                        <option value="java">java</option>
+                        <option value="python">python</option>
+                        <option value="mysql">mysql</option>
+                        <option value="javascript">javascript</option>
+                        <option value="android">android</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="minyears">연차</label>
+                    <div class="form-group">
+                        <label for="maxyears">최소 연차</label>
+                        <input type="number" min="1" max="50" class="form-control" id="maxYears" name="minYears" placeholder="최소 연차" required>
+                        <label for="minyears">최대 연차</label>
+                        <input type="number" min="1" max="50" class="form-control" id="minYears" name="maxYears" placeholder="최대 연차" required>
+                    </div>
+
+                </div>
+        </div>
+        <div class="project-box second-box" id="box2">
+            <h4>프로젝트 시작 희망일</h4>
+            <div class="form-group">
+                <input type="date" id="project-start" name="projectStart"class="form-control" max="2077-06-20" min="2024-11-01"
+                       value="2024-11-01" required>
+            </div>
+
+            <h4>예상 기간</h4>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <select name="expected-period" class="form-control" required>
+                        <option value="months">개월</option>
+                        <option value="weeks">주</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <input type="number" min='1' max='50' class="form-control" id="expectedPeriod" name="expectedPeriod" required>
+                </div>
+            </div>
+
+            <h4>프로젝트 예산</h4>
+            <div class="form-group">
+                <input type="radio" name="salaryType" value="month" required> 월 단위
+                <input type="radio" name="salaryType" value="project" required> 프로젝트 단위
+            </div>
+
+            <h4>근무 방식</h4>
+            <div class="form-group">
+                <input type="radio" name="workingStyle" value="remote" required> 원격 근무
+                <input type="radio" name="workingStyle" value="hybrid" required> 원격,상주 모두 가능
+                <input type="radio" name="workingStyle" value="on-site" required> 상주 근무
+            </div>
+
+            <h4>추가 정보</h4>
+            <div class="form-group">
+                <select name="meeting" class="form-control" required>
+                    <option value="off-line">오프라인(협의불가능)</option>
+                    <option value="off-line-nego">오프라인(협의가능)</option>
+                    <option value="on-line">온라인</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="address" name="address" placeholder="근무지 주소 (예: 회사 주소 등)"
+                       required>
+                <input type="text" class="form-control" id="worktime" name="worktime" placeholder="근무 시간 (예: 9시~6시 등)"
+                       required>
+            </div>
+
+            <h4>근무 시간 조율</h4>
+            <div class="form-group">
+                <input type="radio" name="workAdjust" value="possible" required> 원격,상주 모두 가능
+                <input type="radio" name="workAdjust" value="impossible" required> 상주 근무
+                <input type="radio" name="workAdjust" value="remote" required> 원격 근무
+            </div>
+
+            <h4>월차 제공</h4>
+            <div class="form-group">
+                <input type="radio" name="vacation" value="possible" required> 제공
+                <input type="radio" name="vacation" value="impossible" required> 미제공
+                <input type="radio" name="vacation" value="negotiation" required> 협의 가능
+            </div>
+        </div>
+        <div class="project-box third-box" id="box3">
+            <h4>현재 프로젝트 진행 상황</h4>
+            <div class="form-group">
+                <textarea id="progress" name="progress" class="form-control" required></textarea>
+            </div>
+            <h4>주요 담당 업무</h4>
+            <div class="form-group">
+                <textarea id="main-tasks" name="mainTasks" class="form-control" required></textarea>
+            </div>
+            <h4>세부 업무 범위</h4>
+            <div class="form-group">
+                <textarea id="detail-task" name="detailTask" class="form-control" required></textarea>
+            </div>
+            <h4>기타 전달사항 또는 우대사항</h4>
+            <div class="form-group">
+                <textarea id="delivered" name="delivered" class="form-control" required></textarea>
+            </div>
+
+            <h4>프로젝트 관련 자료</h4>
+            <div class="form-group">
+                <input type="file" id="file" name="files" accept="image/png, image/jpeg" class="form-control-file">
+            </div>
+        </div>
+        <div class="project-box forth-box" id="box4">
+
+            <h4>담당자 정보</h4>
+            <div class="form-group">
+                <label for="company">회사명(사업자명)</label>
+                <input type="text" class="form-control" id="company" name="company" required>
+            </div>
+            <div class="form-group">
+                <label for="name">담당자 이름</label>
+                <input type="text" class="form-control" id="managerName" name="managerName" required>
+            </div>
+            <div class="form-group">
+                <label for="contact">담당자 연락처</label>
+                <input type="text" class="form-control" id="contact" name="contact" required>
+            </div>
+            <div class="form-group">
+                <label for="email">담당자 이메일</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" id="agree" name="agree" value="0" required>
+                <label for="agree">(필수)다모아 <a href="save-form">이용약관</a>에 동의합니다</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">제출</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+        <button type="submit" onclick="before()">이전</button>
+        <button type="submit" onclick="next()">다음</button>
+
+        <script>
+
+            var progress = 0;
+            var currentBox = 0;
+            var boxes = [
+        document.getElementById("box1"),
+        document.getElementById("box2"),
+        document.getElementById("box3"),
+        document.getElementById("box4")
+    ];
+
+    function updateVisibility() {
+        boxes.forEach((box, index) => {
+            box.style.display = index === currentBox ? 'block' : 'none';
+        });
+
+       // 진행 상황 업데이트
+            var progress = (currentBox / (boxes.length - 1)) * 100; // 0%에서 100%로
+            document.getElementById("progressBar").value = progress; // 프로그레스 바 업데이트
+
+
+    }
+
+    function next() {
+        if (currentBox < boxes.length - 1) {
+            currentBox++;
+            updateVisibility();
+        }
+    }
+
+    function before() {
+        if (currentBox > 0) {
+            currentBox--;
+            updateVisibility();
+        }
+    }
+
+    function validateForm() {
+    const minYears = document.getElementById('minyears').value;
+    const maxYears = document.getElementById('maxyears').value;
+
+    if (minYears && maxYears && parseInt(maxYears) < parseInt(minYears)) {
+        alert("최대 연차는 최소 연차보다 클 수 없습니다.");
+        return false; // 폼 제출 방지
+    }
+
+    return true; // 폼 제출 허용
+}
+
+    updateVisibility();
+
+
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
