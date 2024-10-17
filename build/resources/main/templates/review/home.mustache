@@ -1,0 +1,58 @@
+{{> layout/header}}
+
+<div class="container mt-4">
+    <div class="bg-success text-white text-center p-3 mb-3">
+        <h1>다모아 Review 후기</h1>
+    </div>
+    <div class="bg-warning text-center p-2 mb-3">
+        <p>{{totalReviews}}개의 다모아 고객님들의 후기</p>
+    </div>
+
+    <!-- 클라이언트 리뷰 섹션 -->
+    <section class="mt-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h2 class="h5">기업 리뷰</h2>
+        </div>
+        <div class="row">
+            {{#companyReview}}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow">
+                        <div class="card-body text-center">
+                            <img src="https://cdn.wishket.com/profiles/{{companyId}}.png"
+                                 class="img-fluid rounded-circle" alt="프로필 이미지"
+                                 style="width: 100px; height: 100px; margin-bottom: 15px;">
+                            <p class="text-muted">평균 평점: {{overallScore}}점</p>
+                            <p class="card-text">{{responseData}}</p>
+                        </div>
+                        <button class="btn btn-primary btn-block">리뷰 더보기</button>
+                    </div>
+                </div>
+            {{/companyReview}}
+        </div>
+    </section>
+
+    <!-- 프리랜서 리뷰 섹션 -->
+    <section class="mt-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h2 class="h5">프리랜서 리뷰</h2>
+        </div>
+        <div class="row">
+            {{#freelancerReview}}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow">
+                        <div class="card-body text-center">
+                            <img src="https://cdn.wishket.com/profiles/{{freelancerId}}.png"
+                                 class="img-fluid rounded-circle" alt="프로필 이미지"
+                                 style="width: 100px; height: 100px;">
+                            <p class="text-muted">평균 평점: {{overallScore}}점</p>
+                            <p class="card-text">{{responseData}}</p>
+                        </div>
+                        <button class="btn btn-primary btn-block">리뷰 더보기</button>
+                    </div>
+                </div>
+            {{/freelancerReview}}
+        </div>
+    </section>
+</div>
+
+{{> layout/footer}}

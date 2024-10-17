@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.damoa.repository.interfaces.CompanyReviewRepository">
+    <select id="findAllByCompanyReviews" resultType="com.damoa.repository.model.CompanyReview">
+        SELECT * FROM company_review ORDER BY id DESC
+    </select>
+
+    <!-- GCP company 리뷰 데이터 MySQL로 insert-->
+    <insert id="insertCompanyReview" parameterType="com.damoa.repository.model.CompanyReview">
+        INSERT INTO company_review (company_id, freelancer_id, work_quality_score,
+        timeliness_score, feedback_score, willingness_score,
+        overall_score, review_date, response_data)
+        VALUES (#{companyId}, #{freelancerId}, #{workQualityScore},
+        #{timelinessScore}, #{feedbackScore}, #{willingnessScore},
+        #{overallScore}, #{reviewDate}, #{responseData})
+    </insert>
+</mapper>
+

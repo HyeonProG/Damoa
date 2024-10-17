@@ -239,4 +239,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+google_sheet_api/
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,eclipse,intellij
