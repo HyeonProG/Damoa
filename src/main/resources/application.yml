@@ -30,6 +30,10 @@ spring:
   h2:
     console:
       enabled: true # H2 데이터베이스 콘솔을 활성화 한다.
+  web:
+    resources:
+      static-locations:
+        - classpath:/static/ # 애플리케이션의 resources/static 디렉토리에서 정적 자원을 찾습니다.
 
   output:
     ansi:
