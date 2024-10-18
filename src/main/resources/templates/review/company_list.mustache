@@ -1,0 +1,26 @@
+{{> layout/header}} <!-- 헤더를 불러옴 -->
+
+<div class="container mt-4">
+    <h2 class="mb-4">Company Reviews</h2>
+
+    <!-- 그리드 시스템 사용하여 반응형 레이아웃 구성 -->
+    <div class="row">
+        {{#companyReview}}
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm">
+                    <!-- 이미지와 콘텐츠를 포함하는 카드 구조 -->
+                    <div class="card-body">
+                        <h5 class="card-title">김기석</h5>
+                        <p class="card-subtitle mb-2 text-muted">주)미진 소프트</p>
+                        <p class="card-text">프로젝트 설명: project_tb 데이터 삽입해야됨</p>
+                        <p class="card-text" aria-readonly="true">{{responseData}}</p> <!-- 동적으로 리뷰 내용 추가 -->
+                        <small class="text-muted">총 리뷰 평점: {{overallScore}}</small>
+                        <boutten class="btn btn-primary btn-block">리뷰 상세 보기</boutten>
+                    </div>
+                </div>
+            </div>
+        {{/companyReview}}
+    </div>
+</div>
+
+{{> layout/footer}} <!-- 푸터를 불러옴 -->

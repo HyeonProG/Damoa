@@ -12,4 +12,12 @@
         SELECT count(*) FROM user WHERE email = #{email}
     </select>
 
+    <select id="findDuplicatePhoneNumber" resultType="int">
+        SELECT count(*) FROM user WHERE phone_number = #{phoneNumber}
+    </select>
+
+    <select id="findByEmail">
+        SELECT * FROM user WHERE email = #{email}
+    </select>
+
 </mapper>

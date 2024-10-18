@@ -6,6 +6,10 @@
         SELECT * FROM company_review ORDER BY id DESC
     </select>
 
+    <select id="findByCompanyReviewId">
+        select * from company_review where id = #{id}
+    </select>
+
     <!-- GCP company 리뷰 데이터 MySQL로 insert-->
     <insert id="insertCompanyReview" parameterType="com.damoa.repository.model.CompanyReview">
         INSERT INTO company_review (company_id, freelancer_id, work_quality_score,
