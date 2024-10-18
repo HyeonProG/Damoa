@@ -98,7 +98,7 @@ public class UserController {
 
         model.addAttribute("socialType", "local");
 
-        return "user/sign_up";
+        return "/user/sign_up";
     }
 
     // 카카오 로그인 URL 설정
@@ -240,7 +240,7 @@ public class UserController {
             response.setContentType("text/html; charset=utf-8");
             out.println("<script>alert('추가 정보를 입력해주세요.')</script>");
             out.flush();
-            return "user/add_kakao_user_info"; // 추가 정보를 입력하는 페이지로 이동
+            return "/user/add_kakao_user_info"; // 추가 정보를 입력하는 페이지로 이동
         }
 
         session.setAttribute("principal", principalDTO);
@@ -319,7 +319,7 @@ public class UserController {
             response.setContentType("text/html; charset=utf-8");
             out.println("<script>alert('추가 정보를 입력해주세요.')</script>");
             out.flush();
-            return "user/add_google_user_info"; // 추가 정보를 입력하는 페이지로 이동
+            return "/user/add_google_user_info"; // 추가 정보를 입력하는 페이지로 이동
         }
 
         session.setAttribute("principal", principalDTO);
@@ -371,7 +371,7 @@ public class UserController {
         model.addAttribute("kakaoLoginUrl", kakaoLoginUrl);
         model.addAttribute("googleLoginUrl", googleLoginUrl);
 
-        return "user/sign_in";
+        return "/user/sign_in";
     }
 
     @PostMapping("sign-in")
@@ -401,7 +401,7 @@ public class UserController {
                 throw new DataDeliveryException("비밀번호를 입력하세요.", HttpStatus.BAD_REQUEST);
             }
             model.addAttribute("errorMessage", e.getMessage());
-            return "user/sign_in";
+            return "/user/sign_in";
         }
 
     }
