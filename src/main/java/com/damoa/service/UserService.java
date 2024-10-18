@@ -158,4 +158,12 @@ public class UserService {
 
     }
 
+    @Transactional
+    public void deleteUserAccount(User user) {
+        userRepository.insertDeleteUser(user);
+
+        userRepository.deleteUser(user.getId());
+    }
+
+
 }

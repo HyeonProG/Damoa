@@ -16,7 +16,6 @@ public class ProjectSaveDTO {
     private String skill;
     private int minYears;
     private int maxYears;
-    @DateTimeFormat(pattern = "yyyy-MM-dd") // 예상 날짜 형식 지정
     private Date projectStart;
     private String expectedPeriod;
     private int period;

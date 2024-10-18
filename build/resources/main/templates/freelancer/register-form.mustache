@@ -227,25 +227,25 @@
     });
 
     // 근무 방식에 따라 입력 필드를 보여주거나 숨기는 함수
-function toggleWorkType() {
-    var workType = document.getElementById("work_type").value;
-    var onSiteLocation = document.getElementById("on_site_location");
-    var remoteMeeting = document.getElementById("remote_meeting");
+    function toggleWorkType() {
+        var workType = document.getElementById("work_type").value;
+        var onSiteLocation = document.getElementById("on_site_location");
+        var remoteMeeting = document.getElementById("remote_meeting");
 
-    if (workType === "상주") {
-        onSiteLocation.style.display = "block";
-        remoteMeeting.style.display = "none";
-    } else if (workType === "원격") {
-        onSiteLocation.style.display = "none";
-        remoteMeeting.style.display = "block";
-    } else if (workType === "모두 가능") {
-        onSiteLocation.style.display = "block";
-        remoteMeeting.style.display = "block";
-    } else {
-        onSiteLocation.style.display = "none";
-        remoteMeeting.style.display = "none";
+        if (workType === "상주") {
+            onSiteLocation.style.display = "block";
+            remoteMeeting.style.display = "none";
+        } else if (workType === "원격") {
+            onSiteLocation.style.display = "none";
+            remoteMeeting.style.display = "block";
+        } else if (workType === "모두 가능") {
+            onSiteLocation.style.display = "block";
+            remoteMeeting.style.display = "block";
+        } else {
+            onSiteLocation.style.display = "none";
+            remoteMeeting.style.display = "none";
+        }
     }
-}
 
     // 급여 타입에 따라 금액 입력 필드 토글
     function toggleSalaryInput() {
@@ -268,7 +268,7 @@ function toggleWorkType() {
     }
 
     // 보유 스킬
-      let skillCount = 1;
+    let skillCount = 1;
 
     // 보유 스킬 추가 기능
     function addSkill() {
@@ -322,46 +322,46 @@ function toggleWorkType() {
 
     let selectedJobTitles = [];
 
-function addJobTitle() {
-    const jobTitleSelect = document.getElementById('job_title');
-    const selectedTitle = jobTitleSelect.value;
+    function addJobTitle() {
+        const jobTitleSelect = document.getElementById('job_title');
+        const selectedTitle = jobTitleSelect.value;
 
-    // 직무를 선택했을 때 유효한 값이면 추가
-    if (selectedTitle && !selectedJobTitles.includes(selectedTitle)) {
-        selectedJobTitles.push(selectedTitle);
-        updateJobTitleList();
+        // 직무를 선택했을 때 유효한 값이면 추가
+        if (selectedTitle && !selectedJobTitles.includes(selectedTitle)) {
+            selectedJobTitles.push(selectedTitle);
+            updateJobTitleList();
+        }
+
+        // select를 다시 초기화
+        jobTitleSelect.value = "";
     }
 
-    // select를 다시 초기화
-    jobTitleSelect.value = "";
-}
+    function updateJobTitleList() {
+        const jobTitleList = document.getElementById('job-title-list');
+        jobTitleList.innerHTML = ''; // 기존 목록 초기화
 
-function updateJobTitleList() {
-    const jobTitleList = document.getElementById('job-title-list');
-    jobTitleList.innerHTML = ''; // 기존 목록 초기화
+        selectedJobTitles.forEach((title, index) => {
+            const listItem = document.createElement('li');
+            listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+            listItem.textContent = title;
 
-    selectedJobTitles.forEach((title, index) => {
-        const listItem = document.createElement('li');
-        listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-        listItem.textContent = title;
+            const removeButton = document.createElement('button');
+            removeButton.className = 'btn btn-danger btn-sm';
+            removeButton.textContent = '삭제';
+            removeButton.onclick = () => removeJobTitle(index);
 
-        const removeButton = document.createElement('button');
-        removeButton.className = 'btn btn-danger btn-sm';
-        removeButton.textContent = '삭제';
-        removeButton.onclick = () => removeJobTitle(index);
+            listItem.appendChild(removeButton);
+            jobTitleList.appendChild(listItem);
+        });
 
-        listItem.appendChild(removeButton);
-        jobTitleList.appendChild(listItem);
-    });
+        // 선택된 직무 목록을 hidden input에 저장 (서버로 전송할 수 있도록)
+        document.getElementById('selected_job_titles').value = selectedJobTitles.join(',');
+    }
 
-    // 선택된 직무 목록을 hidden input에 저장 (서버로 전송할 수 있도록)
-    document.getElementById('selected_job_titles').value = selectedJobTitles.join(',');
-}
-
-function removeJobTitle(index) {
-    selectedJobTitles.splice(index, 1);
-    updateJobTitleList();
-}
+    function removeJobTitle(index) {
+        selectedJobTitles.splice(index, 1);
+        updateJobTitleList();
+    }
 </script>
 
 {{> layout/footer }}

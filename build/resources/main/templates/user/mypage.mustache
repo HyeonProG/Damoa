@@ -1,0 +1,18 @@
+{{> layout/header }}
+
+<h1>마이페이지</h1>
+
+<p>이메일: {{user.email}}</p>
+<p>이름: {{user.username}}</p>
+<p>사용자 유형: {{user.userType}}</p>
+<p>소셜 로그인 유형: {{user.socialType}}</p>
+
+<form action="/user/logout" method="GET">
+    <button type="submit" class="btn btn-primary">로그아웃</button>
+</form>
+
+<form action="/user/delete-account" method="POST">
+    <button type="submit" class="btn btn-danger">회원탈퇴</button>
+</form>
+
+{{> layout/footer }}
