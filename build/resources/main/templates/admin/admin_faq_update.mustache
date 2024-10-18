@@ -1,0 +1,18 @@
+{{>admin/admin_header}}
+
+<div class="container mt-5">
+    {{#faq}}
+        <form action="faq/update" method="post">
+        <input type="hidden"  value={{id}} id="id">
+        <input type="textarea" value={{title}} id="title">
+        <hr>
+        <input type="textarea" value="{{content}}" id="content">
+            <button type="submit">수정하기</button>
+        </form>
+
+    {{/faq}}
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

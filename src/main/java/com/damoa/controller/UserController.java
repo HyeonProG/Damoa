@@ -1,9 +1,12 @@
 package com.damoa.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.damoa.repository.model.Faq;
+import com.damoa.service.FaqService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -16,11 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import com.damoa.dto.user.AddSocialUserInfoDTO;
@@ -42,7 +41,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequestMapping("/user")
@@ -51,6 +49,9 @@ public class UserController {
 
     @Autowired
     private final UserService userService;
+
+    @Autowired
+    private final FaqService faqService;
 
     @Autowired
     private final PasswordEncoder passwordEncoder;
@@ -416,5 +417,19 @@ public class UserController {
         session.invalidate();
         return "redirect:/";
     }
+    @GetMapping("/faq")
+    public String qna(Model model){
+        List<Faq> faqList = faqService.getAllQna();
+        model.addAttribute("faqList",faqList);
+        return "user/faq_list";
+    }
+
+    @GetMapping("/faq-detail/{id}")
+    public String qnaDetail(@PathVariable int id, Model model){
+        Faq faq = faqService.getFaqById(id);
+        model.addAttribute("faq",faq);
+        return "user/faq_detail";
+    }
+
 
 }
