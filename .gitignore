@@ -241,7 +241,7 @@ $RECYCLE.BIN/
 
 #application-secure
 application-secure.yml
+application.yml
 
-# End of https://www.toptal.com/developers/gitignore/api/windows,macos,eclipse,intellij
 google_sheet_api/
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,eclipse,intellij
