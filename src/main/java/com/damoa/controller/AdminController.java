@@ -9,14 +9,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+@RequestMapping("/admin")
 @Controller
 public class AdminController {
 
     // 관리자 메인 페이지
-    @GetMapping("/admin-main")
+    @GetMapping("/main")
     public String mainPage(){
-        return "admin_main";
+        return "admin/admin_main";
     }
+
+    @GetMapping("/faq")
+    public String faq(){
+        return "admin/admin_faq";
+    }
+
 
 }

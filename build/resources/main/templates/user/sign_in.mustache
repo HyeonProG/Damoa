@@ -1,0 +1,53 @@
+{{> layout/header }}
+
+<div class="container mt-5">
+    <h2 class="text-center">로그인</h2>
+    {{! 에러 메세지 처리 }}
+    {{#errorMessage}}
+        <script>
+            alert("{{errorMessage}}");
+        </script>
+    {{/errorMessage}}
+    <form action="/user/sign-in" method="post" id="loginForm">
+        <div class="form-group">
+            <label for="email">이메일</label>
+            <input type="text" class="form-control" id="email" name="email" placeholder="아이디를 입력해주세요." required>
+        </div>
+        <div class="form-group">
+            <label for="password">비밀번호</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호를 입력해주세요." required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">로그인</button>
+    </form>
+    <hr>
+    <div class="text-center">
+        <p>또는 소셜 계정으로 로그인하세요:</p>
+        <div class="d-flex justify-content-center">
+            <a href="{{googleLoginUrl}}" class="btn btn-danger mr-2" onclick="setSocialType('google')">
+                <i class="fab fa-google"></i> Google 로그인
+            </a>
+            <a href="{{kakaoLoginUrl}}" class="btn btn-warning text-white mr-2" onclick="setSocialType('kakao')">
+                <i class="fas fa-comment"></i> Kakao 로그인
+            </a>
+        </div>
+    </div>
+    <hr>
+    <div class="text-center">
+        <p>계정이 없으신가요? <a href="/user/sign-up">회원가입</a></p>
+    </div>
+</div>
+
+<script>
+    // 로그인 유효성 검사
+    document.querySelector('#loginForm').addEventListener('submit', function(event) {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        if (!username || !password) {
+            event.preventDefault(); // 기본 제출 방지
+            alert('아이디와 비밀번호를 모두 입력해주세요.');
+        }
+    });
+</script>
+
+{{> layout/footer }}

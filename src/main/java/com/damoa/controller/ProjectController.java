@@ -27,16 +27,14 @@ public class ProjectController {
     @GetMapping("/save")
     public String savePage(){
 
-        return "project/save-form";
+        return "project/save_form";
 
     }
 
     @PostMapping("/save")
     public String saveProc(@ModelAttribute("reqDTO") ProjectSaveDTO reqDTO){
-        System.out.println("컨트롤러 들어옴!!!!");
-        System.out.println(reqDTO);
         projectService.createProject(reqDTO);
-        return "project/save-complete";
+        return "project/save_complete";
     }
 
 
