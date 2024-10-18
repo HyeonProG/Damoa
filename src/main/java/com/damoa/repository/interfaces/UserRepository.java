@@ -16,4 +16,7 @@ public interface UserRepository {
 
     public int findDuplicatePhoneNumber(String phoneNumber); // 휴대폰 번호 중복 확인
 
+    public int insertDeleteUser(User user); // 탈퇴한 사용자 등록
+
+    public int deleteUser(@Param("userId") int userId); // 사용자 삭제
 }

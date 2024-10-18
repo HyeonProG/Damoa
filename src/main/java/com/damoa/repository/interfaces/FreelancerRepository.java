@@ -1,3 +1,4 @@
+
 package com.damoa.repository.interfaces;
 
 import com.damoa.repository.model.BusinessType;

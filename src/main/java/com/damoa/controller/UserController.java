@@ -417,4 +417,35 @@ public class UserController {
         return "redirect:/";
     }
 
+    @GetMapping("/mypage")
+    public String myPage(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("principal");
+        if (user == null) {
+            return "redirect:/user/sign-in";
+        }
+
+        PrincipalDTO principalDTO = PrincipalDTO.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .username(user.getUsername())
+                .userType(user.getUserType())
+                .socialType(user.getSocialType())
+                .build();
+
+        model.addAttribute("user", principalDTO);
+        return "user/mypage";
+    }
+
+    @PostMapping("/delete-account")
+    public String deleteAccount(HttpSession session) {
+        User user = (User) session.getAttribute("principal");
+        if (user == null) {
+            return "redirect:/user/sign-in";
+        }
+        // 회원탈퇴 처리
+        userService.deleteUserAccount(user);
+        session.invalidate();
+        return "redirect:/";
+    }
+
 }
