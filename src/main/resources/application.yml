@@ -15,10 +15,10 @@ spring:
       max-file-size: 20MB # 파일 최대 크기는 20MB로 제한
       max-request-size: 20MB # 멀티 파트 전체 요청 크기 20MB 제한
   datasource:
-    driver-class-name: org.h2.Driver # 데이터베이스 드라이버로 H2 DB를 사용
-    url: jdbc:h2:mem:test;MODE=MySQL # H2 인메모리 데이터베이스를 MySQL 호환 모드로 사용 (테스트용)
-    username: sa # 데이터베이스 연결 시 기본 사용자 이름
-    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver # MySQL driver
+    url: jdbc:mysql://localhost:3306/damoa?serverTimezone=Asia/Seoul
+    username: root # 데이터베이스 연결 시 기본 사용자 이름
+    password: ''
   sql:
     init:
       schema-locations:
@@ -36,8 +36,8 @@ spring:
 #mybatis 설정
 mybatis:
   mapper-locations:
-    # - classpath:mapper/**/*.xml #myBatis 매퍼 파일 위치를 설정
-    # **은 모든 디렉터리를 의미, *.xml은 모든 xml 파일을 의미
+  # - classpath:mapper/**/*.xml #myBatis 매퍼 파일 위치를 설정
+  # **은 모든 디렉터리를 의미, *.xml은 모든 xml 파일을 의미
   configuration:
     map-underscore-to-camel-case: true # 데이터베이스의 언더 스코어 네이밍(column_name)을 카멜 케이스(columnName)로 자동 매핑
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # SQL 로깅 구현체를 설정
