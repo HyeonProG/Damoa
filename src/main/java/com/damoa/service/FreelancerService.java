@@ -1,13 +1,14 @@
 package com.damoa.service;
 
-import com.damoa.repository.interfaces.FreelancerRepository;
-import com.damoa.repository.model.BusinessType;
-import com.damoa.repository.model.JobTitle;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.damoa.dto.freelancer.RegisterFreelancerDTO;
+import com.damoa.repository.interfaces.FreelancerRepository;
+import com.damoa.repository.model.Freelancer;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -16,14 +17,20 @@ public class FreelancerService {
     @Autowired
     private final FreelancerRepository freelancerRepository;
 
-    //직무 목록 가져오기
-    public List<JobTitle> jobTitles() {
-        return freelancerRepository.jobTitles();
-    }
-
-    // 사업자 유형
-    public List<BusinessType> businessTypes() {
-        return freelancerRepository.businessTypes();
+    /**
+     * 프리랜서 등록
+     * 
+     * @param dto
+     * @return
+     */
+    @Transactional
+    public void insertFreelancer(RegisterFreelancerDTO dto) {
+        int result = 0;
+        try {
+            result = freelancerRepository.insertFreelancer(dto.toFreelancer());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

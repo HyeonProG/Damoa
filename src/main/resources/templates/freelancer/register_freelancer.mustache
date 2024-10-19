@@ -1,367 +1,299 @@
-{{> layout/header }}
+{{> layout/header}}
 
-<div class="container mt-5">
-    <h3 class="text-center">프리랜서 등록</h3>
+<style>
+.career-container {
+    display: flex;           /* Flexbox를 사용하여 요소들을 나란히 배치 */
+    justify-content: space-between;  /* 두 요소 사이에 공간을 균등하게 배치 */
+    align-items: center;    /* 수직 중앙 정렬 */
+}
 
-    <!-- 프리랜서 기본 정보 -->
-    <div id="step1" class="form-step">
-        <h4>1. 기본 정보</h4>
-        <div class="form-group">
-            <label for="name">이름 *</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="이름을 입력하세요" required>
+.career-container div {
+    margin-right: 20px;     /* 요소 간 간격 */
+}
+</style>
+
+<h2>프리랜서 정보 등록</h2>
+
+<form id="freelancerForm" action="/freelancer/register" method="post" enctype="multipart/form-data">
+    {{! 기본 정보 }}
+    <div id="basicInfo" class="form-section">
+        <h4>기본 정보</h4>
+        <div>
+            <label for="username">이름</label>
+            <input type="text" id="username" name="username" value="{{username}}" placeholder="이름을 입력하세요" required readonly>
         </div>
-        <div class="form-group">
-            <label for="email">이메일 *</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="이메일을 입력하세요" required>
+        <div>
+            <label for="email">이메일</label>
+            <input type="text" id="email" name="email" value="{{email}}" placeholder="이메일을 입력하세요" required readonly>
         </div>
-        <div class="form-group">
-            <label for="job_title">직무 *</label>
-            <select class="form-control" id="job_title" name="job_title" onchange="addJobTitle()">
-                <option value="">직무를 선택해주세요</option>
-                {{#jobTitles}}
-                    <option value="{{title}}">{{title}}</option>
-                {{/jobTitles}}
+        <div>
+            <label for="phoneNumber">연락처</label>
+            <input type="text" id="phoneNumber" name="phoneNumber" value="{{phoneNumber}}" placeholder="연락처를 입력하세요" required readonly>
+        </div>
+        <div>
+            <label for="jobPart">직무 분야</label>
+            <select id="jobPartSelect" name="jobPart" required>
+                <option value="">직무를 선택하세요</option>
+                {{#jobCategories}}
+                    <option value="{{.}}">{{.}}</option>
+                {{/jobCategories}}
             </select>
-            <small>선택한 직무들이 아래에 추가됩니다.</small>
+            <button type="button" id="addJobPart">추가</button>
         </div>
-
-        <!-- 선택된 직무 목록을 보여주는 영역 -->
-        <div id="selected-job-titles" class="form-group">
-            <ul id="job-title-list" class="list-group"></ul>
+        <div id="selectedJobParts">
+            <h4>선택된 직무 분야</h4>
+            <ul id="jobPartList"></ul>
         </div>
-
-        <!-- 선택된 직무들을 저장하는 hidden input (서버로 전송) -->
-        <input type="hidden" id="selected_job_titles" name="job_titles">
-        <div class="form-group">
-            <label for="contact">연락처 *</label>
-            <input type="text" class="form-control" id="contact" name="contact" placeholder="연락처를 입력하세요" required>
+    </div>
+    
+    {{! 근무 방식 }}
+    <div id="workingStyle" class="form-section">
+        <h4>근무 방식</h4>
+        <div>
+            <label for="expectedSalary">희망 연봉</label>
+            <input type="number" id="expectedSalary" name="expectedSalary" maxlength="6" value="0" min="0" max="100000" step="100" required>
+            만
         </div>
-        <div class="form-group">
-            <label for="business_type">사업자 유형 *</label>
-            <select class="form-control" id="business_type" name="business_type" required>
-                <option value="">사업자 유형을 선택해주세요.</option>
-                {{#businessTypes}}
-                    <option value="{{type}}">{{type}}</option>
-                {{/businessTypes}}
+        <div>
+            <label for="workingStyleInput">근무 방식</label>
+            <select id="workingStyleSelect" name="workingStyle" required>
+                <option value="">근무 방식을 선택하세요</option>
+                {{#workingStyleCategories}}
+                    <option value="{{.}}">{{.}}</option>
+                {{/workingStyleCategories}}
+            </select>
+        </div>
+        <div>
+            <label for="salaryType">급여 방식</label>
+            <select id="salaryTypeSelect" name="salaryType" required>
+                <option value="">급여 방식을 선택하세요</option>
+                {{#salaryTypeCategories}}
+                    <option value="{{.}}">{{.}}</option>
+                {{/salaryTypeCategories}}
             </select>
         </div>
     </div>
 
-    <!-- 근무 조건 -->
-    <div id="step2" class="form-step" style="display:none;">
-        <!-- 근무 조건 -->
-        <div class="form-group">
-            <label for="work_type">근무 방식 *</label>
-            <select class="form-control" id="work_type" name="work_type" required onchange="toggleWorkType()">
-                <option value="">근무 방식을 선택해 주세요</option>
-                <option value="상주">상주 근무</option>
-                <option value="원격">원격 근무</option>
-                <option value="모두 가능">상주, 원격 모두 가능</option>
-            </select>
-        </div>
-
-        <!-- 상주 근무 시, 선호 근무 지역 입력 -->
-        <div class="form-group" id="on_site_location" style="display:none;">
-            <label for="preferred_location">선호 근무지역 *</label>
-            <input type="text" class="form-control" id="preferred_location" name="preferred_location" placeholder="선호 근무지역을 입력해 주세요">
-        </div>
-
-        <!-- 원격 근무 시, 미팅 방식 선택 -->
-        <div class="form-group" id="remote_meeting" style="display:none;">
-            <label for="meeting_type">미팅 방식 선택 *</label>
-            <select class="form-control" id="meeting_type" name="meeting_type">
-                <option value="">미팅 방식을 선택하세요</option>
-                <option value="온라인">온라인</option>
-                <option value="오프라인(협의가능)">오프라인(협의가능)</option>
-                <option value="오프라인(협의 불가능)">오프라인(협의 불가능)</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="work_type">근무 형태 *</label>
-            <select class="form-control" id="work_type" name="work_type" required>
-                <option value="풀타임">풀타임</option>
-                <option value="파트타임">파트타임</option>
-                <option value="모두 가능">모두 가능</option>
-            </select>
-        </div>
-        <!-- 희망 급여 -->
-        <div class="form-group">
-            <label for="salary_type">희망 급여 *</label>
-            <select class="form-control" id="salary_type" name="salary_type" required onchange="toggleSalaryInput()">
-                <option value="">급여 방식을 선택해 주세요</option>
-                <option value="시급">시급</option>
-                <option value="일급">일급</option>
-                <option value="월급">월급</option>
-            </select>
-        </div>
-
-        <!-- 급여 입력 -->
-        <div class="form-group" id="salary_input_group" style="display:none;">
-            <label for="salary_input">금액 입력 *</label>
-            <input type="text" class="form-control" id="salary_input" name="salary_input" placeholder="금액을 입력하세요" oninput="formatSalary()" required>
-            <small>입력하신 금액은 자동으로 "만원" 단위로 표시됩니다.</small>
-        </div>
-
-        <div class="form-group">
-            <label for="start_date">프로젝트 시작 가능 날짜 *</label>
-            <input type="date" class="form-control" id="start_date" name="start_date" required>
-        </div>
-    </div>
-
-    <!-- 경력 -->
-    <div id="step3" class="form-step" style="display:none;">
-        <h4>3. 경력</h4>
-        <div class="form-group">
-            <label for="freelance_experience">프리랜서 경험 *</label>
-            <select class="form-control" id="freelance_experience" name="freelance_experience" required>
+    <div id="experience" class="form-section">
+        <h4>경력</h4>
+        <div>
+            <label for="experienceInput">프리랜서 경험</label>
+            <select id="experienceInput" name="experience" required>
+                <option value="">경험을 선택하세요</option>
                 <option value="있음">있음</option>
                 <option value="없음">없음</option>
             </select>
         </div>
-        <!-- 직무 관련 경력 -->
-        <div class="form-group">
-            <label for="job_experience_years">경력 (직무 관련) *</label>
-            <input type="text" class="form-control" id="job_experience_years" name="job_experience_years" placeholder="경력을 입력하세요" oninput="formatExperience()" required>
-            <small>* 선택하신 직무 관련 경력만 입력해 주세요.</small>
-        </div>
-        <!-- 보유 스킬 -->
-        <div class="form-group">
-            <label for="skills">보유 스킬 *</label>
-            <div id="skills-container">
-                <div class="form-group skill-row">
-                    <label for="skill_1">스킬 1 *</label>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <select class="form-control" id="skill_1" name="skills[]" required>
-                                <option value="">스킬을 선택하세요</option>
-                                <option value="Java">Java</option>
-                                <option value="JavaScript">JavaScript</option>
-                                <option value="Python">Python</option>
-                                <option value="MySQL">MySQL</option>
-                                <option value="Android">Android</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <select class="form-control" name="skill_level[]" required>
-                                <option value="">숙련도를 선택하세요</option>
-                                <option value="초급">초급</option>
-                                <option value="중급">중급</option>
-                                <option value="고급">고급</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-danger" onclick="removeSkill(this)">삭제</button>
-                        </div>
-                    </div>
-                </div>
+        <div class="career-container">
+            <div>
+                <label for="careerCategory">경력 직무</label>
+                <select id="careerCategory" name="careerCategory" required onchange="handleCareerChange()">
+                    <option value="">직무를 선택하세요</option>
+                    {{#careerCategories}}
+                        <option value="{{.}}">{{.}}</option>
+                    {{/careerCategories}}
+                </select>
             </div>
-            <button type="button" class="btn btn-primary" id="add-skill-btn" onclick="addSkill()">보유 스킬 추가</button>
+            <div id="careerYearContainer" style="display: none;">
+                <input type="number" id="careerYear" name="careerYear" min="1" max="10" required>
+                년
+            </div>
+            <button type="button" id="addCareer">추가</button>
+        </div>
+        <div id="selectedCareers">
+            <h4>선택된 경력 직무</h4>
+            <ul id="careerList"></ul>
+        </div>
+        <div>
+            <label for="skillCategory">기술 스택</label>
+                <select id="skillCategory" name="skillCategory" required onchange="handleSkillChange()">
+                    <option value="">기술 스택을 선택하세요</option>
+                    {{#skillCategories}}
+                        <option value="{{.}}">{{.}}</option>
+                    {{/skillCategories}}
+                </select>
+                    <button type="button" id="addSkill">추가</button>
+        </div>
+        <div id="selectedSkills">
+            <h4>선택된 기술 스택</h4>
+            <ul id="skillList"></ul>
+        </div>                
         </div>
     </div>
 
-
-    <!-- 상세 경력 -->
-    <div id="step4" class="form-step" style="display:none;">
-        <h4>4. 상세 경력</h4>
-        <div class="form-group">
-            <label for="resume">이력서/포트폴리오 파일 업로드</label>
-            <input type="file" class="form-control" id="resume" name="resume">
+    <div id="additionalInfo" class="form-section">
+        <h4>추가 정보</h4>
+        <div>
+            <label for="portfolio">포트폴리오</label>
+            <input type="file" id="portfolio" name="portfolio">
         </div>
-        <div class="form-group">
-            <label for="introduction">상세 소개</label>
-            <textarea class="form-control" id="introduction" name="introduction" rows="4" placeholder="ex) 직무와 관련된 자신의 장점, "></textarea>
+        <div>
+            <label for="detail">상세 소개</label>
+            <textarea
+             id="detail"
+             name="detail"
+             placeholder="상세한 자기소개를 입력해주세요."
+             style="width: 100%; height: 150px; resize: none;">
+            </textarea>
         </div>
-        <div class="form-group">
-            <label for="links">링크</label>
-            <input type="text" class="form-control" id="links" name="links" placeholder="깃허브, 포트폴리오, 노션 링크를 입력하세요">
-        </div>
-    </div>
-
-    <!-- 약관 동의 -->
-    <div id="step5" class="form-step" style="display:none;">
-        <h4>5. 약관 동의</h4>
-        <div class="form-group">
-            <label>
-                <input type="checkbox" id="agree_terms" name="agree_terms" required> 약관에 동의합니다.
-            </label>
+        <div>
+            <label for="link">링크</label>
+            <input type="url" id="link" name="link" placeholder="예: Github, Notion 링크"
+             style="width: 100%;">
         </div>
     </div>
 
-    <!-- 이전/다음 버튼 -->
-    <div class="form-group text-right">
-        <button type="button" id="prevBtn" class="btn btn-secondary" style="display:none;" onclick="prevStep()">이전</button>
-        <button type="button" id="nextBtn" class="btn btn-primary" onclick="nextStep()">다음</button>
-        <button type="submit" id="submitBtn" class="btn btn-success" style="display:none;">제출</button>
+    <div>
+        <button type="button" id="prevButton" style="display:none;">이전</button>
+        <button type="button" id="nextButton">다음</button>
     </div>
-</div>
+    <div>
+        <button type="submit" id="submitButton">프리랜서 정보 등록</button>
+    </div>
+</form>
 
 <script>
-    let currentStep = 1;
+    let currentSectionIndex = 0; // 현재 섹션 인덱스
+    const sections = document.querySelectorAll('.form-section');
 
-    function showStep(step) {
-        document.querySelectorAll('.form-step').forEach((stepDiv, index) => {
-            if (index + 1 === step) {
-                stepDiv.style.display = 'block';
-            } else {
-                stepDiv.style.display = 'none';
-            }
+    // 섹션 보이기 함수
+    function showSection(index) {
+        sections.forEach((section, i) => {
+            section.style.display = (i === index) ? 'block' : 'none'; // 현재 섹션만 보이기
         });
-
-        document.getElementById('prevBtn').style.display = step > 1 ? 'inline' : 'none';
-        document.getElementById('nextBtn').style.display = step < 5 ? 'inline' : 'none';
-        document.getElementById('submitBtn').style.display = step === 5 ? 'inline' : 'none';
+        document.getElementById('submitButton').style.display = (index === sections.length - 1) ? 'block' : 'none';
+        document.getElementById('nextButton').style.display = (index === sections.length - 1) ? 'none' : 'inline'; // 마지막 섹션일 때는 숨김
+        document.getElementById('prevButton').style.display = (index === 0) ? 'none' : 'inline'; // 첫 섹션일 때는 숨김
     }
 
-    function nextStep() {
-        currentStep++;
-        showStep(currentStep);
-    }
-
-    function prevStep() {
-        currentStep--;
-        showStep(currentStep);
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        showStep(currentStep);
+    // 다음 섹션으로 이동
+    document.getElementById('nextButton').addEventListener('click', function() {
+        if (currentSectionIndex < sections.length - 1) {
+            currentSectionIndex++; // 다음 섹션으로 이동
+            showSection(currentSectionIndex);
+        }
     });
 
-    // 근무 방식에 따라 입력 필드를 보여주거나 숨기는 함수
-function toggleWorkType() {
-    var workType = document.getElementById("work_type").value;
-    var onSiteLocation = document.getElementById("on_site_location");
-    var remoteMeeting = document.getElementById("remote_meeting");
+    // 이전 섹션으로 이동
+    document.getElementById('prevButton').addEventListener('click', function() {
+        if (currentSectionIndex > 0) {
+            currentSectionIndex--; // 이전 섹션으로 이동
+            showSection(currentSectionIndex);
+        }
+    });
 
-    if (workType === "상주") {
-        onSiteLocation.style.display = "block";
-        remoteMeeting.style.display = "none";
-    } else if (workType === "원격") {
-        onSiteLocation.style.display = "none";
-        remoteMeeting.style.display = "block";
-    } else if (workType === "모두 가능") {
-        onSiteLocation.style.display = "block";
-        remoteMeeting.style.display = "block";
-    } else {
-        onSiteLocation.style.display = "none";
-        remoteMeeting.style.display = "none";
-    }
-}
+    // 직무 추가 버튼 기능
+    const addedJobParts = []; // 직무 분야 중복 체크를 위한 배열
+    document.getElementById('addJobPart').addEventListener('click', function() {
+        const select = document.getElementById('jobPartSelect');
+        const selectedValue = select.value;
 
-    // 급여 타입에 따라 금액 입력 필드 토글
-    function toggleSalaryInput() {
-        var salaryType = document.getElementById("salary_type").value;
-        var salaryInputGroup = document.getElementById("salary_input_group");
-        if (salaryType !== "") {
-            salaryInputGroup.style.display = "block";
+        // 선택된 값이 비어있지 않은지 확인
+        if (selectedValue) {
+            // 중복 체크
+            if (!addedJobParts.includes(selectedValue)) {
+                addedJobParts.push(selectedValue); // 배열에 추가
+                const li = document.createElement('li');
+                li.textContent = selectedValue;
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = '삭제';
+                deleteButton.style.marginLeft = '10px';
+                deleteButton.onclick = function() {
+                    li.remove(); // 리스트에서 항목 삭제
+                    addedJobParts.splice(addedJobParts.indexOf(selectedValue), 1); // 배열에서도 삭제
+                };
+
+                li.appendChild(deleteButton);
+                document.getElementById('jobPartList').appendChild(li);
+                select.value = ''; // 선택한 옵션을 초기화
+            } else {
+                alert("이미 추가된 직무 분야입니다."); // 중복 경고 메시지
+            }
         } else {
-            salaryInputGroup.style.display = "none";
+            alert("직무를 선택해주세요.");
         }
-    }
-
-    // 입력된 금액에 "만원" 단위를 자동으로 추가하는 함수
-    function formatSalary() {
-        var salaryInput = document.getElementById("salary_input");
-        var value = salaryInput.value.replace(/\D/g, ''); // 숫자 이외의 값 제거
-        if (value) {
-            salaryInput.value = value + "만원";
-        }
-    }
-
-    // 보유 스킬
-      let skillCount = 1;
-
-    // 보유 스킬 추가 기능
-    function addSkill() {
-        skillCount++;
-        const skillContainer = document.getElementById('skills-container');
-        const newSkill = `
-            <div class="form-group skill-row">
-                <label for="skill_${skillCount}">스킬 ${skillCount} *</label>
-                <div class="row">
-                    <div class="col-md-6">
-                        <select class="form-control" id="skill_${skillCount}" name="skills[]" required>
-                            <option value="">스킬을 선택하세요</option>
-                            <option value="Java">Java</option>
-                            <option value="JavaScript">JavaScript</option>
-                            <option value="Python">Python</option>
-                            <option value="MySQL">MySQL</option>
-                            <option value="Android">Android</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <select class="form-control" name="skill_level[]" required>
-                            <option value="">숙련도를 선택하세요</option>
-                            <option value="초급">초급</option>
-                            <option value="중급">중급</option>
-                            <option value="고급">고급</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-danger" onclick="removeSkill(this)">삭제</button>
-                    </div>
-                </div>
-            </div>
-        `;
-        skillContainer.insertAdjacentHTML('beforeend', newSkill);
-    }
-
-    // 보유 스킬 삭제 기능
-    function removeSkill(button) {
-        const skillRow = button.closest('.skill-row');
-        skillRow.remove();
-    }
-
-    // 경력 입력
-    function formatExperience() {
-        var experienceInput = document.getElementById("job_experience_years");
-        var value = experienceInput.value.replace(/\D/g, ''); // 숫자 이외의 값 제거
-        if (value) {
-            experienceInput.value = value + "년";
-        }
-    }
-
-    let selectedJobTitles = [];
-
-function addJobTitle() {
-    const jobTitleSelect = document.getElementById('job_title');
-    const selectedTitle = jobTitleSelect.value;
-
-    // 직무를 선택했을 때 유효한 값이면 추가
-    if (selectedTitle && !selectedJobTitles.includes(selectedTitle)) {
-        selectedJobTitles.push(selectedTitle);
-        updateJobTitleList();
-    }
-
-    // select를 다시 초기화
-    jobTitleSelect.value = "";
-}
-
-function updateJobTitleList() {
-    const jobTitleList = document.getElementById('job-title-list');
-    jobTitleList.innerHTML = ''; // 기존 목록 초기화
-
-    selectedJobTitles.forEach((title, index) => {
-        const listItem = document.createElement('li');
-        listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-        listItem.textContent = title;
-
-        const removeButton = document.createElement('button');
-        removeButton.className = 'btn btn-danger btn-sm';
-        removeButton.textContent = '삭제';
-        removeButton.onclick = () => removeJobTitle(index);
-
-        listItem.appendChild(removeButton);
-        jobTitleList.appendChild(listItem);
     });
 
-    // 선택된 직무 목록을 hidden input에 저장 (서버로 전송할 수 있도록)
-    document.getElementById('selected_job_titles').value = selectedJobTitles.join(',');
-}
+    // 경력 추가 버튼 기능
+    const addedCareers = []; // 경력 직무 중복 체크를 위한 배열
+    document.getElementById('addCareer').addEventListener('click', function() {
+        const careerSelect = document.getElementById('careerCategory');
+        const selectedCareer = careerSelect.value;
+        const careerYearInput = document.getElementById('careerYear');
+        const careerYear = careerYearInput.value;
 
-function removeJobTitle(index) {
-    selectedJobTitles.splice(index, 1);
-    updateJobTitleList();
-}
+        // 선택된 값이 비어있지 않은지 확인
+        if (selectedCareer && careerYear) {
+            // 중복 체크
+            if (!addedCareers.some(career => career.name === selectedCareer)) {
+                addedCareers.push({ name: selectedCareer, year: careerYear }); // 배열에 추가
+                const li = document.createElement('li');
+                li.textContent = `${selectedCareer} (${careerYear}년)`;
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = '삭제';
+                deleteButton.style.marginLeft = '10px';
+                deleteButton.onclick = function() {
+                    li.remove(); // 리스트에서 항목 삭제
+                    addedCareers.splice(addedCareers.indexOf(addedCareers.find(career => career.name === selectedCareer && career.year === careerYear)), 1); // 배열에서도 삭제
+                };
+
+                li.appendChild(deleteButton);
+                document.getElementById('careerList').appendChild(li);
+                careerSelect.value = ''; // 선택한 옵션을 초기화
+                careerYearInput.value = ''; // 입력 필드 초기화
+                document.getElementById('careerYearContainer').style.display = 'none'; // 연도 입력 숨김
+            } else {
+                alert("이미 추가된 경력 직무입니다."); // 중복 경고 메시지
+            }
+        } else {
+            alert("경력 직무와 연도를 모두 입력해주세요.");
+        }
+    });
+
+    // 경력 직무 선택 시 연도 입력 필드 표시
+    function handleCareerChange() {
+        const careerSelect = document.getElementById('careerCategory');
+        const careerYearContainer = document.getElementById('careerYearContainer');
+        careerYearContainer.style.display = (careerSelect.value) ? 'block' : 'none'; // 선택된 값에 따라 보이기
+    }
+
+    // 기술 스택
+    const addedSkills = []; // 기술 스택 중복 체크를 위한 배열
+    document.getElementById('addSkill').addEventListener('click', function() {
+        const skillSelect = document.getElementById('skillCategory');
+        const selectedSkill = skillSelect.value;
+
+        // 선택된 값이 비어있지 않은지 확인
+        if (selectedSkill) {
+            // 중복 체크
+            if (!addedSkills.includes(selectedSkill)) {
+                addedSkills.push(selectedSkill); // 배열에 추가
+                const li = document.createElement('li');
+                li.textContent = selectedSkill;
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = '삭제';
+                deleteButton.style.marginLeft = '10px';
+                deleteButton.onclick = function() {
+                    li.remove(); // 리스트에서 항목 삭제
+                    addedSkills.splice(addedSkills.indexOf(selectedSkill), 1); // 배열에서도 삭제
+                };
+
+                li.appendChild(deleteButton);
+                document.getElementById('skillList').appendChild(li);
+                skillSelect.value = ''; // 선택한 옵션을 초기화
+            } else {
+                alert("이미 추가된 기술 스택입니다."); // 중복 경고 메시지
+            }
+        } else {
+            alert("기술 스택을 선택해주세요.");
+        }
+    });
+
+    document.getElementById('detail').value = '';
+
+    showSection(currentSectionIndex); // 초기 섹션 표시
 </script>
-
-{{> layout/footer }}
+{{> layout/footer}}

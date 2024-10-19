@@ -2,12 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.damoa.repository.interfaces.FreelancerRepository">
 
-    <select id="jobTitles" resultType="com.damoa.repository.model.JobTitle">
-        SELECT * FROM job_titles_tb;
-    </select>
-
-    <select id="businessTypes" resultType="com.damoa.repository.model.BusinessType">
-        SELECT * FROM business_types_tb;
-    </select>
+    <insert id="insertFreelancer">
+        INSERT INTO freelancer_info(user_id, job_part, working_style, expected_salary, salary_type, experience, career, skill, portfolio, detail, link, created_at)
+        VALUES(#{userId}, #{jobPart}, #{workingStyle}, #{expectedSalary}, #{salaryType}, #{experience}, #{career}, #{skill}, #{portfolio}, #{detail}, #{link}, now())
+    </insert>
 
 </mapper>

@@ -1,13 +1,12 @@
 package com.damoa.repository.interfaces;
 
-import com.damoa.repository.model.BusinessType;
-import com.damoa.repository.model.JobTitle;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.List;
+import com.damoa.repository.model.Freelancer;
 
 @Mapper
 public interface FreelancerRepository {
-    List<JobTitle> jobTitles(); // 직무 목록
-    List<BusinessType> businessTypes(); // 사업자 유형 목록
+
+    public int insertFreelancer(Freelancer freelancer); // 프리랜서 등록
+
 }
