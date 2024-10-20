@@ -1,24 +1,23 @@
 package com.damoa.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.damoa.dto.freelancer.RegisterFreelancerDTO;
 import com.damoa.repository.model.Freelancer;
 import com.damoa.repository.model.User;
 import com.damoa.service.FreelancerService;
-import java.util.List;
-import java.util.ArrayList;
-import edu.emory.mathcs.backport.java.util.Arrays;
+
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -62,6 +61,7 @@ public class FreelancerController {
         model.addAttribute("careerCategories", careerCategories);
         model.addAttribute("skillCategories", skillCategories);
 
+        // 사용자 정보 세션에서 가져오기
         model.addAttribute("username", user.getUsername());
         model.addAttribute("email", user.getEmail());
         model.addAttribute("phoneNumber", user.getPhoneNumber());
@@ -70,10 +70,31 @@ public class FreelancerController {
         return "freelancer/register_freelancer";
     }
 
+    /**
+     * 프리랜서 등록 로직
+     * @param dto
+     * @param session
+     * @return
+     */
     @PostMapping("/register")
-    public String createFreelancer(RegisterFreelancerDTO dto) {
+    public String registerFreelancerProc(@ModelAttribute RegisterFreelancerDTO dto,
+            HttpSession session) {
+
+        // 세션에서 사용자 정보 가져오기
+        User user = (User) session.getAttribute("principal");
+        if (user == null) {
+            return "redirect:/user/sign-in"; // 로그인 페이지로 리디렉션
+        }
+
+        // 세션 유저id 받아오기
+        dto.setUserId(user.getId());
+        System.out.println("==============================");
+        System.out.println("UPLOAED FILE : " + dto.getMFile().getOriginalFilename());
+        System.out.println("==============================");
+
         freelancerService.insertFreelancer(dto);
-        return "redirect:/user/main";
+
+        return "redirect:/main";
     }
 
 }

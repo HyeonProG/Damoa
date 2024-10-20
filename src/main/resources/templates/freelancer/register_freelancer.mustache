@@ -2,13 +2,12 @@
 
 <style>
 .career-container {
-    display: flex;           /* Flexbox를 사용하여 요소들을 나란히 배치 */
-    justify-content: space-between;  /* 두 요소 사이에 공간을 균등하게 배치 */
-    align-items: center;    /* 수직 중앙 정렬 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
-
 .career-container div {
-    margin-right: 20px;     /* 요소 간 간격 */
+    margin-right: 20px;
 }
 </style>
 
@@ -38,11 +37,6 @@
                     <option value="{{.}}">{{.}}</option>
                 {{/jobCategories}}
             </select>
-            <button type="button" id="addJobPart">추가</button>
-        </div>
-        <div id="selectedJobParts">
-            <h4>선택된 직무 분야</h4>
-            <ul id="jobPartList"></ul>
         </div>
     </div>
     
@@ -86,8 +80,8 @@
         </div>
         <div class="career-container">
             <div>
-                <label for="careerCategory">경력 직무</label>
-                <select id="careerCategory" name="careerCategory" required onchange="handleCareerChange()">
+                <label for="career">경력 직무</label>
+                <select id="career" name="career" required onchange="handleCareerChange()">
                     <option value="">직무를 선택하세요</option>
                     {{#careerCategories}}
                         <option value="{{.}}">{{.}}</option>
@@ -98,26 +92,15 @@
                 <input type="number" id="careerYear" name="careerYear" min="1" max="10" required>
                 년
             </div>
-            <button type="button" id="addCareer">추가</button>
-        </div>
-        <div id="selectedCareers">
-            <h4>선택된 경력 직무</h4>
-            <ul id="careerList"></ul>
         </div>
         <div>
-            <label for="skillCategory">기술 스택</label>
-                <select id="skillCategory" name="skillCategory" required onchange="handleSkillChange()">
-                    <option value="">기술 스택을 선택하세요</option>
-                    {{#skillCategories}}
-                        <option value="{{.}}">{{.}}</option>
-                    {{/skillCategories}}
-                </select>
-                    <button type="button" id="addSkill">추가</button>
-        </div>
-        <div id="selectedSkills">
-            <h4>선택된 기술 스택</h4>
-            <ul id="skillList"></ul>
-        </div>                
+            <label for="skill">기술 스택</label>
+            <select id="skill" name="skill" required>
+                <option value="">기술 스택을 선택하세요</option>
+                {{#skillCategories}}
+                    <option value="{{.}}">{{.}}</option>
+                {{/skillCategories}}
+            </select>
         </div>
     </div>
 
@@ -125,21 +108,15 @@
         <h4>추가 정보</h4>
         <div>
             <label for="portfolio">포트폴리오</label>
-            <input type="file" id="portfolio" name="portfolio">
+            <input type="file" id="portfolio" name="mFile">
         </div>
         <div>
             <label for="detail">상세 소개</label>
-            <textarea
-             id="detail"
-             name="detail"
-             placeholder="상세한 자기소개를 입력해주세요."
-             style="width: 100%; height: 150px; resize: none;">
-            </textarea>
+            <textarea id="detail" name="detail" placeholder="상세한 자기소개를 입력해주세요." style="width: 100%; height: 150px; resize: none;"></textarea>
         </div>
         <div>
             <label for="link">링크</label>
-            <input type="url" id="link" name="link" placeholder="예: Github, Notion 링크"
-             style="width: 100%;">
+            <input type="url" id="link" name="link" placeholder="예: Github, Notion 링크" style="width: 100%;">
         </div>
     </div>
 
@@ -182,118 +159,19 @@
         }
     });
 
-    // 직무 추가 버튼 기능
-    const addedJobParts = []; // 직무 분야 중복 체크를 위한 배열
-    document.getElementById('addJobPart').addEventListener('click', function() {
-        const select = document.getElementById('jobPartSelect');
-        const selectedValue = select.value;
-
-        // 선택된 값이 비어있지 않은지 확인
-        if (selectedValue) {
-            // 중복 체크
-            if (!addedJobParts.includes(selectedValue)) {
-                addedJobParts.push(selectedValue); // 배열에 추가
-                const li = document.createElement('li');
-                li.textContent = selectedValue;
-
-                const deleteButton = document.createElement('button');
-                deleteButton.textContent = '삭제';
-                deleteButton.style.marginLeft = '10px';
-                deleteButton.onclick = function() {
-                    li.remove(); // 리스트에서 항목 삭제
-                    addedJobParts.splice(addedJobParts.indexOf(selectedValue), 1); // 배열에서도 삭제
-                };
-
-                li.appendChild(deleteButton);
-                document.getElementById('jobPartList').appendChild(li);
-                select.value = ''; // 선택한 옵션을 초기화
-            } else {
-                alert("이미 추가된 직무 분야입니다."); // 중복 경고 메시지
-            }
-        } else {
-            alert("직무를 선택해주세요.");
-        }
-    });
-
-    // 경력 추가 버튼 기능
-    const addedCareers = []; // 경력 직무 중복 체크를 위한 배열
-    document.getElementById('addCareer').addEventListener('click', function() {
-        const careerSelect = document.getElementById('careerCategory');
-        const selectedCareer = careerSelect.value;
-        const careerYearInput = document.getElementById('careerYear');
-        const careerYear = careerYearInput.value;
-
-        // 선택된 값이 비어있지 않은지 확인
-        if (selectedCareer && careerYear) {
-            // 중복 체크
-            if (!addedCareers.some(career => career.name === selectedCareer)) {
-                addedCareers.push({ name: selectedCareer, year: careerYear }); // 배열에 추가
-                const li = document.createElement('li');
-                li.textContent = `${selectedCareer} (${careerYear}년)`;
-
-                const deleteButton = document.createElement('button');
-                deleteButton.textContent = '삭제';
-                deleteButton.style.marginLeft = '10px';
-                deleteButton.onclick = function() {
-                    li.remove(); // 리스트에서 항목 삭제
-                    addedCareers.splice(addedCareers.indexOf(addedCareers.find(career => career.name === selectedCareer && career.year === careerYear)), 1); // 배열에서도 삭제
-                };
-
-                li.appendChild(deleteButton);
-                document.getElementById('careerList').appendChild(li);
-                careerSelect.value = ''; // 선택한 옵션을 초기화
-                careerYearInput.value = ''; // 입력 필드 초기화
-                document.getElementById('careerYearContainer').style.display = 'none'; // 연도 입력 숨김
-            } else {
-                alert("이미 추가된 경력 직무입니다."); // 중복 경고 메시지
-            }
-        } else {
-            alert("경력 직무와 연도를 모두 입력해주세요.");
-        }
-    });
-
-    // 경력 직무 선택 시 연도 입력 필드 표시
+    // 경력 직무 선택 시 연차 입력 필드 보이기
     function handleCareerChange() {
-        const careerSelect = document.getElementById('careerCategory');
+        const careerSelect = document.getElementById('career');
         const careerYearContainer = document.getElementById('careerYearContainer');
-        careerYearContainer.style.display = (careerSelect.value) ? 'block' : 'none'; // 선택된 값에 따라 보이기
+        if (careerSelect.value) {
+            careerYearContainer.style.display = 'block'; // 선택된 경우 연차 입력 필드 보이기
+        } else {
+            careerYearContainer.style.display = 'none'; // 선택되지 않은 경우 숨기기
+        }
     }
 
-    // 기술 스택
-    const addedSkills = []; // 기술 스택 중복 체크를 위한 배열
-    document.getElementById('addSkill').addEventListener('click', function() {
-        const skillSelect = document.getElementById('skillCategory');
-        const selectedSkill = skillSelect.value;
-
-        // 선택된 값이 비어있지 않은지 확인
-        if (selectedSkill) {
-            // 중복 체크
-            if (!addedSkills.includes(selectedSkill)) {
-                addedSkills.push(selectedSkill); // 배열에 추가
-                const li = document.createElement('li');
-                li.textContent = selectedSkill;
-
-                const deleteButton = document.createElement('button');
-                deleteButton.textContent = '삭제';
-                deleteButton.style.marginLeft = '10px';
-                deleteButton.onclick = function() {
-                    li.remove(); // 리스트에서 항목 삭제
-                    addedSkills.splice(addedSkills.indexOf(selectedSkill), 1); // 배열에서도 삭제
-                };
-
-                li.appendChild(deleteButton);
-                document.getElementById('skillList').appendChild(li);
-                skillSelect.value = ''; // 선택한 옵션을 초기화
-            } else {
-                alert("이미 추가된 기술 스택입니다."); // 중복 경고 메시지
-            }
-        } else {
-            alert("기술 스택을 선택해주세요.");
-        }
-    });
-
-    document.getElementById('detail').value = '';
-
-    showSection(currentSectionIndex); // 초기 섹션 표시
+    // 초기 섹션 표시
+    showSection(currentSectionIndex);
 </script>
-{{> layout/footer}}
+
+{{> layout/footer }}

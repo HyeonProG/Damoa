@@ -3,8 +3,8 @@
 <mapper namespace="com.damoa.repository.interfaces.FreelancerRepository">
 
     <insert id="insertFreelancer">
-        INSERT INTO freelancer_info(user_id, job_part, working_style, expected_salary, salary_type, experience, career, skill, portfolio, detail, link, created_at)
-        VALUES(#{userId}, #{jobPart}, #{workingStyle}, #{expectedSalary}, #{salaryType}, #{experience}, #{career}, #{skill}, #{portfolio}, #{detail}, #{link}, now())
+        INSERT INTO freelancer_info(user_id, username, email, phone_number, job_part, working_style, expected_salary, salary_type, experience, career, career_year, skill, origin_file_name, upload_file_name, detail, link, created_at)
+        VALUES(#{userId}, #{username}, #{email}, #{phoneNumber}, #{jobPart}, #{workingStyle}, #{expectedSalary}, #{salaryType}, #{experience}, #{career}, #{careerYear}, #{skill}, #{originFileName}, #{uploadFileName}, #{detail}, #{link}, now())
     </insert>
 
 </mapper>
