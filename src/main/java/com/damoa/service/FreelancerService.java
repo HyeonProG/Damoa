@@ -102,4 +102,22 @@ public class FreelancerService {
 		return new String[] { originalFileName, uploadFileName };
 	}
 
+    /**
+     * 프리랜서 리스트 조회
+     * @return
+     */
+    public List<Freelancer> findAllFreelancers(int page, int size) {
+        // 페이지네이션
+        int offset = (page - 1) * size;
+        return freelancerRepository.findAllFreelancers(offset, size);
+    }
+
+    /**
+     * 프리랜서 리스트 카운트
+     * @return
+     */
+    public int countAllFreelancers() {
+        return freelancerRepository.countAllFreelancers();
+    }
+
 }

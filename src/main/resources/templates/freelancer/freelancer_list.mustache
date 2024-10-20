@@ -1,0 +1,142 @@
+{{> layout/header}}
+
+<h1>프리랜서 목록</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>이름</th>
+            <th>이메일</th>
+            <th>전화번호</th>
+            <th>직무</th>
+            <th>근무 방식</th>
+            <th>희망 연봉</th>
+            <th>기술 스택</th>
+            <th>등록일</th>
+        </tr>
+    </thead>
+    <tbody id="freelancer-list">
+        {{#freelancers}}
+        <tr>
+            <td>{{username}}</td>
+            <td>{{email}}</td>
+            <td>{{phoneNumber}}</td>
+            <td>{{jobPart}}</td>
+            <td>{{workingStyle}}</td>
+            <td>{{expectedSalary}}</td>
+            <td>{{skill}}</td>
+            <td>{{createdAt}}</td> <!-- 날짜 포맷 -->
+        </tr>
+        {{/freelancers}}
+    </tbody>
+</table>
+
+<div id="paginationContainer"></div> <!-- 페이지네이션을 위한 컨테이너 -->
+
+<script>
+    let currentPage = 1; // 현재 페이지
+    const pageSize = 5; // 페이지당 항목 수
+
+    // 프리랜서 목록 로드
+    function loadFreelancers(page) {
+        fetch(`/freelancer/list/data?page=${page}&size=${pageSize}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Data:", data); // 데이터 로그
+                const freelancerList = document.getElementById('freelancer-list');
+                freelancerList.innerHTML = ''; // 기존 목록 초기화
+
+                // freelancers가 정의되어 있는지 확인
+                if (Array.isArray(data.freelancers)) {
+                    data.freelancers.forEach(freelancer => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${freelancer.username}</td>
+                            <td>${freelancer.email}</td>
+                            <td>${freelancer.phoneNumber}</td>
+                            <td>${freelancer.jobPart}</td>
+                            <td>${freelancer.workingStyle}</td>
+                            <td>${freelancer.expectedSalary}</td>
+                            <td>${freelancer.skill}</td>
+                            <td>${new Date(freelancer.createdAt).toISOString().slice(0, 10)}</td>
+                        `;
+                        freelancerList.appendChild(row);
+                    });
+                } else {
+                    console.warn("No freelancers found.");
+                }
+
+                currentPage = data.currentPage;
+                renderPagination(data.totalCount, currentPage, pageSize, data.totalPages); // 페이지네이션 렌더링
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // 페이지네이션을 렌더링하는 함수
+    function renderPagination(totalCount, currentPage, pageSize, totalPages) {
+        const paginationContainer = document.getElementById('paginationContainer');
+
+        // 기존 페이지네이션 항목 제거
+        while (paginationContainer.firstChild) {
+            paginationContainer.removeChild(paginationContainer.firstChild);
+        }
+
+        // 페이지네이션 리스트 생성
+        const ul = document.createElement('ul');
+        ul.className = 'pagination';
+
+        // 이전 페이지 링크
+        const prevLi = document.createElement('li');
+        prevLi.className = currentPage > 1 ? 'page-item' : 'page-item disabled';
+        const prevLink = document.createElement('a');
+        prevLink.className = 'page-link';
+        prevLink.textContent = '이전';
+        prevLink.addEventListener('click', (event) => {
+            event.preventDefault(); // 페이지 이동 및 새로 고침 방지
+            if (currentPage > 1) { loadFreelancers(currentPage - 1); }
+        });
+        prevLi.appendChild(prevLink);
+        ul.appendChild(prevLi);
+
+        // 페이지 번호 링크
+        for (let i = 1; i <= totalPages; i++) {
+            const li = document.createElement('li');
+            li.className = i === currentPage ? 'page-item active' : 'page-item';
+            const link = document.createElement('a');
+            link.className = 'page-link';
+            link.textContent = i;
+            link.addEventListener('click', (event) => {
+                event.preventDefault(); // 페이지 이동 및 새로 고침 방지
+                loadFreelancers(i); // 해당 페이지 로드
+            });
+            li.appendChild(link);
+            ul.appendChild(li);
+        }
+
+        // 다음 페이지 링크
+        const nextLi = document.createElement('li');
+        nextLi.className = currentPage < totalPages ? 'page-item' : 'page-item disabled';
+        const nextLink = document.createElement('a');
+        nextLink.className = 'page-link';
+        nextLink.textContent = '다음';
+        nextLink.addEventListener('click', (event) => {
+            event.preventDefault(); // 페이지 이동 및 새로 고침 방지
+            if (currentPage < totalPages) { loadFreelancers(currentPage + 1); }
+        });
+        nextLi.appendChild(nextLink);
+        ul.appendChild(nextLi);
+
+        // 완성된 페이지네이션을 페이지네이션 컨테이너에 추가
+        paginationContainer.appendChild(ul);
+    }
+
+    // 페이지 로드 시 기본 페이지 로드
+    loadFreelancers(currentPage);
+</script>
+
+{{> layout/footer}}

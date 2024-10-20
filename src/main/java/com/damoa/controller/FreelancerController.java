@@ -1,6 +1,8 @@
 package com.damoa.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +19,7 @@ import com.damoa.service.FreelancerService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
@@ -72,6 +74,7 @@ public class FreelancerController {
 
     /**
      * 프리랜서 등록 로직
+     * 
      * @param dto
      * @param session
      * @return
@@ -97,4 +100,42 @@ public class FreelancerController {
         return "redirect:/main";
     }
 
+    /**
+     * 프리랜서 찾기 리스트 페이지
+     * 
+     * @param model
+     * @return
+     */
+    @GetMapping("/list")
+    public String findFreelancerPage(Model model) {
+        return "/freelancer/freelancer_list";
+    }
+
+    /**
+     * 프리랜서 목록 AJAX 요청을 처리할 엔드포인트
+     * 
+     * @param page
+     * @param size
+     * @return
+     */
+    @GetMapping("/list/data")
+    @ResponseBody
+    public Map<String, Object> fetchFreelancerList(@RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size) {
+
+        // 프리랜서 목록을 페이지별로 조회
+        List<Freelancer> freelancers = freelancerService.findAllFreelancers(page, size);
+        int totalFreelancers = freelancerService.countAllFreelancers();
+        int totalPages = (int) Math.ceil((double) totalFreelancers / size);
+
+        // 응답 데이터
+        Map<String, Object> response = new HashMap<>();
+        response.put("freelancers", freelancers);
+        response.put("totalCount", totalFreelancers);
+        response.put("currentPage", page);
+        response.put("pageSize", size);
+        response.put("totalPages", totalPages);
+
+        return response; // JSON 형태로 응답
+    }
 }
