@@ -244,7 +244,7 @@ public class UserController {
         }
 
         session.setAttribute("principal", principalDTO);
-        return "redirect:/user/main";
+        return "redirect:/main";
     }
 
     /**
@@ -323,7 +323,7 @@ public class UserController {
         }
 
         session.setAttribute("principal", principalDTO);
-        return "redirect:/user/main";
+        return "redirect:/main";
 
     }
 
