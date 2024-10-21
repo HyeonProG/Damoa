@@ -15,7 +15,13 @@
             UPDATE faq_tb SET title = #{title}, content = #{content} WHERE id = #{id}
     </update>
 
+    <insert id="insert">
+             INSERT INTO faq_tb (type, title, content, created_at)
+              VALUES (#{type}, #{title}, #{content}, now())
+    </insert>
 
-
+    <delete id="delete">
+        delete from faq_tb where id = #{id}
+    </delete>
 
 </mapper>

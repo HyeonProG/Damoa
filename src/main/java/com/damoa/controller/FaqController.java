@@ -1,5 +1,7 @@
 package com.damoa.controller;
 
+import com.damoa.dto.admin.FaqSaveDTO;
+import com.damoa.dto.admin.FaqUpdateDTO;
 import com.damoa.repository.model.Faq;
 import com.damoa.service.FaqService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,34 +20,52 @@ public class FaqController {
 
 
     @GetMapping("/list")
-    public String qnaListPage(Model model){
+    public String qnaListPage(Model model) {
         List<Faq> faqList = faqService.getAllQna();
-        model.addAttribute("faqList",faqList);
+        model.addAttribute("faqList", faqList);
         return "admin/admin_faq_list";
 
     }
 
     @GetMapping("/detail/{id}")
-    public String detailPage(@PathVariable int id, Model model){
+    public String detailPage(@PathVariable int id, Model model) {
         Faq faq = faqService.getFaqById(id);
-        model.addAttribute("faq",faq);
+        model.addAttribute("faq", faq);
         return "admin/admin_faq_detail";
     }
 
     @GetMapping("/update/{id}")
-    public String updatePage(@PathVariable("id") int id, Model model){
+    public String updatePage(@PathVariable("id") int id, Model model) {
         Faq faq = faqService.getFaqById(id);
-        model.addAttribute("faq",faq);
+        System.out.println(faq);
+        model.addAttribute("faq", faq);
         return "admin/admin_faq_update";
     }
 
     @PostMapping("/update/{id}")
-    public String updatePage(@RequestParam int id,@RequestParam String title, @RequestParam String content){
-        faqService.updateById(id,title,content);
-        faqService.getFaqById(id);
-        return "admin/admin_faq_update";
+    public String updatePage(@PathVariable int id, @RequestParam String title, @RequestParam String content) {
+        FaqUpdateDTO updateDTO = new FaqUpdateDTO(id, title, content);
+        faqService.updateById(updateDTO);
+        return "redirect:/faq/list";
+    }
+    @GetMapping("/save")
+    public String savePage(){
+
+        return "admin/faq_save_form";
+
     }
 
+    @PostMapping("/save")
+    public String saveProc(@ModelAttribute("reqDTO") FaqSaveDTO reqDTO){
+        faqService.createFaq(reqDTO);
+        return "redirect:/faq/list";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable int id){
+        faqService.delete(id);
+        return "redirect:/faq/list";
+    }
 
 
 }

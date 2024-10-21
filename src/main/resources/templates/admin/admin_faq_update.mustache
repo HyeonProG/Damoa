@@ -2,11 +2,11 @@
 
 <div class="container mt-5">
     {{#faq}}
-        <form action="faq/update" method="post">
-        <input type="hidden"  value={{id}} id="id">
-        <input type="textarea" value={{title}} id="title">
+        <form action="/faq/update/{{id}}" method="post">
+        <input type="hidden"  value="{{id}}" name="id">
+        <input type="text" value="{{title}}" name="title" class="form-control" >
         <hr>
-        <input type="textarea" value="{{content}}" id="content">
+        <input type="text" value="{{content}}" name="content" class="form-control" >
             <button type="submit">수정하기</button>
         </form>
 

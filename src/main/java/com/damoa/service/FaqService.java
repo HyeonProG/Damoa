@@ -1,5 +1,7 @@
 package com.damoa.service;
 
+import com.damoa.dto.admin.FaqSaveDTO;
+import com.damoa.dto.admin.FaqUpdateDTO;
 import com.damoa.repository.interfaces.FaqRepository;
 import com.damoa.repository.model.Faq;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,18 @@ public class FaqService {
         return faqRepository.findById(id);
     }
 
-    public Faq updateById(int id,String content, String title){
-        return  faqRepository.updateById(id,content,title);
+    public int updateById(FaqUpdateDTO updateDTO){
+        return  faqRepository.updateById(updateDTO);
     }
+
+    public int createFaq(FaqSaveDTO dto){
+        return faqRepository.insert(dto.toFaq());
+    }
+
+    public int delete(int id){
+        return faqRepository.delete(id);
+    }
+
 
 
 }

@@ -1,5 +1,6 @@
 package com.damoa.repository.interfaces;
 
+import com.damoa.dto.admin.FaqUpdateDTO;
 import com.damoa.repository.model.Faq;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -12,5 +13,7 @@ public interface FaqRepository {
 
     public List<Faq> getAllQna();
     public Faq findById(int id);
-    public Faq updateById(int id, @RequestParam String title, @RequestParam String content);
+    public int updateById(FaqUpdateDTO updateDTO);
+    public int insert(Faq faq);
+    public int delete(int id);
 }
