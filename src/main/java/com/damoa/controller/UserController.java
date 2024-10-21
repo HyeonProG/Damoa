@@ -392,7 +392,7 @@ public class UserController {
             HttpSession session = request.getSession(true);
             session.setAttribute("principal", user);
 
-            return "redirect:/";
+            return "redirect:/main";
         } catch (Exception e) {
             if (userSignInDTO.getEmail() == null || userSignInDTO.getEmail().isEmpty()) {
                 throw new DataDeliveryException("이메일을 입력하세요.", HttpStatus.BAD_REQUEST);

@@ -20,4 +20,13 @@
         SELECT * FROM user WHERE email = #{email}
     </select>
 
+    <insert id="insertDeleteUser">
+        INSERT INTO delete_user (id, email, username, password, phone_number, social_type, user_type, created_at, deleted_at, delete_scheduled_at)
+        VALUES (#{id}, #{email}, #{username}, #{password}, #{phoneNumber}, #{socialType}, #{userType}, #{createdAt}, NOW(), DATE_ADD(NOW(), INTERVAL 3 YEAR))
+    </insert>
+
+    <delete id="deleteUser">
+        DELETE FROM user WHERE id = #{userId}
+    </delete>
+
 </mapper>
