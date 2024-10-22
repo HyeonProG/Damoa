@@ -46,5 +46,8 @@
     </div>
     {{/noticeList}}
 </div>
+<button onclick="location.href='/notice/list/{{lastPage}}'">{{lastPage}}</button>
+<button onclick="location.href='/notice/list/{{currentPageNum}}'">{{currentPageNum}}</button>
+<button onclick="location.href='/notice/list/{{nextPage}}'">{{nextPage}}</button>
 
 {{>layout/footer}}

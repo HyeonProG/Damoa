@@ -1,0 +1,20 @@
+{{>layout/header}}
+<h3>프로젝트 목록</h3>
+<p>프로젝트를 찾고 매칭해보세요</p>
+
+<div class="page-nation" id="page-nation" >
+</div>
+{{#projectList}}
+    <div class="project-box" id="each-project" onclick="location.href='/project/detail/{{id}}'">
+        <h5>{{id}}</h5>
+        <h5>{{projectName}}</h5>
+        <h5>{{job}}</h5>
+        <h5>{{skill}}</h5>
+        <h5>{{projectStart}}</h5>
+    </div>
+{{/projectList}}
+
+<script>
+
+</script>
+{{>layout/footer}}

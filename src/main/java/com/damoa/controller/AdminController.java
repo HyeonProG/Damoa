@@ -16,7 +16,7 @@ public class AdminController {
     // 관리자 메인 페이지
     @GetMapping("/admin-main")
     public String mainPage(){
-        return "admin_main";
+        return "admin/admin_main";
     }
 
 }
