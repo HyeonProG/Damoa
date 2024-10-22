@@ -22,12 +22,13 @@
 
     <select id="getAllProject"  parameterType="com.damoa.repository.model.Project">
         select * from project_tb
+        where status = 1
     </select>
 
     <select id="getProjectForPaging"  parameterType="com.damoa.repository.model.Project">
-        select * from project_tb
-        limit #{limit} offset #{offset}
-        where major_status = 1
+        SELECT * FROM project_tb
+        WHERE status = 1
+        LIMIT #{limit} OFFSET #{offset}
     </select>
 
     <select id="getProjectById"  parameterType="com.damoa.repository.model.Project">

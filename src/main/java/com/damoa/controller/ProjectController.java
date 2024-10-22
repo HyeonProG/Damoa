@@ -136,7 +136,7 @@ public class ProjectController {
         // 파일명 중복 방지를 위한 파일명
         String uploadFileName = UUID.randomUUID()+"_"+mFile.getOriginalFilename();
 
-        // 파일 전체 경ㄹ + 새로 생성한 파일명
+        // 파일 전체 경로 + 새로 생성한 파일명
         String uploadPath = saveDirectory+uploadFileName;
         File destination = new File(uploadPath);
 

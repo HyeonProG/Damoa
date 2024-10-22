@@ -100,7 +100,7 @@ public class SignCotroller {
     }
 
     // 사인 경로 설정
-    private List<Sign> setSignPath(List<Sign> list){
+    public List<Sign> setSignPath(List<Sign> list){
         for(int a=0; a<list.size(); a++){
             list.get(a).setFileName(list.get(a).setUpSignImage());
         }
