@@ -1,0 +1,37 @@
+{{> layout/header}}
+
+ <h1>프리랜서 경력 관리</h1>
+
+    <!-- 프리랜서의 경력이 있는지 확인 -->
+
+    <ul>
+        {{#freelancerCareers}}
+        <li>{{career}} 
+            <!-- 경력 삭제 버튼 -->
+            <form action="/freelancer/delete-career" method="post" style="display: inline;">
+                <input type="hidden" name="careerId" value="{{id}}">
+                <button type="submit">삭제</button>
+            </form>
+        </li>
+        {{/freelancerCareers}}
+    </ul>
+
+    {{^freelancerCareers}}
+    <h2>등록된 경력이 없습니다</h2>
+    {{/freelancerCareers}}
+
+    <h2>경력 추가</h2>
+    <!-- 경력 추가 폼 -->
+    <form action="/freelancer/insert-career" method="post">
+        <label for="career">추가할 경력:</label>
+        <select name="careerId" id="career">
+            {{#careers}}
+            <option value="{{id}}">{{career}}</option>
+            {{/careers}}
+        </select>
+        <button type="submit">추가</button>
+    </form>
+
+    <a href="/freelancer/dashboard">뒤로 가기</a>
+
+{{> layout/footer}}

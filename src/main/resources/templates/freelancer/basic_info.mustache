@@ -1,0 +1,45 @@
+{{> layout/header}}
+
+<div class="container">
+    <h1>프리랜서 정보</h1>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <!-- 직무 -->
+            <h5 class="card-title">직무 정보</h5>
+            <p class="card-text">
+                직무: {{freelancer.jobPart}} <br>
+                근무 방식: {{freelancer.workingStyle}} <br>
+                희망 연봉: {{freelancer.expectedSalary}} 만 원 <br>
+                급여 방식: {{freelancer.salaryType}}
+            </p>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <!-- 상세 소개 -->
+            <h5 class="card-title">상세 소개</h5>
+            <p class="card-text">{{freelancer.detail}}</p>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <!-- 포트폴리오 링크 -->
+            <h5 class="card-title">포트폴리오 및 링크</h5>
+            <p class="card-text">
+                {{#freelancer.link}}
+                    <a href="{{freelancer.link}}" target="_blank">{{freelancer.link}}</a>
+                {{/freelancer.link}}
+                {{^freelancer.link}}
+                    포트폴리오 링크가 없습니다.
+                {{/freelancer.link}}
+            </p>
+        </div>
+    </div>
+
+    <a href="/freelancer/update-basic-info" class="btn btn-primary mt-3">정보 수정</a>
+</div>
+
+{{> layout/footer}}

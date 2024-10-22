@@ -1,0 +1,111 @@
+{{> layout/header }}
+
+<style>
+    .detail-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+    .detail-container h2 {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    .detail-item {
+        margin-bottom: 15px;
+    }
+    .detail-item label {
+        font-weight: bold;
+        display: block;
+    }
+    .detail-item p {
+        margin: 5px 0 0 0;
+    }
+</style>
+
+<div class="detail-container">
+    <h2>프리랜서 상세 정보</h2>
+    
+    <div class="detail-item">
+        <label for="username">이름:</label>
+        <p>{{freelancer.username}}</p>
+    </div>
+    
+    <div class="detail-item">
+        <label for="email">이메일:</label>
+        <p>{{freelancer.email}}</p>
+    </div>
+    
+    <div class="detail-item">
+        <label for="phoneNumber">연락처:</label>
+        <p>{{freelancer.phoneNumber}}</p>
+    </div>
+    
+    <div class="detail-item">
+        <label for="jobPart">직무 분야:</label>
+        <p>{{freelancer.jobPart}}</p>
+    </div>
+    
+    <div class="detail-item">
+        <label for="expectedSalary">희망 연봉:</label>
+        <p>{{freelancer.expectedSalary}} 만원</p>
+    </div>
+    
+    <div class="detail-item">
+        <label for="workingStyle">근무 방식:</label>
+        <p>{{freelancer.workingStyle}}</p>
+    </div>
+    
+    <div class="detail-item">
+        <label for="salaryType">급여 방식:</label>
+        <p>{{freelancer.salaryType}}</p>
+    </div>
+    
+    <div class="detail-item">
+        <label for="experience">프리랜서 경험:</label>
+        <p>{{freelancer.experience}}</p>
+    </div>
+    
+    <div class="detail-item">
+        <label for="career">경력 직무:</label>
+        <p>{{freelancer.career}} - {{freelancer.careerYear}}년</p>
+    </div>
+    
+    <div class="detail-item">
+        <label for="skill">기술 스택:</label>
+        <p>{{freelancer.skill}}</p>
+    </div>
+    
+    <div class="detail-item">
+        <label for="uploadFileName">포트폴리오:</label>
+        {{#freelancer.uploadFileName}}
+        <p><a href="/files/{{freelancer.uploadFileName}}" target="_blank">포트폴리오 다운로드</a></p>
+        {{/freelancer.uploadFileName}}
+        {{^freelancer.uploadFileName}}
+        <p>포트폴리오가 없습니다.</p>
+        {{/freelancer.uploadFileName}}
+    </div>
+    
+    <div class="detail-item">
+        <label for="detail">상세 소개:</label>
+        <p>{{freelancer.detail}}</p>
+    </div>
+    
+    <div class="detail-item">
+        <label for="link">링크:</label>
+        {{#freelancer.link}}
+        <p><a href="{{freelancer.link}}" target="_blank">{{freelancer.link}}</a></p>
+        {{/freelancer.link}}
+        {{^freelancer.link}}
+        <p>링크가 없습니다.</p>
+        {{/freelancer.link}}
+    </div>
+
+    <div class="detail-item">
+        <button onclick="location.href='/freelancer/list'">목록으로 돌아가기</button>
+    </div>
+</div>
+
+{{> layout/footer }}

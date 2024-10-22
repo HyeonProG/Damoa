@@ -29,7 +29,7 @@ public class RegisterFreelancerDTO {
     private String phoneNumber; // 전화번호
     private String jobPart; // 직무
     private String workingStyle; // 근무 방식
-    private String expectedSalary; // 희망 연봉
+    private Integer expectedSalary; // 희망 연봉
     private String salaryType; // 급여 방식
     private String experience; // 프리랜서 경험
     private String career; // 경력
@@ -54,9 +54,6 @@ public class RegisterFreelancerDTO {
                 .expectedSalary(this.expectedSalary)
                 .salaryType(this.salaryType)
                 .experience(this.experience)
-                .career(this.career)
-                .careerYear(this.careerYear)
-                .skill(this.skill)
                 .originFileName(this.originFileName)
                 .uploadFileName(this.uploadFileName)
                 .detail(this.detail)

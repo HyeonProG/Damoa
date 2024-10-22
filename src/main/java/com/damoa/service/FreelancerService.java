@@ -12,10 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.damoa.dto.freelancer.FreelancerBasicInfoDTO;
 import com.damoa.dto.freelancer.RegisterFreelancerDTO;
 import com.damoa.handler.exception.DataDeliveryException;
 import com.damoa.repository.interfaces.FreelancerRepository;
+import com.damoa.repository.interfaces.SkillRepository;
+import com.damoa.repository.model.Career;
 import com.damoa.repository.model.Freelancer;
+import com.damoa.repository.model.Skill;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,84 +30,49 @@ public class FreelancerService {
     @Autowired
     private final FreelancerRepository freelancerRepository;
 
+    @Autowired
+    private final SkillRepository skillRepository;
+
     /**
-     * 프리랜서 등록
-     * 
-     * @param dto
-     * @return
+     * 파일 업로드
      */
     @Transactional
-    public void insertFreelancer(RegisterFreelancerDTO dto) {
-        System.out.println("======================");
-        System.out.println("CAREER : " + dto.getCareer());
-        System.out.println("======================");
-        System.out.println("======================");
-        System.out.println("UPLOADFILENAME : " + dto.getUploadFileName());
-        System.out.println("======================");
-        System.out.println("======================");
-        System.out.println("ORIGINFILENAME : " + dto.getOriginFileName());
-        System.out.println("======================");
-        int result = 0;
+    public String[] uploadFile(MultipartFile mFile) {
+        if (mFile.getSize() > 1024 * 1024 * 20) {
+            throw new DataDeliveryException("파일 크기는 20MB 이상 클 수 없습니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        String saveDirectory = null;
+
         try {
-            // 파일 업로드 수행
-            if (dto.getMFile() != null && !dto.getMFile().isEmpty()) {
-                String[] fileNames = uploadFile(dto.getMFile());
-                dto.setOriginFileName(fileNames[0]);
-                dto.setUploadFileName(fileNames[1]);
+            saveDirectory = System.getProperty("user.dir") + "/src/main/resources/static/images/portfolio/";
+            System.out.println("saveDirectory : " + saveDirectory);
+            File dir = new File(saveDirectory);
+            if (!dir.exists()) {
+                dir.mkdirs(); // 디렉토리 생성
             }
-            // 프리랜서 등록
-            result = freelancerRepository.insertFreelancer(dto.toFreelancer());
-            if (result == 0) {
-                throw new RuntimeException("프리랜서 등록 실패");
-            }
-        } catch (DataAccessException e) {
-            e.printStackTrace();
-            throw new RuntimeException("데이터베이스 접근 오류 발생", e);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("프리랜서 등록 중 오류 발생", e);
         }
+        String originalFileName = mFile.getOriginalFilename();
+        String uploadFileName = UUID.randomUUID() + "_" + originalFileName;
+        String uploadPath = saveDirectory + File.separator + uploadFileName;
+        File destination = new File(uploadPath);
+        System.out.println("UPLOADPATH : " + uploadPath);
+        System.out.println("destination : " + destination);
+        try {
+            mFile.transferTo(destination);
+        } catch (IllegalStateException | IOException e) {
+            e.printStackTrace();
+            throw new DataDeliveryException("파일 업로드 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new String[] { originalFileName, uploadFileName };
     }
 
     /**
-	 * 파일 업로드
-	 */
-	@Transactional
-	public String[] uploadFile(MultipartFile mFile) {
-		if (mFile.getSize() > 1024 * 1024 * 20) {
-			throw new DataDeliveryException("파일 크기는 20MB 이상 클 수 없습니다.", HttpStatus.BAD_REQUEST);
-		}
-
-		String saveDirectory = null;
-
-		try {
-			saveDirectory = System.getProperty("user.dir") + "/src/main/resources/static/images/portfolio/";
-			System.out.println("saveDirectory : " + saveDirectory);
-			File dir = new File(saveDirectory);
-		    if (!dir.exists()) {
-		        dir.mkdirs(); // 디렉토리 생성
-		    }
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		String originalFileName = mFile.getOriginalFilename();
-		String uploadFileName = UUID.randomUUID() + "_" + originalFileName;
-		String uploadPath = saveDirectory + File.separator + uploadFileName;
-		File destination = new File(uploadPath);
-		System.out.println("UPLOADPATH : " + uploadPath);
-		System.out.println("destination : " + destination);
-		try {
-			mFile.transferTo(destination);
-		} catch (IllegalStateException | IOException e) {
-			e.printStackTrace();
-			throw new DataDeliveryException("파일 업로드 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
-		return new String[] { originalFileName, uploadFileName };
-	}
-
-    /**
      * 프리랜서 리스트 조회
+     * 
      * @return
      */
     public List<Freelancer> findAllFreelancers(int page, int size) {
@@ -114,10 +83,123 @@ public class FreelancerService {
 
     /**
      * 프리랜서 리스트 카운트
+     * 
      * @return
      */
     public int countAllFreelancers() {
         return freelancerRepository.countAllFreelancers();
+    }
+
+    /**
+     * userId로 프리랜서 조회
+     * 
+     * @param id
+     * @return
+     */
+    public Freelancer findUserIdJoinFreelancerTb(int id) {
+        return freelancerRepository.findUserIdJoinFreelancerTb(id);
+    }
+
+    /**
+     * 프리랜서 기본 정보 업데이트
+     * 
+     * @param dto
+     */
+    @Transactional
+    public void updateFreelancerBasicInfo(FreelancerBasicInfoDTO dto) {
+        // 파일 업로드 수행
+        if (dto.getMFile() != null && !dto.getMFile().isEmpty()) {
+            String[] fileNames = uploadFile(dto.getMFile());
+            dto.setOriginFileName(fileNames[0]);
+            dto.setUploadFileName(fileNames[1]);
+        }
+
+        // 프리랜서 기본 정보 업데이트
+        freelancerRepository.updateFreelancerBasicInfo(dto);
+    }
+
+    /**
+     * 프리랜서 기본 정보 find
+     * 
+     * @param userId
+     * @return
+     */
+    public FreelancerBasicInfoDTO findFreelancerBasicInfo(int userId) {
+        return freelancerRepository.findFreelancerBasicInfo(userId);
+    }
+
+    /**
+     * 경력 정보 리스트 조회
+     * @return
+     */
+    public List<Career> findAllCareers() {
+        return freelancerRepository.findAllCareers();
+    }
+
+    /**
+     * 프리랜서 경력 추가
+     * @param userId
+     * @param careerId
+     */
+    @Transactional
+    public void insertFreelancerCareer(int userId, int careerId) {
+        freelancerRepository.insertFreelancerCareer(userId, careerId);
+    }
+
+    /**
+     * 프리랜서 경력 삭제
+     * @param userId
+     * @param careerId
+     */
+    @Transactional
+    public void deleteFreelancerCareerByFreelancerId(int userId, int careerId) {
+        freelancerRepository.deleteFreelancerCareerByFreelancerId(userId, careerId);
+    }
+
+    /**
+     * 프리랜서 경력 조회
+     * @param userId
+     * @return
+     */
+    public List<Career> findCareersByFreelancerId(int userId) {
+        return freelancerRepository.findCareersByFreelancerId(userId);
+    }
+
+    /**
+     * 모든 스킬 가져오기
+     * @return
+     */
+    public List<Skill> findAllSkills() {
+        return freelancerRepository.findAllSkills();
+    }
+
+    /**
+     * 프리랜서 스킬 조회
+     * @param userId
+     * @return
+     */
+    public List<Skill> findSkillsByFreelancerId(int userId) {
+        return freelancerRepository.findSkillsByFreelancerId(userId);
+    }
+
+    /**
+     * 프리랜서 스킬 추가
+     * @param userId
+     * @param skillId
+     */
+    @Transactional
+    public void insertFreelancerSkill(int userId, int skillId) {
+        freelancerRepository.insertFreelancerSkill(userId, skillId);
+    }
+
+    /**
+     * 프리랜서 스킬 삭제
+     * @param userId
+     * @param skillId
+     */
+    @Transactional
+    public void deleteFreelancerSkill(int userId, int skillId) {
+        freelancerRepository.deleteFreelancerSkillByFreelancerId(userId, skillId);
     }
 
 }
