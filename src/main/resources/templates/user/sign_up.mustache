@@ -1,5 +1,111 @@
 {{> layout/header }}
 
+<style>
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-top: 5px;
+    }
+
+    button, .btn {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        margin-top: 10px;
+        background-color: #007bff;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover, .btn:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-outline-secondary {
+        background-color: white;
+        border: 1px solid #ccc;
+        color: #333;
+        width: 48%;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #f1f1f1;
+        border-color: #bbb;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+    }
+
+    .text-white {
+        color: white;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    #pwdConfirm {
+        display: block;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    #emailCheckResult {
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    .d-flex {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+    hr {
+        margin-top: 30px;
+    }
+
+    .swal2-popup {
+        font-size: 16px !important;
+    }
+</style>
+
 <div class="container mt-5">
     <h2 class="text-center">회원가입</h2>
     <form action="/user/sign-up" method="post" id="signUpForm">
@@ -7,9 +113,9 @@
 
         <div class="form-group">
             <label for="userType">회원 유형 선택</label>
-            <div>
-                <button type="button" id="freelancerBtn" class="btn btn-outline-secondary">프리랜서</button>
-                <button type="button" id="companyBtn" class="btn btn-outline-secondary">기업</button>
+            <div class="d-flex justify-content-between">
+                <button type="button" id="freelancerBtn" class="btn-outline-secondary">프리랜서</button>
+                <button type="button" id="companyBtn" class="btn-outline-secondary">기업</button>
             </div>
             <input type="hidden" name="userType" id="userType" value="">
         </div>
@@ -67,6 +173,7 @@
         </div>
     </div>
 </div>
+
 
 <script>
 let isEmailValid = false; // 이메일 유효성 확인 변수

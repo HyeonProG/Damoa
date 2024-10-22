@@ -1,36 +1,36 @@
 {{> layout/header}}
 
-<div class="container">
-    <h1>프리랜서 정보</h1>
+<div class="container mt-5">
+    <h1 class="text-center mb-4 font-weight-bold">프리랜서 정보</h1>
 
-    <div class="card mt-4">
+    <div class="card mb-4 shadow-sm">
         <div class="card-body">
             <!-- 직무 -->
-            <h5 class="card-title">직무 정보</h5>
+            <h5 class="card-title font-weight-bold">직무 정보</h5>
             <p class="card-text">
-                직무: {{freelancer.jobPart}} <br>
-                근무 방식: {{freelancer.workingStyle}} <br>
-                희망 연봉: {{freelancer.expectedSalary}} 만 원 <br>
-                급여 방식: {{freelancer.salaryType}}
+                <strong>직무:</strong> {{freelancer.jobPart}} <br>
+                <strong>근무 방식:</strong> {{freelancer.workingStyle}} <br>
+                <strong>희망 연봉:</strong> {{freelancer.expectedSalary}} 만 원 <br>
+                <strong>급여 방식:</strong> {{freelancer.salaryType}}
             </p>
         </div>
     </div>
 
-    <div class="card mt-4">
+    <div class="card mb-4 shadow-sm">
         <div class="card-body">
             <!-- 상세 소개 -->
-            <h5 class="card-title">상세 소개</h5>
+            <h5 class="card-title font-weight-bold">상세 소개</h5>
             <p class="card-text">{{freelancer.detail}}</p>
         </div>
     </div>
 
-    <div class="card mt-4">
+    <div class="card mb-4 shadow-sm">
         <div class="card-body">
             <!-- 포트폴리오 링크 -->
-            <h5 class="card-title">포트폴리오 및 링크</h5>
+            <h5 class="card-title font-weight-bold">포트폴리오 및 링크</h5>
             <p class="card-text">
                 {{#freelancer.link}}
-                    <a href="{{freelancer.link}}" target="_blank">{{freelancer.link}}</a>
+                    <a href="{{freelancer.link}}" target="_blank" class="text-primary">{{freelancer.link}}</a>
                 {{/freelancer.link}}
                 {{^freelancer.link}}
                     포트폴리오 링크가 없습니다.
@@ -39,7 +39,9 @@
         </div>
     </div>
 
-    <a href="/freelancer/update-basic-info" class="btn btn-primary mt-3">정보 수정</a>
+    <div class="text-center">
+        <a href="/freelancer/update-basic-info" class="btn btn-primary btn-lg">정보 수정</a>
+    </div>
 </div>
 
 {{> layout/footer}}
