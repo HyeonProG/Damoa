@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.damoa.DamoaApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-10-17T14:47:43" hostname="jun-ui-MacBookPro.local" time="0.368">
+  <properties/>
+  <testcase name="contextLoads()" classname="com.damoa.DamoaApplicationTests" time="0.368"/>
+  <system-out><![CDATA[23:47:42.957 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.damoa.DamoaApplicationTests]: DamoaApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+23:47:42.988 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.damoa.DamoaApplication for test class com.damoa.DamoaApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+?[32m :: Spring Boot :: ?[39m             ?[2m (v3.2.10)?[0;39m
+
+?[2m2024-10-17T23:47:43.115+09:00?[0;39m ?[32m INFO?[0;39m ?[35m31533?[0;39m ?[2m---?[0;39m ?[2m[    Test worker]?[0;39m ?[2m?[0;39m?[36mcom.damoa.DamoaApplicationTests         ?[0;39m ?[2m:?[0;39m Starting DamoaApplicationTests using Java 21.0.4 with PID 31533 (started by byeon-yeongjun in /Users/byeon-yeongjun/IdeaProjects/Damoa)
+?[2m2024-10-17T23:47:43.115+09:00?[0;39m ?[32m INFO?[0;39m ?[35m31533?[0;39m ?[2m---?[0;39m ?[2m[    Test worker]?[0;39m ?[2m?[0;39m?[36mcom.damoa.DamoaApplicationTests         ?[0;39m ?[2m:?[0;39m No active profile set, falling back to 1 default profile: "default"
+?[2m2024-10-17T23:47:43.308+09:00?[0;39m ?[32mDEBUG?[0;39m ?[35m31533?[0;39m ?[2m---?[0;39m ?[2m[    Test worker]?[0;39m ?[2m?[0;39m?[36morg.apache.ibatis.logging.LogFactory    ?[0;39m ?[2m:?[0;39m Logging initialized using 'class org.apache.ibatis.logging.slf4j.Slf4jImpl' adapter.
+?[2m2024-10-17T23:47:43.419+09:00?[0;39m ?[32m INFO?[0;39m ?[35m31533?[0;39m ?[2m---?[0;39m ?[2m[    Test worker]?[0;39m ?[2m?[0;39m?[36mo.s.b.a.w.s.WelcomePageHandlerMapping   ?[0;39m ?[2m:?[0;39m Adding welcome page: class path resource [static/index.html]
+Logging initialized using 'class org.apache.ibatis.logging.stdout.StdOutImpl' adapter.
+?[2m2024-10-17T23:47:43.529+09:00?[0;39m ?[32m INFO?[0;39m ?[35m31533?[0;39m ?[2m---?[0;39m ?[2m[    Test worker]?[0;39m ?[2m?[0;39m?[36mcom.zaxxer.hikari.HikariDataSource      ?[0;39m ?[2m:?[0;39m HikariPool-1 - Starting...
+?[2m2024-10-17T23:47:43.588+09:00?[0;39m ?[32m INFO?[0;39m ?[35m31533?[0;39m ?[2m---?[0;39m ?[2m[    Test worker]?[0;39m ?[2m?[0;39m?[36mcom.zaxxer.hikari.pool.HikariPool       ?[0;39m ?[2m:?[0;39m HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:test user=SA
+?[2m2024-10-17T23:47:43.589+09:00?[0;39m ?[32m INFO?[0;39m ?[35m31533?[0;39m ?[2m---?[0;39m ?[2m[    Test worker]?[0;39m ?[2m?[0;39m?[36mcom.zaxxer.hikari.HikariDataSource      ?[0;39m ?[2m:?[0;39m HikariPool-1 - Start completed.
+?[2m2024-10-17T23:47:43.593+09:00?[0;39m ?[32m INFO?[0;39m ?[35m31533?[0;39m ?[2m---?[0;39m ?[2m[    Test worker]?[0;39m ?[2m?[0;39m?[36mo.s.b.a.h2.H2ConsoleAutoConfiguration   ?[0;39m ?[2m:?[0;39m H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:test'
+?[2m2024-10-17T23:47:43.620+09:00?[0;39m ?[32m INFO?[0;39m ?[35m31533?[0;39m ?[2m---?[0;39m ?[2m[    Test worker]?[0;39m ?[2m?[0;39m?[36mcom.damoa.DamoaApplicationTests         ?[0;39m ?[2m:?[0;39m Started DamoaApplicationTests in 0.589 seconds (process running for 0.957)
+]]></system-out>
+  <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (/Users/byeon-yeongjun/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.14.19/154da3a65b4f4a909d3e5bdec55d1b2b4cbb6ce1/byte-buddy-agent-1.14.19.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>
