@@ -91,7 +91,7 @@ public class FreelancerService {
     }
 
     /**
-     * userId로 프리랜서 조회
+     * userId로 프리랜서 기본 정보 조회
      * 
      * @param id
      * @return
@@ -200,6 +200,13 @@ public class FreelancerService {
     @Transactional
     public void deleteFreelancerSkill(int userId, int skillId) {
         freelancerRepository.deleteFreelancerSkillByFreelancerId(userId, skillId);
+    }
+
+    /**
+     * 프리랜서 상세 정보 조회
+     */
+    public Freelancer findFreelancerDetailById(int userId) {
+        return freelancerRepository.findFreelancerDetailById(userId);
     }
 
 }

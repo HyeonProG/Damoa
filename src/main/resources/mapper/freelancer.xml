@@ -49,10 +49,11 @@
     </select>
 
     <select id="findUserIdJoinFreelancerTb">
-        select * 
-        from user_tb as u
-        join freelancer_tb as f
-        where u.id = #{id};
+        select *
+        from freelancer_tb as f
+        left join user_tb as u
+        on f.user_id = u.id
+        where u.id = #{id}
     </select>
 
     <!-- 프리랜서 기본 정보 업데이트 쿼리 -->
@@ -140,6 +141,41 @@
         FROM freelancer_skills_tb fs
         JOIN skill_tb s ON fs.skill_id = s.id
         WHERE fs.user_id = #{userId}
+    </select>
+
+    <select id="findFreelancerDetailById">
+        SELECT 
+        f.id,
+        f.user_id,
+        u.username,
+        f.job_part,
+        f.working_style,
+        f.expected_salary,
+        f.salary_type,
+        f.origin_file_name,
+        f.upload_file_name,
+        f.detail,
+        f.link,
+        f.created_at,
+        GROUP_CONCAT(DISTINCT s.name) AS skills,
+        GROUP_CONCAT(DISTINCT c.career) AS career
+    FROM 
+        freelancer_tb f
+    LEFT JOIN 
+        user_tb u ON f.user_id = u.id
+    LEFT JOIN 
+        freelancer_skills_tb fs ON f.user_id = fs.user_id
+    LEFT JOIN 
+        skill_tb s ON fs.skill_id = s.id
+    LEFT JOIN 
+        freelancer_career_tb fc ON f.user_id = fc.user_id
+    LEFT JOIN   
+        career c ON fc.career_id = c.id
+	WHERE f.user_id = #{userId}
+    GROUP BY 
+        f.id, f.user_id, u.username, f.job_part, f.working_style, 
+        f.expected_salary, f.salary_type, f.origin_file_name, 
+        f.upload_file_name, f.detail, f.link, f.created_at
     </select>
 
 </mapper>

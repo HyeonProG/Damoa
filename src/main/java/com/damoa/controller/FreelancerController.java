@@ -11,11 +11,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.damoa.dto.freelancer.UpdateFreelancerWorkingStyleDTO;
 import com.damoa.dto.freelancer.FreelancerBasicInfoDTO;
-import com.damoa.dto.freelancer.RegisterFreelancerDTO;
-import com.damoa.dto.freelancer.UpdateFreelancerCareerDTO;
 import com.damoa.repository.model.Career;
 import com.damoa.repository.model.Freelancer;
 import com.damoa.repository.model.Skill;
@@ -24,9 +23,6 @@ import com.damoa.service.FreelancerService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequiredArgsConstructor
@@ -328,8 +324,8 @@ public class FreelancerController {
         return response; // JSON 형태로 응답
     }
 
-    @GetMapping("/detail/{id}")
-    public String freelancerDetailPage(@PathVariable("id") int id, HttpSession session, Model model) {
+    @GetMapping("/detail/{userId}")
+    public String freelancerDetailPage(@PathVariable("userId") int userId, HttpSession session, Model model) {
         // 세션에서 사용자 정보 가져오기
         User user = (User) session.getAttribute("principal");
         // 사용자가 로그인하지 않았을 경우 로그인 페이지로 리디렉션
@@ -337,15 +333,16 @@ public class FreelancerController {
             return "redirect:/user/sign-in";
         }
 
-        // // 프리랜서 조회
-        // Freelancer freelancer = freelancerService.findById(id);
+        // 프리랜서 상세 정보 조회
+        Freelancer freelancer = freelancerService.findFreelancerDetailById(userId);
 
-        // // 프리랜서가 없을 경우 예외 처리-=]
-        // if (freelancer == null) {
-        // throw new IllegalArgumentException("해당 프리랜서가 존재하지 않습니다.");
-        // }
+        // 프리랜서가 없을 경우 예외 처리
+        if (freelancer == null) {
+            throw new IllegalArgumentException("해당 프리랜서가 존재하지 않습니다.");
+        }
 
-        // model.addAttribute("freelancer", freelancer);
+        // 모델에 프리랜서 정보 추가
+        model.addAttribute("freelancer", freelancer);
 
         return "freelancer/detail";
     }

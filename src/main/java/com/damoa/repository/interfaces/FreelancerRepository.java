@@ -50,4 +50,7 @@ public interface FreelancerRepository {
     // 프리랜서 스킬 삭제
     public void deleteFreelancerSkillByFreelancerId(@Param("userId") int userId, @Param("skillId") int skillId);
 
+    // 프리랜서 디테일 조회
+    public Freelancer findFreelancerDetailById(int userId);
+
 }
