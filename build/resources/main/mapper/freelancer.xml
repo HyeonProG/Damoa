@@ -2,12 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.damoa.repository.interfaces.FreelancerRepository">
 
-    <select id="jobTitles" resultType="com.damoa.repository.model.JobTitle">
-        SELECT * FROM job_titles_tb;
+    <insert id="insertFreelancer">
+        INSERT INTO freelancer_tb(user_id, username, email, phone_number, job_part, working_style, expected_salary, salary_type, experience, career, career_year, skill, origin_file_name, upload_file_name, detail, link, created_at)
+        VALUES(#{userId}, #{username}, #{email}, #{phoneNumber}, #{jobPart}, #{workingStyle}, #{expectedSalary}, #{salaryType}, #{experience}, #{career}, #{careerYear}, #{skill}, #{originFileName}, #{uploadFileName}, #{detail}, #{link}, now())
+    </insert>
+
+    <select id="findAllFreelancers">
+        SELECT * FROM freelancer_tb
+        ORDER BY created_at DESC
+        LIMIT #{size} OFFSET #{offset}
     </select>
 
-    <select id="businessTypes" resultType="com.damoa.repository.model.BusinessType">
-        SELECT * FROM business_types_tb;
+    <select id="countAllFreelancers" resultType="int">
+        SELECT COUNT(*) FROM freelancer_tb
     </select>
 
 </mapper>

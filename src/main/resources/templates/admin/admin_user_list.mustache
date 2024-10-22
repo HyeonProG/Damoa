@@ -1,0 +1,44 @@
+{{>admin/admin_header}}
+
+
+<div class="container mt-5">
+    <h1>User List</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>아이디</th>
+            <th>이메일</th>
+            <th>유저네임</th>
+            <th>폰번호</th>
+            <th>생성날짜</th>
+            <th>유저타입</th>
+            <th>소셜타입</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {{#userList}}
+            <tr>
+                <td>{{id}}</td>
+                <td>{{email}}</td>
+                <td>{{username}}</td>
+                <td>{{phoneNumber}}</td>
+                <td>{{createdAt}}</td>
+                <td>{{userType}}</td>
+                <td>{{socialType}}</td>
+            </tr>
+        {{/userList}}
+        {{^userList}}
+            <tr>
+                <td colspan="8" class="text-center">유저리스트가 없습니다.</td>
+            </tr>
+        {{/userList}}
+        </tbody>
+    </table>
+
+
+
+
+
+    </body>
+</html>
