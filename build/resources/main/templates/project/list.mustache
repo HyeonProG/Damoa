@@ -1,20 +1,67 @@
 {{>layout/header}}
-<h3>프로젝트 목록</h3>
+<style type="text/css">
+    .body {
+        background: #DEDEDE;
+    }
+    .project-container-box {
+        margin: 20px;
+        padding: 20px;
+        width: 60%;
+        border-radius: 20px;
+        background: white;
+        box-shadow: 2px 2px 2px #DEDEDE;
+    }
+</style>
+<h3>프로젝트 목록 ({{totalProjectNum}})</h3>
 <p>프로젝트를 찾고 매칭해보세요</p>
 
-<div class="page-nation" id="page-nation" >
-</div>
 {{#projectList}}
-    <div class="project-box" id="each-project" onclick="location.href='/project/detail/{{id}}'">
-        <h5>{{id}}</h5>
-        <h5>{{projectName}}</h5>
+    <div class="project-container-box" id="each-project" onclick="location.href='/project/detail/{{id}}'">
+        <h4>{{id}}</h4>
+        <h4>{{projectName}}</h4>
         <h5>{{job}}</h5>
-        <h5>{{skill}}</h5>
-        <h5>{{projectStart}}</h5>
+        <p>{{skill}}</p>
+        <p>{{projectStart}}</p>
     </div>
 {{/projectList}}
 
-<script>
+<div class="page-nation" id="page-nation">
+    <button id="before" class="before" onclick="beforePage(this.value)"></button>
+    <button id="currentPage" class="currentPage" onclick="current()">{{currentPageNum}}</button>
+    <input type="hidden" id="totalPageNum" class="totalPageNum" value="{{totalPageNum}}" >
+    <button id="next" class="next" onclick="beforePage(this.value)"></button>
+</div>
 
+<script>
+    // 현재 페이지 번호를 가져옵니다.
+    var currentPage = parseInt(document.getElementById('currentPage').textContent, 10);
+    var totalPageNum = parseInt(document.getElementById('totalPageNum').textContent, 10);
+
+    var beforePageNum = document.querySelector('.before');
+    var nextPageNum = document.querySelector('.next');
+    var currentPageNum = document.querySelector('.currentPage');
+
+    function pagination() {
+
+        // 현재 페이지가 1일 경우
+        if (currentPage <= 1) {
+            // 2페이지를 중심에 두기
+            currentPage = 2;
+            currentPageNum.textContent = currentPage;
+        }
+        beforePageNum.value = currentPage - 1;
+        nextPageNum.value = currentPage + 1;
+
+        beforePageNum.textContent = beforePageNum.value;
+        nextPageNum.textContent = nextPageNum.value;
+    }
+
+    function beforePage(data){
+        alert(data);
+        location.href="/project/list/"+data;
+    }
+
+    // 페이지네이션 함수 호출
+    pagination();
 </script>
 {{>layout/footer}}

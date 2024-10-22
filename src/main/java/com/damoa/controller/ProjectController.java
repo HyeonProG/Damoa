@@ -65,16 +65,12 @@ public class ProjectController {
 
         // offset - 몇 번째 프로젝트부터 볼 것인가
         int offset;
-        if(currentPageNum == 0 || currentPageNum == 1){
-            currentPageNum = 1;
-            offset = 0;
-        } else {
-            offset=limit*currentPageNum+1;
-        }
+        offset=limit*(currentPageNum-1);
         // 페이징 처리 된 프로젝트들
         List<Project> projectListForPaging = projectService.getProjectForPaging(limit,offset);
 
         model.addAttribute("totalPageNum",totalPageNum);
+        model.addAttribute("totalProjectNum",totalProjectNum);
         model.addAttribute("currentPageNum",currentPageNum);
         model.addAttribute("projectList",projectList);
 
