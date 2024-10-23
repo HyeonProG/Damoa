@@ -21,7 +21,6 @@ public class Project {
     private String projectName;
     private int minYears;
     private int maxYears;
-    private String projectName;
     private Date projectStart;
     private String expectedPeriod;
     private int period;

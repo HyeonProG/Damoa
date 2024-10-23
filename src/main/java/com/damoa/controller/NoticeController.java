@@ -22,7 +22,7 @@ public class NoticeController {
     public NoticeService noticeService;
 
     @GetMapping("/notice/{currentPageNum}")
-    public String noticeListPage(@PathVariable(required = false) int currentPageNum,Model model){
+    public String noticeListPage(@PathVariable(name = "currentPageNum", required = false) int currentPageNum,Model model){
         // 모든 공지 가져오기
         List<Notice> allNotice = noticeService.getAllNotice();
         int totalNotice = allNotice.size(); // 모든 공지 개수

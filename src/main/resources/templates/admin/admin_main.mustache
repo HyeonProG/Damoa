@@ -1,4 +1,4 @@
-    {{>admin/admin_header}}
+{{>admin/admin_header}}
 
     <div class="main-board">
         <div class="title-div">
@@ -40,55 +40,92 @@
 </div>
 
 
-<!-- 차트를 위한 스크립트 -->
-<script>
-    // 방문자 차트 생성
-    var visitorsChartCtx = document.getElementById('visitorsChart').getContext('2d');
-    var visitorsChart = new Chart(visitorsChartCtx, {
-        type: 'line', // 차트 타입 (line, bar 등)
-        data: {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'], // X축 라벨
-            datasets: [{
-                label: 'Visitors',
-                data: [65, 59, 80, 81, 56, 55, 40], // 데이터 값
-                backgroundColor: 'rgba(75, 192, 192, 0.2)', // 차트 배경색
-                borderColor: 'rgba(75, 192, 192, 1)', // 차트 선 색상
-                borderWidth: 1 // 차트 선 두께
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true // Y축 0부터 시작
-                }
-            }
-        }
-    });
+    <!-- 차트 스크립트 -->
+    <script>
+        function loadRegisterData() {
+            $.ajax({
+                url: '/admin/monthly-registers',
+                method: 'GET',
+                success: function(data) {
 
-    // 회원 등록 차트 생성
-    var registerChartCtx = document.getElementById('registerChart').getContext('2d');
-    var registerChart = new Chart(registerChartCtx, {
-        type: 'bar', // 차트 타입 (bar)
-        data: {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'], // X축 라벨
-            datasets: [{
-                label: 'Number of Register',
-                data: [30, 45, 70, 50, 60, 90, 100], // 데이터 값
-                backgroundColor: 'rgba(153, 102, 255, 0.2)', // 차트 배경색
-                borderColor: 'rgba(153, 102, 255, 1)', // 차트 선 색상
-                borderWidth: 1 // 차트 선 두께
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true // Y축 0부터 시작
+                    var labels = data.map(item => item.month);
+                    var registerData = data.map(item => item.count); // 회원 등록 수 데이터 설정
+
+                    var registerChartCtx = document.getElementById('registerChart').getContext('2d');
+                    var registerChart = new Chart(registerChartCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: '월별 회원가입 사용자 수',
+                                data: registerData,
+                                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                borderColor: 'rgba(153, 102, 255, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true // Y축 0부터 시작
+                                }
+                            }
+                        }
+                    });
+                },
+                error: function(err) {
+                    console.error('Error loading register data:', err);
                 }
-            }
+            });
         }
-    });
-</script>
+
+
+
+        function loadVisitorData() {
+            $.ajax({
+                url: '/admin/monthly-visitors',
+                method: 'GET',
+                success: function(data) {
+
+                    var labels = data.map(item => item.month);
+                    var visitorData = data.map(item => item.count);
+
+                    var visitorChartCtx = document.getElementById('visitorsChart').getContext('2d');
+                    var visitorChart = new Chart(visitorChartCtx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: '월별 방문자 수',
+                                data: visitorData,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                },
+                error: function(err) {
+                    console.error('Error loading visitor data:', err);
+                }
+            });
+        }
+
+
+        // 페이지 로드 시 데이터 로드 함수 호출
+        $(document).ready(function() {
+            loadVisitorData();
+            loadRegisterData();
+        });
+    </script>
+
 
 </body>
 </html>
-
