@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 @Service
@@ -19,6 +20,7 @@ public class ReviewService {
 
     private final CompanyReviewRepository companyReviewRepo;
     private final FreelancerReviewRepository freelancerReviewRepo;
+    private final UserService userService;
     private final ObjectMapper objectMapper;
 
     // 클라이언트 프리랜서 리뷰 데이터 응답
@@ -34,9 +36,38 @@ public class ReviewService {
         model.addAttribute("totalReviews", companyReview.size() + freelancerReview.size());
     }
 
-    // 별점 리뷰 점수 평균 계산 기능
-    private int calculateOverallScore(CompanyReview review) {
-        return (review.getWorkQualityScore() + review.getTimelinessScore() +
-                review.getFeedbackScore() + review.getWillingnessScore()) / 4;
+    // 프리랜서 리뷰 데이터 호출 메서드
+    // getAllReviews()는 모든 리뷰 데이터를 호출
+    // 불필요한 데이터 로드를 피함으로 서버 리소스 소모, 응답 시간을 줄임.
+    public void getFreelancerReviews(Model model) {
+        List<FreelancerReview> freelancerReview = freelancerReviewRepo.findAllByFreelancerReviews();
+        model.addAttribute("freelancerReview", freelancerReview);
+        model.addAttribute("totalReviews", freelancerReview.size());
     }
+
+    // 회사 리뷰 데이터 호출 메서드
+    public void getCompanyReviews(Model model) {
+        List<CompanyReview> companyReview = companyReviewRepo.findAllByCompanyReviews();
+        model.addAttribute("companyReview", companyReview);
+        model.addAttribute("totalReviews", companyReview.size());
+    }
+
+    // 프리랜서 리뷰 상세 조회 기능
+    public void getByFreelancerId(int id, Model model) {
+            Optional<FreelancerReview> freelancerReviewreview = freelancerReviewRepo.findByFreelancerReviewId(id);
+            freelancerReviewreview.ifPresentOrElse(
+                    freelancerReview -> model.addAttribute("freelancerReview",freelancerReview),
+                    () -> { throw new NullPointerException("삭제된 리뷰 입니다."); }
+            );
+    }
+
+    // 회사 리뷰 상세 조회 기능
+    public void getByCompanyId(int id, Model model) {
+        Optional<CompanyReview> companyReview = companyReviewRepo.findByCompanyReviewId(id);
+        companyReview.ifPresentOrElse(
+                review -> model.addAttribute("companyReview", review),
+                () -> { throw new NullPointerException("삭제된 리뷰 입니다."); }
+        );
+    }
+
 }

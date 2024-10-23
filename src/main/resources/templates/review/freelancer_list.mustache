@@ -1,0 +1,30 @@
+{{> layout/header}} <!-- 헤더를 불러옴 -->
+
+<!-- container 클래스 중앙 정렬, 반응형 그리드 레이아웃 제공 -->
+<!--<h5 class="mb-1">: 텍스트 요소로, mb-1 클래스는 하단에 마진을 부여해 텍스트 간격을 조절.-->
+<!--<div class="list-group">: 리스트 형태의 그룹 요소. list-group-item을 사용해 아이템들을 나열.-->
+<!-- Freelancer Reviews -->
+<div class="container mt-4">
+    <h2 class="mb-4">Freelancer Reviews</h2>
+
+    <!-- 그리드 시스템 사용하여 반응형 레이아웃 구성 -->
+    <div class="row">
+        {{#freelancerReview}}
+            <div class="col-md-6 mb-3">
+                <div class="card shadow-sm">
+                    <!-- 이미지와 콘텐츠를 포함하는 카드 구조 -->
+                    <div class="card-body">
+                        <h5 class="card-title">소마길동</h5>
+                        <p class="card-subtitle mb-2 text-muted">프리랜서</p>
+                        <p class="card-text">프로젝트 설명: project_tb 데이터 삽입해야됨</p>
+                        <p class="card-text" aria-readonly="true">{{responseData}}</p> <!-- 동적으로 리뷰 내용 추가 -->
+                        <small class="text-muted">총 리뷰 평점: {{overallScore}}</small>
+                        <boutten class="btn btn-primary btn-block">리뷰 상세 보기</boutten>
+                    </div>
+                </div>
+            </div>
+        {{/freelancerReview}}
+    </div>
+</div>
+
+{{> layout/footer}} <!-- 푸터를 불러옴 -->

@@ -7,6 +7,10 @@
         SELECT * FROM freelancers_review ORDER BY id DESC
     </select>
 
+    <select id="findByFreelancerReviewId">
+        select * from freelancers_review where id = #{id}
+    </select>
+
     <!-- GCP 프리랜서 리뷰 데이터 MySQL로 insert-->
     <insert id="insertFreelancerReview" parameterType="com.damoa.repository.model.FreelancerReview">
         INSERT INTO freelancers_review (company_id, freelancer_id, communication_score,
