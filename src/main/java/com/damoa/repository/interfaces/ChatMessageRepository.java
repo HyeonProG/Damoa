@@ -1,6 +1,7 @@
 package com.damoa.repository.interfaces;
 
 import com.damoa.repository.model.ChatMessage;
+import com.damoa.repository.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
@@ -11,4 +12,5 @@ import java.util.List;
 * */
 public interface ChatMessageRepository extends MongoRepository<ChatMessage, String> {
     List<ChatMessage> findByCompanyIdAndFreelancerId(String companyId, String freelancerId);
+
 }

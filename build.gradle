@@ -57,6 +57,8 @@ dependencies {
 	implementation 'org.webjars:jquery:3.6.4'
 	// MongoDB 의존성 추가
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	// json
+	implementation 'org.json:json:20210307'
 }
 
 tasks.named('test') {

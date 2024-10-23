@@ -34,8 +34,7 @@ public class ChatMessageService {
         String sessionId = headerAccessor.getSessionId();
 
         // 세션 ID를 기반으로 사용자 조회
-        List<User> user = userRepository
-                .findByUserId(Integer.parseInt(sessionId)); // sessionId는 String이므로 Integer로 변환
+        List<User> user = null;
 
         // 사용자 유형에 따라 회사 ID 또는 프리랜서 ID 설정
         if (UserType.COMPANY.name().equalsIgnoreCase(user.get(0).getUserType())) {
