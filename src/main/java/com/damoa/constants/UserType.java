@@ -2,7 +2,7 @@ package com.damoa.constants;
 
 /*
 * @relations
-* ReviewController, ChatService
+* ReviewController, ChatMessageService
 * */
 public enum UserType {
     COMPANY, FREELANCER
