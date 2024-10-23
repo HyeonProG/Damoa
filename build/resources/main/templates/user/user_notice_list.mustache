@@ -1,34 +1,33 @@
 {{>layout/header}}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 <style type="text/css">
-    .notice-title{
-        width: 90%;
-        height: 20vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+    .notice-title {
+        text-align: center;
+        margin: 20px 0;
     }
-    .notice-list-container{
+    .notice-list-container {
         width: 80%;
         height: 60vh;
-        border: 1px solid gray;
         border-radius: 10px;
-        background: white;
         box-shadow: 2px 2px 5px #dee2e6;
-
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        padding: 20px; /* 여백 추가 */
     }
-    .notice-box{
-        width: 90%;
-        border: 1px solid gray;
+    .notice-table {
+        width: 100%;
+    }
+    .notice-box {
+        border: 1px solid #dee2e6;
         border-radius: 10px;
-        background: white;
-        box-shadow: 2px 2px 5px #dee2e6;
-        margin: 10px;
-        padding: 10px;
+        background: #f8f9fa;
+        transition: background 0.3s; /* 호버 효과를 위한 애니메이션 */
+    }
+    .notice-box:hover {
+        background: #e9ecef; /* 호버 시 배경 색상 변경 */
+    }
+    .pagination {
+        justify-content: center;
+        margin: 20px 0;
     }
 </style>
 
@@ -38,13 +37,28 @@
 </div>
 
 <div class="notice-list-container">
-    {{#noticeList}}
-    <div class="notice-box" onclick="location.href='/notice/detail/{{id}}'">
-            <h5>{{id}}</h5>
-            <h5>{{title}}</h5>
-            <p>{{createdAt}}</p>
-    </div>
-    {{/noticeList}}
+    <table class="table table-bordered notice-table">
+        <thead>
+        <tr>
+            <th>제목</th>
+            <th>작성일</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#noticeList}}
+            <tr class="notice-box" onclick="location.href='/notice/detail/{{id}}'">
+                <td>{{title}}</td>
+                <td>{{createdAt}}</td>
+            </tr>
+        {{/noticeList}}
+        </tbody>
+    </table>
+</div>
+
+<div class="pagination">
+    <button class="btn btn-secondary" onclick="location.href='/notice/list/{{lastPage}}'">이전 페이지</button>
+    <button class="btn btn-primary" onclick="location.href='/notice/list/{{currentPageNum}}'">{{currentPageNum}}</button>
+    <button class="btn btn-secondary" onclick="location.href='/notice/list/{{nextPage}}'">다음 페이지</button>
 </div>
 
 {{>layout/footer}}

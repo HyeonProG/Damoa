@@ -1,0 +1,97 @@
+{{>layout/header}}
+<style type="text/css">
+    .project-detail-container{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 30px;
+    }
+    .wait-form{
+        display: none;
+        background: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+    }
+    .wait-detail{
+        margin: 10px;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+    .project-box{
+        width: 90%;
+    }
+    .project-input-form{
+        margin: 5px;
+    }
+</style>
+<h3>프로젝트 상세 보기</h3>
+<div class="project-detail-container">
+    <div class="project-detail">
+        {{#project}}
+            <div class="project-box" id="each-project" style="location.href='/project/detail/{{id}}'">
+                <h5>{{id}}</h5>
+                <h5>{{job}}</h5>
+                <h5>{{skill}}</h5>
+                <p>{{minYears}}~{{maxYears}}</p>
+                <p>프로젝트 명: {{projectName}}</p>
+                <p>프로젝트 시작일: {{projectStart}} 예상 기간: {{expectedPeriod}}</p>
+                <p>지급 방식 : {{salaryType}}</p>
+                <p>근무 방식 : {{workingStyle}}</p>
+                <p>미팅 방식 : {{meeting}}</p>
+                <p>근무 시간 : {{worktime}}</p>
+                <button class="btn btn-primary" onclick="makeWaitForm()">프로젝트 대기하기</button>
+                <button class="btn btn-secondary" onclick="location.href='/project/list/1'">목록으로 돌아가기</button>
+
+            </div>
+        {{/project}}
+    </div>
+    <div class="project-detail">
+        <div class="wait-form" id="wait-form">
+            <form action="/project/wait" id="makeWait" method="post" class="wait-detail" enctype="multipart/form-data">
+                <input type="hidden" name="projectId" value="1">
+                <input type="hidden" name="userId" value="1">
+                <div class="project-input-form">
+                    자기소개 : <input type="text" name="introduce" id="introduce"  required>
+                </div>
+                <div class="project-input-form">
+                    최소 급여 : <input type="number" name="minimumWage" id="minimumWage"  required>
+                </div>
+                <div class="project-input-form">
+                    최대 급여 : <input type="number" name="maximumWage" id="maximumWage"  required>
+                </div>
+                <div class="project-input-form">
+                    시작 가능일 : <input type="date" name="startDate" id="startDate" required>
+                </div>
+                <div class="project-input-form">
+                    보유 스킬 : <input type="text" name="skill" id="skill" required> <button onclick="addSkill()">+스킬 추가</button>
+                </div>
+                <div class="project-input-form">
+                    이력서/포트폴리오 업로드 : <input type="file" name="file" id="file" required>
+                </div>
+                <div class="project-input-form">
+                    상세 소개 : <input type="text" name="detail" id="detail" required>
+                </div>
+                <input type="submit">
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    const waitForm = document.getElementById("wait-form");
+    function makeWaitForm() {
+        console.log("Current display:", waitForm.style.display);
+        if (waitForm.style.display === "none" || waitForm.style.display === "") {
+            waitForm.style.display = "flex";
+        } else {
+            waitForm.style.display = "none"; // 다시 숨길 수 있도록 설정
+        }
+    }
+</script>
+{{>layout/footer}}

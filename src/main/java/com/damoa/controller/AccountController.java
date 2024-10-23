@@ -1,7 +1,9 @@
 package com.damoa.controller;
 
 import com.damoa.dto.BankAuthDTO;
+import com.damoa.repository.model.Project;
 import com.damoa.service.AccountService;
+import com.damoa.service.ProjectService;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,9 +32,15 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private ProjectService projectService;
 
     @GetMapping("/main")
-    public String mainPage(){
+    public String mainPage(Model model){
+
+        List<Project> projectList = projectService.getProjectForPaging(3,0);
+
+        model.addAttribute("projectList",projectList);
         return "user/index";
     }
 

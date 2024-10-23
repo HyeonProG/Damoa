@@ -47,6 +47,16 @@ public class NoticeController {
         model.addAttribute("noticeList",noticeList);
         model.addAttribute("totalNotice",totalNotice);
         model.addAttribute("totalPages",totalPages);
+
+        if(currentPageNum<=1){
+            model.addAttribute("currentPageNum",2);
+            model.addAttribute("lastPage",1);
+            model.addAttribute("nextPage",3);
+        } else{
+            model.addAttribute("currentPageNum",currentPageNum);
+            model.addAttribute("lastPage",currentPageNum-1);
+            model.addAttribute("nextPage",currentPageNum+1);
+        }
         return "/user/user_notice_list";
     }
 
