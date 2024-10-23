@@ -1,6 +1,7 @@
 package com.damoa.controller;
 
 import com.damoa.dto.TossApproveResponse;
+import com.damoa.repository.model.User;
 import com.damoa.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -12,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,20 +30,19 @@ public class TossController {
     private final PaymentService payService;
 
     @GetMapping("/pay")
-    public String tossPage(Model model) {
+    public String tossPage(@SessionAttribute(name = "principal") User principal, Model model) {
         String orderId = payService.getOrderId();
-        System.out.println("payService : " + orderId);
 
         model.addAttribute("amount", 1);
         model.addAttribute("orderId", orderId);
         model.addAttribute("orderName", "결제");
-        model.addAttribute("customerName", "주니");
+        model.addAttribute("customerName", principal.getUsername());
         return "/tossPay";
     }
 
     @GetMapping("/success")
-    public String successPage(@RequestParam(name = "orderId") String orderId, @RequestParam(name = "paymentKey") String paymentKey) throws IOException, InterruptedIOException {
-        System.out.println(orderId);
+    public String successPage(@RequestParam(name = "orderId") String orderId, @RequestParam(name = "paymentKey") String paymentKey
+            , @SessionAttribute(name = "principal") User principal) throws IOException, InterruptedIOException {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -63,21 +64,20 @@ public class TossController {
 
             TossApproveResponse response2 = response.getBody();
 
-            //TODO 나중에 아이디 수정할 예정
-            System.out.println(response2.toString());
-             payService.insertTossHistory(response2, 1);
+            payService.insertTossHistory(response2, principal.getId());
 
         } catch (HttpClientErrorException e) {
             System.err.println("Error response body: " + e.getResponseBodyAsString());
         }
 
-        return "redirect:/chat";
+        return "redirect:/main";
     }
+
 
 
     @GetMapping("/fail")
     public String fail() {
 
-        return "/chat";
+        return "/main";
     }
 }

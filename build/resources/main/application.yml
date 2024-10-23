@@ -24,20 +24,17 @@ spring:
       expose-request-attributes: true # Mustache 템플릿에서 요청 속성에 접근할 수 있도록 허용
     prefix: file:src/main/resources/templates/ # Mustache 템플릿 위치
 
-  resources:
-    static-locations: file:src/main/resources/static/ # 정적 리소스 위치
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver # MySQL driver 
-    url: jdbc:mysql://192.168.0.46:3306/damoa?serverTimezone=Asia/Seoul
-    username: jhj # 데이터베이스 연결 시 기본 사용자 이름
-    password: 1234
+    url: jdbc:mysql://localhost:3306/damoa?serverTimezone=Asia/Seoul
+    username: root # 데이터베이스 연결 시 기본 사용자 이름
+    password: ''
   sql:
     init:
       schema-locations:
-      - classpath:db/table.sql
+        - classpath:db/table.sql
       data-locations:
-      - classpath:db/data.sql
+        - classpath:db/data.sql
   h2:
     console:
       enabled: true # H2 데이터베이스 콘솔을 활성화 한다.

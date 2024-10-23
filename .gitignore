@@ -377,3 +377,5 @@ filehashes.bin
 checksums.lock
 checksums.bin
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,eclipse,intellij
+*.lock
+*.bin

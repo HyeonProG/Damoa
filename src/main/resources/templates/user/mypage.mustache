@@ -15,4 +15,27 @@
     <button type="submit" class="btn btn-danger">회원탈퇴</button>
 </form>
 
+<a href="javascript:void(0)" onclick="refundAccount()" id="refundBtn">환불</a>
+
+<script>
+
+    function refundAccount() {
+    fetch(`http://localhost:8080/toss/refund`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Fetched data:', data);
+        })
+        .catch(error => {
+            console.log('error', error);
+        });
+}
+
+
+</script>
+
 {{> layout/footer }}
