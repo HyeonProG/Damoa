@@ -4,6 +4,7 @@
         width: 100%;
         display: flex;
         justify-content: center;
+        margin: 30px;
     }
     .wait-form{
         display: none;
@@ -41,10 +42,11 @@
                 <p>근무 방식 : {{workingStyle}}</p>
                 <p>미팅 방식 : {{meeting}}</p>
                 <p>근무 시간 : {{worktime}}</p>
-                <button onclick="makeWaitForm()">프로젝트 대기하기</button>
+                <button class="btn btn-primary" onclick="makeWaitForm()">프로젝트 대기하기</button>
+                <button class="btn btn-secondary" onclick="location.href='/project/list/1'">목록으로 돌아가기</button>
+
             </div>
         {{/project}}
-        <button onclick="location.href='/project/list/1'">목록으로 돌아가기</button>
     </div>
     <div class="project-detail">
         <div class="wait-form" id="wait-form">

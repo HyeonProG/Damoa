@@ -38,7 +38,7 @@ public class AccountController {
     @GetMapping("/main")
     public String mainPage(Model model){
 
-        List<Project> projectList = projectService.getProjectForPaging(4,0);
+        List<Project> projectList = projectService.getProjectForPaging(3,0);
 
         model.addAttribute("projectList",projectList);
         return "user/index";

@@ -35,21 +35,33 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    // 프로젝트 폼 페이지 이동
+    /**
+     * 프로젝트 작성 폼 이동
+     * @return
+     */
     @GetMapping("/save")
-    public String savePage(){
+    public String projectSavePage(){
         return "project/save-form";
 
     }
 
-    // 프로젝트 폼 저장 요청
+    /**
+     * 프로젝트 작성 요청
+     * @param reqDTO
+     * @return
+     */
     @PostMapping("/save")
-    public String saveProc(@ModelAttribute("reqDTO") ProjectSaveDTO reqDTO){
+    public String projectSaveProc(@ModelAttribute("reqDTO") ProjectSaveDTO reqDTO){
         projectService.createProject(reqDTO);
         return "project/save-complete";
     }
 
-    // 프로젝트 게시판 이동
+    /**
+     * 프로젝트 게시판 이동
+     * @param currentPageNum
+     * @param model
+     * @return
+     */
     @GetMapping("/list/{currentPageNum}")
     public String projectListPage(@PathVariable(required=false)int currentPageNum, Model model){
         // 모든 프로젝트 가져오기
@@ -92,7 +104,7 @@ public class ProjectController {
     }
 
     @PostMapping("/wait")
-    public String makeProjectWait(@ModelAttribute ProjectWaitDTO reqDTO, Model model){
+    public String projectWaitProc(@ModelAttribute ProjectWaitDTO reqDTO, Model model){
         System.out.println(reqDTO);
 
         ProjectWait newProWait = reqDTO.toProWait(reqDTO);
@@ -144,6 +156,16 @@ public class ProjectController {
         }
 
         return new String[] {mFile.getOriginalFilename(), uploadFileName};
+    }
+
+    @GetMapping("/my-project/{currentPageNum}")
+    private String myProjectPage(@PathVariable(required=false)int currentPageNum, Model model){
+        int limit=10;
+        int offset=limit*(currentPageNum-1);
+        List<Project> projectListForPaging = projectService.getProjectForPaging(limit,offset);
+
+        model.addAttribute("projectListForPaging",projectListForPaging);
+        return "project/my_project";
     }
 
 

@@ -3,65 +3,89 @@
     .body {
         background: #DEDEDE;
     }
-    .project-container-box {
-        margin: 20px;
-        padding: 20px;
-        width: 60%;
-        border-radius: 20px;
+    .project-container {
+        display: flex;
+        flex-direction: column;
+        width: 80%; /* 중앙 정렬을 위해 너비 설정 */
+        margin: 20px auto; /* 자동 여백으로 중앙 정렬 */
+    }
+    .project-list-item {
+        width: 80%;
+        padding: 15px;
+        margin: 10px 0;
         background: white;
-        box-shadow: 2px 2px 2px #DEDEDE;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: background 0.2s; /* 마우스 오버 시 애니메이션 */
+        display: flex; /* Flexbox 사용 */
+        flex-direction: column; /* 세로 방향으로 배치 */
+    }
+    .project-list-item:hover {
+        background: #f8f9fa; /* 호버 시 배경색 변경 */
+    }
+    .project-info {
+        margin-bottom: 10px; /* 정보 간 간격 설정 */
+    }
+    .project-job {
+        font-weight: bold; /* 직무 강조 */
+    }
+    .page-nation {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    .page-nation button {
+        margin: 0 5px;
     }
 </style>
+
 <h3>프로젝트 목록 ({{totalProjectNum}})</h3>
 <p>프로젝트를 찾고 매칭해보세요</p>
 
-{{#projectList}}
-    <div class="project-container-box" id="each-project" onclick="location.href='/project/detail/{{id}}'">
-        <h4>{{id}}</h4>
-        <h4>{{projectName}}</h4>
-        <h5>{{job}}</h5>
-        <p>{{skill}}</p>
-        <p>{{projectStart}}</p>
-    </div>
-{{/projectList}}
+<div class="project-container">
+    {{#projectList}}
+        <div class="project-list-item" onclick="location.href='/project/detail/{{id}}'">
+            <h4>{{projectName}}</h4>
+            <h5 class="project-job">{{job}}</h5>
+            <p>{{skill}}</p>
+            <p>{{projectStart}}</p>
+            <button class="btn btn-primary">자세히 보기</button> <!-- 추가 버튼 -->
+        </div>
+    {{/projectList}}
+</div>
 
 <div class="page-nation" id="page-nation">
-    <button id="before" class="before" onclick="beforePage(this.value)"></button>
-    <button id="currentPage" class="currentPage" onclick="current()">{{currentPageNum}}</button>
-    <input type="hidden" id="totalPageNum" class="totalPageNum" value="{{totalPageNum}}" >
-    <button id="next" class="next" onclick="beforePage(this.value)"></button>
+    <button id="before" class="btn btn-light" onclick="beforePage(currentPage - 1)">이전</button>
+    {{#totalPageNum }}
+        <button class="btn btn-light" onclick="goToPage(this)" value="{{this}}">{{this}}</button>
+    {{/totalPageNum}}
+    <button id="next" class="btn btn-light" onclick="beforePage(currentPage + 1)">다음</button>
 </div>
 
 <script>
-    // 현재 페이지 번호를 가져옵니다.
     var currentPage = parseInt(document.getElementById('currentPage').textContent, 10);
-    var totalPageNum = parseInt(document.getElementById('totalPageNum').textContent, 10);
+    var totalPageNum = parseInt(document.getElementById('totalPageNum').value, 10);
 
-    var beforePageNum = document.querySelector('.before');
-    var nextPageNum = document.querySelector('.next');
-    var currentPageNum = document.querySelector('.currentPage');
+    var beforePageNum = document.querySelector('#before');
+    var nextPageNum = document.querySelector('#next');
 
-    function pagination() {
+    function updatePaginationButtons() {
+        beforePageNum.disabled = (currentPage <= 1);
+        nextPageNum.disabled = (currentPage >= totalPageNum);
+    }
 
-        // 현재 페이지가 1일 경우
-        if (currentPage <= 1) {
-            // 2페이지를 중심에 두기
-            currentPage = 2;
-            currentPageNum.textContent = currentPage;
+    function beforePage(data) {
+        if (data >= 1 && data <= totalPageNum) {
+            location.href = "/project/list/" + data;
         }
-        beforePageNum.value = currentPage - 1;
-        nextPageNum.value = currentPage + 1;
-
-        beforePageNum.textContent = beforePageNum.value;
-        nextPageNum.textContent = nextPageNum.value;
     }
 
-    function beforePage(data){
-        alert(data);
-        location.href="/project/list/"+data;
+    function goToPage(button) {
+        var pageNumber = parseInt(button.value, 10);
+        beforePage(pageNumber);
     }
 
-    // 페이지네이션 함수 호출
-    pagination();
+    // 페이지 버튼 활성화 상태 업데이트
+    updatePaginationButtons();
 </script>
 {{>layout/footer}}
