@@ -14,7 +14,9 @@ import com.damoa.dto.user.PrincipalDTO;
 import com.damoa.dto.user.UserSignInDTO;
 import com.damoa.dto.user.UserSignUpDTO;
 import com.damoa.handler.exception.DataDeliveryException;
+import com.damoa.repository.interfaces.FreelancerRepository;
 import com.damoa.repository.interfaces.UserRepository;
+import com.damoa.repository.model.Freelancer;
 import com.damoa.repository.model.User;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,9 @@ public class UserService {
 
     @Autowired
     private final UserRepository userRepository;
+
+    @Autowired
+    private final FreelancerRepository freelancerRepository;
 
     @Autowired
     private final PasswordEncoder passwordEncoder;
@@ -54,7 +59,20 @@ public class UserService {
             String hashPwd = passwordEncoder.encode(dto.getPassword());
             dto.setPassword(hashPwd);
 
+            // 사용자 정보 저장
             result = userRepository.insertUser(dto.toUser());
+
+            // 회원가입한 사용자가 프리랜서일 경우, freelancer_tb에 자동 등록
+            if ("freelancer".equals(dto.getUserType())) {
+                // userRepository에서 방금 삽입된 유저의 id 가져오기
+                int userId = userRepository.findByEmail(dto.getEmail()).getId();
+
+                // 기본 프리랜서 정보를 추가 (기본값 설정)
+                Freelancer freelancer = new Freelancer();
+                freelancer.setUserId(userId);
+                // 나머지 값은 필요에 따라 기본값으로 설정하거나 초기 값으로 설정 가능
+                freelancerRepository.insertFreelancer(freelancer);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,6 +97,7 @@ public class UserService {
 
     /**
      * 전화번호 인증 api
+     * 
      * @param phoneNumber
      * @param cerNum
      */
@@ -105,12 +124,13 @@ public class UserService {
 
     /**
      * 휴대폰 번호 체크
+     * 
      * @param phoneNumber
      * @return
      */
     public boolean findDuplicatePhoneNumber(String phoneNumber) {
         int result = userRepository.findDuplicatePhoneNumber(phoneNumber);
-        if (result!= 0) {
+        if (result != 0) {
             return true;
         }
         return false;
@@ -118,6 +138,7 @@ public class UserService {
 
     /**
      * 이메일로 유저 찾기
+     * 
      * @param email
      * @return
      */
@@ -139,16 +160,17 @@ public class UserService {
 
     /**
      * 입력한 이메일, 비밀번호가 DB와 동일한지 확인
+     * 
      * @param userSignInDTO
      * @return
      */
     public User findUser(UserSignInDTO userSignInDTO) {
         User user = userRepository.findByEmail(userSignInDTO.getEmail());
 
-       if (user == null) {
+        if (user == null) {
             throw new DataDeliveryException("존재하지 않는 아이디 입니다.", HttpStatus.BAD_REQUEST);
         }
-        
+
         boolean isPwdMatched = passwordEncoder.matches(userSignInDTO.getPassword(), user.getPassword());
         if (!isPwdMatched) {
             throw new DataDeliveryException("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);

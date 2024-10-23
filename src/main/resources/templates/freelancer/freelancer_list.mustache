@@ -2,36 +2,81 @@
 
 <h1>프리랜서 목록</h1>
 
-<table>
-    <thead>
-        <tr>
-            <th>이름</th>
-            <th>이메일</th>
-            <th>전화번호</th>
-            <th>직무</th>
-            <th>근무 방식</th>
-            <th>희망 연봉</th>
-            <th>기술 스택</th>
-            <th>등록일</th>
-        </tr>
-    </thead>
-    <tbody id="freelancer-list">
-        {{#freelancers}}
-        <tr>
-            <td>{{username}}</td>
-            <td>{{email}}</td>
-            <td>{{phoneNumber}}</td>
-            <td>{{jobPart}}</td>
-            <td>{{workingStyle}}</td>
-            <td>{{expectedSalary}}</td>
-            <td>{{skill}}</td>
-            <td>{{createdAt}}</td> <!-- 날짜 포맷 -->
-        </tr>
-        {{/freelancers}}
-    </tbody>
-</table>
+<div id="freelancer-list" class="freelancer-cards-container">
+    <!-- JavaScript로 프리랜서 카드 목록이 여기에 추가됩니다 -->
+</div>
 
 <div id="paginationContainer"></div> <!-- 페이지네이션을 위한 컨테이너 -->
+
+<!-- 스타일 추가 -->
+<style>
+    .freelancer-cards-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .freelancer-card {
+        width: 300px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        transition: transform 0.2s;
+        cursor: pointer; /* 클릭 가능한 요소로 변경 */
+    }
+
+    .freelancer-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .freelancer-card h2 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+
+    .freelancer-card p {
+        margin: 5px 0;
+        font-size: 0.9em;
+        color: #555;
+    }
+
+    .freelancer-card .card-label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .pagination {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .pagination .page-item {
+        margin: 0 5px;
+    }
+
+    .pagination .page-link {
+        padding: 8px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #ccc;
+    }
+</style>
 
 <script>
     let currentPage = 1; // 현재 페이지
@@ -54,18 +99,22 @@
                 // freelancers가 정의되어 있는지 확인
                 if (Array.isArray(data.freelancers)) {
                     data.freelancers.forEach(freelancer => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${freelancer.username}</td>
-                            <td>${freelancer.email}</td>
-                            <td>${freelancer.phoneNumber}</td>
-                            <td>${freelancer.jobPart}</td>
-                            <td>${freelancer.workingStyle}</td>
-                            <td>${freelancer.expectedSalary}</td>
-                            <td>${freelancer.skill}</td>
-                            <td>${new Date(freelancer.createdAt).toISOString().slice(0, 10)}</td>
+                        const card = document.createElement('div');
+                        card.className = 'freelancer-card';
+                        card.innerHTML = `
+                            <h2>${freelancer.username}</h2>
+                            <p><span class="card-label">직무:</span> ${freelancer.jobPart}</p>
+                            <p><span class="card-label">근무 방식:</span> ${freelancer.workingStyle}</p>
+                            <p><span class="card-label">기술 스택:</span> ${freelancer.skills || ""}</p>
+                            <p><span class="card-label">상세 내용:</span> ${freelancer.detail}</p>
                         `;
-                        freelancerList.appendChild(row);
+
+                        // 카드 클릭 시 상세보기 페이지로 이동
+                        card.addEventListener('click', () => {
+                            window.location.href = `/freelancer/detail/${freelancer.userId}`;
+                        });
+
+                        freelancerList.appendChild(card);
                     });
                 } else {
                     console.warn("No freelancers found.");

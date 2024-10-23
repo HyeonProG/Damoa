@@ -24,12 +24,11 @@ public class Freelancer {
     private String phoneNumber; // 전화번호
     private String jobPart; // 직무
     private String workingStyle; // 근무 방식
-    private String expectedSalary; // 희망 연봉
+    private Integer expectedSalary; // 희망 연봉
     private String salaryType; // 급여 방식
     private String experience; // 프리랜서 경험
     private String career; // 경력
-    private Integer careerYear; // 경력 년차
-    private String skill; // 기술 스택
+    private String skills; // 기술 스택
     private MultipartFile mFile;
     private String originFileName; // 포트폴리오 원본
     private String uploadFileName; // 포트폴리오 저장본
