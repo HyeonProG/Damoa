@@ -165,5 +165,14 @@ public class UserService {
         userRepository.deleteUser(user.getId());
     }
 
+    // 유저 정보 수정
+    @Transactional
+    public void updateUserInfo(User user) {
+        int result = userRepository.updateUser(user);
+        if (result == 0) {
+            throw new DataDeliveryException("유저 정보를 업데이트하는 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }

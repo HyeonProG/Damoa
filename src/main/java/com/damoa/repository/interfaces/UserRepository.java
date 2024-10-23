@@ -1,9 +1,12 @@
 package com.damoa.repository.interfaces;
 
+import com.damoa.dto.user.MonthlyRegisterDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.damoa.repository.model.User;
+
+import java.util.List;
 
 @Mapper
 public interface UserRepository {
@@ -19,4 +22,9 @@ public interface UserRepository {
     public int insertDeleteUser(User user); // 탈퇴한 사용자 등록
 
     public int deleteUser(@Param("userId") int userId); // 사용자 삭제
+
+    public int updateUser(User user); // 유저 정보 수정
+
+    List<MonthlyRegisterDTO> getMonthlyRegisterData();  // 월별 회원가입 수 데이터
+
 }

@@ -3,13 +3,16 @@ package com.damoa.service;
 import com.damoa.dto.ProjectSaveDTO;
 import com.damoa.handler.exception.DataDeliveryException;
 import com.damoa.repository.interfaces.ProjectRepository;
-import lombok.RequiredArgsConstructor;
+import com.damoa.repository.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService {

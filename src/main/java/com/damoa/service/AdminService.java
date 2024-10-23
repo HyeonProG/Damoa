@@ -1,5 +1,7 @@
 package com.damoa.service;
 
+import com.damoa.dto.user.MonthlyRegisterDTO;
+import com.damoa.repository.interfaces.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,12 +16,17 @@ import com.damoa.repository.model.User;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AdminService {
 
     @Autowired
     private final AdminRepository adminRepository;
+
+    @Autowired
+    private final UserRepository userRepository;
 
     /**
      * 어드민 로그인 확인
@@ -41,4 +48,7 @@ public class AdminService {
 
     }
 
+    public List<MonthlyRegisterDTO> getMonthlyRegisterData() {
+        return userRepository.getMonthlyRegisterData();
+    }
 }

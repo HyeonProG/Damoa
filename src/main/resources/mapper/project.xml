@@ -19,4 +19,7 @@
     #{company}, #{managerName}, #{contact}, #{email}, #{agree}
     )
 </insert>
+
+
+
 </mapper>

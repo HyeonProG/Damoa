@@ -26,7 +26,19 @@
     </insert>
 
     <delete id="deleteUser">
-        DELETE FROM user WHERE id = #{userId}
+        DELETE FROM user_tb WHERE id = #{userId}
     </delete>
 
+    <update id="updateUser">
+        UPDATE user_tb
+        SET username = #{username}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 월별 회원가입 수 -->
+    <select id="getMonthlyRegisterData" resultType="com.damoa.dto.user.MonthlyRegisterDTO">
+        SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, COUNT(*) AS count
+        FROM user_tb
+        GROUP BY DATE_FORMAT(created_at, '%Y-%m')
+    </select>
 </mapper>

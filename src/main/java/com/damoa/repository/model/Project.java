@@ -17,6 +17,7 @@ public class Project {
     private int userId;
     private String job;
     private String skill;
+    private String projectName;
     private int minYears;
     private int maxYears;
     private Date projectStart;

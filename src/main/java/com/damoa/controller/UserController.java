@@ -414,7 +414,7 @@ public class UserController {
     @GetMapping("/logout")
     public String logOut(HttpSession session) {
         session.invalidate();
-        return "redirect:/";
+        return "redirect:/main";
     }
 
     @GetMapping("/mypage")
@@ -430,11 +430,19 @@ public class UserController {
                 .username(user.getUsername())
                 .userType(user.getUserType())
                 .socialType(user.getSocialType())
+                .phoneNumber(user.getPhoneNumber())
                 .build();
 
+        boolean isFreelancer = user.getUserType().equals("freelancer");
+        boolean isCompany = user.getUserType().equals("company");
+
         model.addAttribute("user", principalDTO);
+        model.addAttribute("freelancer", isFreelancer);
+        model.addAttribute("company", isCompany);
+
         return "user/mypage";
     }
+
 
     @PostMapping("/delete-account")
     public String deleteAccount(HttpSession session) {
@@ -445,7 +453,22 @@ public class UserController {
         // 회원탈퇴 처리
         userService.deleteUserAccount(user);
         session.invalidate();
-        return "redirect:/";
+        return "redirect:/main";
     }
+
+    @PostMapping("/update")
+    public String updateUser(HttpSession session, @RequestParam("username") String username) {
+        User user = (User) session.getAttribute("principal");
+
+        if (user == null) {
+            return "redirect:/user/sign-in";
+        }
+        user.setUsername(username);
+        userService.updateUserInfo(user);
+        session.setAttribute("principal", user);
+
+        return "redirect:/user/mypage";
+    }
+
 
 }
