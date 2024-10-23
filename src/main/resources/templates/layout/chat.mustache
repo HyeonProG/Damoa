@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        /* 기존 스타일들은 유지 */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #F0F0F0;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .navbar {
+            padding: 10px;
+            display: flex;
+            justify-content: flex-end;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .chat-icon {
+            background-color: #A8E05C;
+            border: none;
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+            font-size: 24px;
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            z-index: 1001;
+        }
+
+        .chat-icon:hover {
+            background-color: rgba(168, 224, 92, 0.8);
+        }
+
+        /* 채팅 목록 헤더 */
+        .chat-list-header {
+            background-color: #A8E05C; /* 연두색 배경 */
+            padding: 10px; /* 패딩 추가 */
+            color: white; /* 텍스트 색상 */
+            text-align: center; /* 중앙 정렬 */
+            font-size: 18px; /* 글씨 크기 */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-list-header button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /* 채팅방 목록 스타일 */
+        #chat-list {
+            display: none;
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            width: 300px;
+            max-height: 500px;
+            overflow-y: auto;
+            background-color: #FFFFFF;
+            border: 1px solid #A8E05C;
+            border-radius: 10px;
+            z-index: 999;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-room-item {
+            padding: 10px;
+            border-bottom: 1px solid #A8E05C;
+            cursor: pointer;
+        }
+
+        .chat-room-item:hover {
+            background-color: rgba(168, 224, 92, 0.3);
+        }
+
+        /* 채팅방 및 메시지 스타일들은 유지 */
+        #chat-room {
+            display: none;
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            width: 300px;
+            max-height: 500px;
+            overflow: hidden;
+            z-index: 999;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-bar {
+            background-color: #A8E05C;
+            padding: 10px;
+            color: white;
+            font-size: 16px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-bar button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .back-bar p {
+            padding: 10px 10px;
+            margin: 0;
+            color: white;
+            text-align: left;
+            width: 100%;
+        }
+
+        #messages {
+            background-color: #FFFFFF;
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #A8E05C;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column-reverse;
+            border-radius: 10px;
+        }
+
+        .input-group {
+            display: none;
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            z-index: 999;
+            width: 300px;
+        }
+
+        #message {
+            flex: 1;
+            border: 1px solid #A8E05C;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 14px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <button class="chat-icon" id="chat-icon" onclick="showChatList()">💬</button> <!-- 채팅 아이콘 -->
+</div>
+
+<div id="chat-list"> <!-- 채팅방 목록 -->
+    <div class="chat-list-header">
+        <button id="close-button">×</button> <!-- 닫기 버튼 -->
+        <h2>채팅 목록</h2>
+    </div>
+    <div class="chat-room-item" onclick="openChatRoom('김기석', '프로젝트 A')">
+        김기석님 - 프로젝트 A
+    </div>
+    <div class="chat-room-item" onclick="openChatRoom('박준형', '프로젝트 B')">
+        박준형님 - 프로젝트 B
+    </div>
+    <!-- 필요한 채팅방 목록들을 추가 -->
+</div>
+
+<div id="chat-room"> <!-- 채팅방 -->
+    <div class="back-bar">
+        <button id="back-button">←</button> <!-- 뒤로가기 버튼 -->
+        <p id="chat-header"></p> <!-- 동적으로 채팅 상대 표시 -->
+    </div>
+    <div id="messages"></div> <!-- 메시지 로그 -->
+</div>
+
+<div class="input-group" id="input-group">
+    <input type="text" id="message" class="form-control" placeholder="메시지를 입력하세요..." />
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script>
+    let selectedCompanyId = ''; // 선택된 회사 ID
+    let selectedFreelancerId = ''; // 선택된 프리랜서 ID
+
+    const socket = new SockJS('/ws');
+    const stompClient = Stomp.over(socket);
+
+    function connect() {
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/messages', function (message) {
+                const chatMessage = JSON.parse(message.body);
+                const messageBox = chatMessage.companyId === selectedCompanyId
+                    ? `<div class='message message-right'>${chatMessage.message}</div>`
+                    : `<div class='message message-left'><strong>${chatMessage.companyId}:</strong> ${chatMessage.message}</div>`;
+                const messagesDiv = document.getElementById('messages');
+                messagesDiv.insertAdjacentHTML('afterbegin', messageBox);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            });
+        });
+    }
+
+    function sendMessage() {
+        const messageInput = document.getElementById("message");
+        const message = messageInput.value.trim();
+        if (message) {
+            stompClient.send("/app/chat/" + selectedCompanyId + "/" + selectedFreelancerId, {}, JSON.stringify({ 'message': message, 'companyId': selectedCompanyId }));
+            messageInput.value = "";
+        }
+    }
+
+    document.getElementById("message").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+            event.preventDefault();
+        }
+    });
+
+    function showChatList() {
+        document.getElementById('chat-list').style.display = 'block';
+        document.getElementById('chat-icon').style.display = 'none';
+    }
+
+    function openChatRoom(companyId, projectName) {
+        selectedCompanyId = companyId;
+        document.getElementById('chat-header').textContent = companyId + '님과의 채팅 - ' + projectName;
+        document.getElementById('chat-room').style.display = 'block';
+        document.getElementById('input-group').style.display = 'flex';
+        document.getElementById('chat-list').style.display = 'none';
+    }
+
+    document.getElementById('back-button').onclick = function() {
+        document.getElementById('chat-room').style.display = 'none';
+        document.getElementById('input-group').style.display = 'none';
+        document.getElementById('chat-list').style.display = 'block';
+    }
+
+    document.getElementById('close-button').onclick = function() {
+        document.getElementById('chat-list').style.display = 'none';
+        document.getElementById('chat-icon').style.display = 'block'; // 채팅 아이콘 다시 보이게 함
+    }
+
+    connect();
+</script>
+</body>
+</html>

@@ -51,4 +51,16 @@ public class AdminService {
     public List<MonthlyRegisterDTO> getMonthlyRegisterData() {
         return userRepository.getMonthlyRegisterData();
     }
+    public List<User> getAllUser(){
+        return adminRepository.getAllUser();
+    }
+
+    public List<User> getUserList(int limit, int offset){
+        return adminRepository.getUserList(limit,offset);
+    }
+
+    public User getUserDetail(int id){
+        return adminRepository.getUserDetail(id);
+    }
+
 }

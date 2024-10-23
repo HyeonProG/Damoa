@@ -7,11 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.damoa.dto.admin.AdminSignInDTO;
 import com.damoa.handler.exception.DataDeliveryException;
@@ -22,9 +21,9 @@ import com.damoa.service.AdminService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 import java.util.List;
 
@@ -58,26 +57,26 @@ public class AdminController {
         String userIp = request.getRemoteAddr(); // 클라이언트의 IP 주소를 얻음
         visitorService.recordVisitor(userIp); // 방문자 기록
 
-        return "/admin/main";
+        return "/admin/admin_main";
     }
 
-//    /**
-//     * 관리자 로그인 페이지
-//     *
-//     * @return
-//     */
-//    @GetMapping("/sign-in")
-//    public String adminSignInPage() {
-//        return "admin/sign_in";
-//    }
-//
-//    /**
-//     * 관리자 로그인
-//     *
-//     * @param username
-//     * @param password
-//     * @return
-//     */
+    /**
+     * 관리자 로그인 페이지
+     * 
+     * @return
+     */
+    @GetMapping("/sign-in")
+    public String adminSignInPage() {
+        return "admin/sign_in";
+    }
+
+    /**
+     * 관리자 로그인
+     * 
+     * @param username
+     * @param password
+     * @return
+     */
 //    @PostMapping("/sign-in")
 //    public String adminSignInProc(AdminSignInDTO adminSignInDTO, HttpServletRequest request) {
 //        try {
@@ -96,12 +95,44 @@ public class AdminController {
 //            e.printStackTrace();
 //            return "/admin/sign_in";
 //        }
-///    }
+//    }
+//
+//    @GetMapping("/management")
+//    public String ListPage(Model model){
+//        List<User> userList = adminService.getAllUser();
+//        model.addAttribute("userList", userList);
+//        return "admin/admin_user_list";
+//    }
 
-    @GetMapping("/faq")
-    public String faq(){
-        return "admin/admin_faq";
+    @GetMapping("/management/{currentPageNum}")
+    public String UserListPage(@PathVariable(required = false) Integer currentPageNum, Model model){
+
+        List<User> allUser = adminService.getAllUser();
+        int totalUser = allUser.size();
+        int limit = 10;
+        int totalPages = totalUser/limit;
+        int offset;
+
+        if(currentPageNum == null || currentPageNum <= 1){
+            currentPageNum = 2;
+            offset = 0;
+        } else{
+            offset = limit*(currentPageNum-1);
+        }
+
+
+        List<User> userList = adminService.getUserList(limit,offset);
+
+        model.addAttribute("userList",userList);
+        model.addAttribute("totalUser",totalUser);
+        model.addAttribute("totalPages",totalPages);
+        model.addAttribute("currentPageNum",currentPageNum);
+        model.addAttribute("beforePageNum",currentPageNum -1);
+        model.addAttribute("nextPageNum",currentPageNum +1);
+
+        return "/admin/admin_user_list";
     }
+
 
     /**
      * 월별 회원 수 데이터 반환

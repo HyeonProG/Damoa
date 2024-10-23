@@ -1,0 +1,53 @@
+{{> layout/header}} <!-- 헤더를 불러옴 -->
+
+    {{# freelancerReview}}
+    <div class="container mt-4">
+        <div class="row">
+            <!-- 좌측 사이드바 -->
+            <div class="col-md-3">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">프리랜서 이름</h5>
+                        <p class="card-subtitle mb-2 text-muted">프리랜서 소개</p>
+                        <p>여기에 프리랜서의 간단한 소개를 작성합니다.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 메인 리뷰 영역 -->
+            <div class="col-md-9">
+                <!-- 평점 요약 -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">리뷰 요약</h5>
+                        <p class="card-text">총 리뷰 평점: {{overallScore}}</p>
+                        <div class="row">
+                            <div class="col-md-3">커뮤니케이션: {{communicationScore}}</div>
+                            <div class="col-md-3">기간 준수: {{timelinessScore}}</div>
+                            <div class="col-md-3">지원 점수: {{supportScore}}</div>
+                            <div class="col-md-3">함께하고 싶은 점수: {{willingnessScore}}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 리뷰 상세 내용 -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">리뷰 내용</h5>
+                        <p>{{responseData}}</p>
+                        <button class="btn btn-primary">프로필 보러가기</button>
+                    </div>
+                </div>
+
+                <!-- 리뷰 작성 날짜 -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <small class="text-muted">리뷰 작성일: {{reviewDate}}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/ freelancerReview}}
+
+{{> layout/footer}} <!-- 푸터를 불러옴 -->

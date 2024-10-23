@@ -17,12 +17,11 @@ public class GoogleSheetsController {
     private final GoogleSheetsService googleSheetsService;
 
     /*
-     * 주소설계 : http://localhost:8080/review/company/import
+     * 주소설계 : http://localhost:8080/reviews/company/import
      * TODO: 주소로 접근하지 않고 스프레드 시트가 업데이트 되면 자동으로 확인되어 업데이트 되게 수정
      *       - Google Apps Script, GCP Pub/Sub 및 Cloud Functions 사용
-     * TODO: 템플릿 메서드 패턴 적용하기
      * */
-    @GetMapping("/review/company/import")
+    @GetMapping("/reviews/company/import")
     public String companyReviewImport() throws Exception {
         // 1. Google Sheets API 서비스 초기화
         Sheets sheetsService = googleSheetsService.getCloudAccountKey();
@@ -32,7 +31,12 @@ public class GoogleSheetsController {
         String companyRange = "A2:I11";  // 필요한 열 범위를 설정
 
         // 3. Google Sheets에서 company 리뷰 데이터 가져와 List 변수에 할당
-        List<List<Object>> companyValues = sheetsService.spreadsheets().values().get(companySpreadsheetId, companyRange).execute().getValues();
+        List<List<Object>> companyValues = sheetsService
+                .spreadsheets()
+                .values()
+                .get(companySpreadsheetId, companyRange)
+                .execute()
+                .getValues();
 
         // 4. company 데이터 유효성 검사 및 저장
         if (companyValues != null && !companyValues.isEmpty()) {
@@ -48,10 +52,10 @@ public class GoogleSheetsController {
     }
 
     /*
-     * 주소설계 : http://localhost:8080/review/freelancer/import
+     * 주소설계 : http://localhost:8080/reviews/freelancer/import
      * */
-    @GetMapping("/review/freelancer/import")
-    public String freelancerReivewImport() throws Exception {
+    @GetMapping("/reviews/freelancer/import")
+    public String freelancerReviewImport() throws Exception {
         // 1. Google Sheets API 서비스 초기화
         Sheets sheetsService = googleSheetsService.getCloudAccountKey();
 
@@ -60,7 +64,12 @@ public class GoogleSheetsController {
         String freelancerRange = "A2:I11";  // 필요한 열 범위를 설정
 
         // 3. Google Sheets에서 프리랜서 데이터 가져와 List 변수에 할당
-        List<List<Object>> freelancerValues = sheetsService.spreadsheets().values().get(freelancerSpreadsheetId, freelancerRange).execute().getValues();
+        List<List<Object>> freelancerValues = sheetsService
+                .spreadsheets()
+                .values()
+                .get(freelancerSpreadsheetId, freelancerRange)
+                .execute()
+                .getValues();
 
         // 4. 프리랜서 데이터 유효성 검사 및 저장
         if (freelancerValues != null && !freelancerValues.isEmpty()) {
