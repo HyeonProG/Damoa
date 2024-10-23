@@ -83,16 +83,16 @@ public class AdminController {
 //            return "/admin/sign_in";
 //        }
 //    }
+//
+//    @GetMapping("/management")
+//    public String ListPage(Model model){
+//        List<User> userList = adminService.getAllUser();
+//        model.addAttribute("userList", userList);
+//        return "admin/admin_user_list";
+//    }
 
-    @GetMapping("/management")
-    public String ListPage(Model model){
-        List<User> userList = adminService.getAllUser();
-        model.addAttribute("userList", userList);
-        return "admin/admin_user_list";
-    }
-
-    @GetMapping("/{currentPageNum}")
-    public String UserListPage(@PathVariable(required = false) int currentPageNum, Model model){
+    @GetMapping("/management/{currentPageNum}")
+    public String UserListPage(@PathVariable(required = false) Integer currentPageNum, Model model){
 
         List<User> allUser = adminService.getAllUser();
         int totalUser = allUser.size();
@@ -100,12 +100,13 @@ public class AdminController {
         int totalPages = totalUser/limit;
         int offset;
 
-        if(currentPageNum == 0 || currentPageNum == 1){
-            currentPageNum = 1;
+        if(currentPageNum == null || currentPageNum <= 1){
+            currentPageNum = 2;
             offset = 0;
-        } else {
-            offset = currentPageNum*limit+1;
+        } else{
+            offset = limit*(currentPageNum-1);
         }
+
 
         List<User> userList = adminService.getUserList(limit,offset);
 
@@ -113,8 +114,10 @@ public class AdminController {
         model.addAttribute("totalUser",totalUser);
         model.addAttribute("totalPages",totalPages);
         model.addAttribute("currentPageNum",currentPageNum);
+        model.addAttribute("beforePageNum",currentPageNum -1);
+        model.addAttribute("nextPageNum",currentPageNum +1);
 
-        return "/admin/admin_notice_list";
+        return "/admin/admin_user_list";
     }
 
 
