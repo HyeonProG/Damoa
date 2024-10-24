@@ -1,15 +1,19 @@
 {{> layout/header}}
 
-<h1>프리랜서 목록</h1>
-
-<div id="freelancer-list" class="freelancer-cards-container">
-    <!-- JavaScript로 프리랜서 카드 목록이 여기에 추가됩니다 -->
-</div>
-
-<div id="paginationContainer"></div> <!-- 페이지네이션을 위한 컨테이너 -->
 
 <!-- 스타일 추가 -->
 <style>
+    .main-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .content {
+        flex: 1;
+        padding: 20px;
+    }
+
     .freelancer-cards-container {
         display: flex;
         flex-wrap: wrap;
@@ -19,6 +23,7 @@
     }
 
     .freelancer-card {
+        display: flex;
         width: 300px;
         border: 1px solid #ccc;
         border-radius: 8px;
@@ -26,7 +31,9 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         background-color: #fff;
         transition: transform 0.2s;
-        cursor: pointer; /* 클릭 가능한 요소로 변경 */
+        cursor: pointer;
+        flex-direction: column;
+        justify-content: center;
     }
 
     .freelancer-card:hover {
@@ -47,6 +54,21 @@
     .freelancer-card .card-label {
         font-weight: bold;
         color: #333;
+    }
+
+    .freelancer-info-card {
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fff;
+        margin-top: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .freelancer-info-card p {
+        margin: 5px 0;
+        font-size: 0.9em;
+        color: #555;
     }
 
     .pagination {
@@ -76,7 +98,30 @@
     .pagination .page-item.disabled .page-link {
         color: #ccc;
     }
+    .salary-card p {
+    height: 100%; /* p 태그 높이를 부모의 100%로 설정 */
+    display: flex; /* p 태그 안의 내용을 중앙 정렬하기 위한 flexbox 사용 */
+    justify-content: center; /* 수평 가운데 정렬 */
+    align-items: center; /* 수직 가운데 정렬 */
+    margin: 0; /* 기본 여백 제거 */
+    font-size: 1em; /* 텍스트 크기 설정 */
+    color: #555;
+    }
+
 </style>
+
+<div class="main-container">
+
+    <!-- 프리랜서 목록 섹션 -->
+    <div class="content">
+        <h1>프리랜서 목록</h1>
+        <div id="freelancer-list" class="freelancer-cards-container">
+            <!-- JavaScript로 프리랜서 카드 목록이 여기에 추가됩니다 -->
+        </div>
+
+        <div id="paginationContainer"></div> <!-- 페이지네이션을 위한 컨테이너 -->
+    </div>
+</div>
 
 <script>
     let currentPage = 1; // 현재 페이지
@@ -87,7 +132,7 @@
         fetch(`/freelancer/list/data?page=${page}&size=${pageSize}`)
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error('네트워크 오류');
                 }
                 return response.json();
             })
@@ -96,96 +141,53 @@
                 const freelancerList = document.getElementById('freelancer-list');
                 freelancerList.innerHTML = ''; // 기존 목록 초기화
 
-                // freelancers가 정의되어 있는지 확인
                 if (Array.isArray(data.freelancers)) {
-                    data.freelancers.forEach(freelancer => {
+                    const randomIndex = Math.floor(Math.random() * data.freelancers.length); // 랜덤 인덱스 생성
+
+                    data.freelancers.forEach((freelancer, index) => {
                         const card = document.createElement('div');
                         card.className = 'freelancer-card';
                         card.innerHTML = `
                             <h2>${freelancer.username}</h2>
-                            <p><span class="card-label">직무:</span> ${freelancer.jobPart}</p>
-                            <p><span class="card-label">근무 방식:</span> ${freelancer.workingStyle}</p>
-                            <p><span class="card-label">기술 스택:</span> ${freelancer.skills || ""}</p>
-                            <p><span class="card-label">상세 내용:</span> ${freelancer.detail}</p>
+                            <div class="card freelancer-info-card">
+                                <p><span class="card-label">직무:</span> ${freelancer.jobPart}</p>
+                                <p><span class="card-label">근무 방식:</span> ${freelancer.workingStyle}</p>
+                                <p><span class="card-label">기술 스택:</span> ${freelancer.skills || ""}</p>
+                                <p><span class="card-label">상세 내용:</span> ${freelancer.detail}</p>
+                            </div>
                         `;
 
-                        // 카드 클릭 시 상세보기 페이지로 이동
                         card.addEventListener('click', () => {
                             window.location.href = `/freelancer/detail/${freelancer.userId}`;
                         });
 
+                        // 무작위로 연봉 카드 추가
+                        if (index === randomIndex) {
+                            const salaryCard = document.createElement('div');
+                            salaryCard.className = 'freelancer-card';
+                            salaryCard.innerHTML = `
+                                <h4>프리랜서 평균 희망 연봉</h4>
+                                <div class="card salary-card">
+                                    <p><strong>{{averageSalary}} 만원</strong></p>
+                                </div>
+                            `;
+                            freelancerList.appendChild(salaryCard);
+                        }
+
                         freelancerList.appendChild(card);
                     });
                 } else {
-                    console.warn("No freelancers found.");
+                    console.warn("프리랜서가 없습니다.");
                 }
 
                 currentPage = data.currentPage;
-                renderPagination(data.totalCount, currentPage, pageSize, data.totalPages); // 페이지네이션 렌더링
+                renderPagination(data.totalCount, currentPage, pageSize, data.totalPages);
             })
             .catch(error => console.error('Error:', error));
     }
 
-    // 페이지네이션을 렌더링하는 함수
-    function renderPagination(totalCount, currentPage, pageSize, totalPages) {
-        const paginationContainer = document.getElementById('paginationContainer');
-
-        // 기존 페이지네이션 항목 제거
-        while (paginationContainer.firstChild) {
-            paginationContainer.removeChild(paginationContainer.firstChild);
-        }
-
-        // 페이지네이션 리스트 생성
-        const ul = document.createElement('ul');
-        ul.className = 'pagination';
-
-        // 이전 페이지 링크
-        const prevLi = document.createElement('li');
-        prevLi.className = currentPage > 1 ? 'page-item' : 'page-item disabled';
-        const prevLink = document.createElement('a');
-        prevLink.className = 'page-link';
-        prevLink.textContent = '이전';
-        prevLink.addEventListener('click', (event) => {
-            event.preventDefault(); // 페이지 이동 및 새로 고침 방지
-            if (currentPage > 1) { loadFreelancers(currentPage - 1); }
-        });
-        prevLi.appendChild(prevLink);
-        ul.appendChild(prevLi);
-
-        // 페이지 번호 링크
-        for (let i = 1; i <= totalPages; i++) {
-            const li = document.createElement('li');
-            li.className = i === currentPage ? 'page-item active' : 'page-item';
-            const link = document.createElement('a');
-            link.className = 'page-link';
-            link.textContent = i;
-            link.addEventListener('click', (event) => {
-                event.preventDefault(); // 페이지 이동 및 새로 고침 방지
-                loadFreelancers(i); // 해당 페이지 로드
-            });
-            li.appendChild(link);
-            ul.appendChild(li);
-        }
-
-        // 다음 페이지 링크
-        const nextLi = document.createElement('li');
-        nextLi.className = currentPage < totalPages ? 'page-item' : 'page-item disabled';
-        const nextLink = document.createElement('a');
-        nextLink.className = 'page-link';
-        nextLink.textContent = '다음';
-        nextLink.addEventListener('click', (event) => {
-            event.preventDefault(); // 페이지 이동 및 새로 고침 방지
-            if (currentPage < totalPages) { loadFreelancers(currentPage + 1); }
-        });
-        nextLi.appendChild(nextLink);
-        ul.appendChild(nextLi);
-
-        // 완성된 페이지네이션을 페이지네이션 컨테이너에 추가
-        paginationContainer.appendChild(ul);
-    }
-
-    // 페이지 로드 시 기본 페이지 로드
     loadFreelancers(currentPage);
+
 </script>
 
 {{> layout/footer}}

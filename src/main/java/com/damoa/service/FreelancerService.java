@@ -210,4 +210,12 @@ public class FreelancerService {
         return freelancerRepository.findFreelancerDetailById(userId);
     }
 
+    /**
+     * 프리랜서 평균 희망 연봉 조회
+     * @return
+     */
+    public int countAverageFreelancerExpectedSalary() {
+        return freelancerRepository.countAverageFreelancerExpectedSalary();
+    }
+
 }

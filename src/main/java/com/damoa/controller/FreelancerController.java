@@ -4,6 +4,7 @@ package com.damoa.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.text.DecimalFormat;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -294,6 +295,14 @@ public class FreelancerController {
      */
     @GetMapping("/list")
     public String findFreelancerPage(Model model) {
+        // 평균 급여 계산
+        double averageSalary = freelancerService.countAverageFreelancerExpectedSalary();
+
+        // 소수점 없이 처리
+        DecimalFormat df = new DecimalFormat("#");
+        String formattedSalary = df.format(averageSalary);
+
+        model.addAttribute("averageSalary", formattedSalary);
         return "/freelancer/freelancer_list";
     }
 
@@ -314,6 +323,9 @@ public class FreelancerController {
         int totalFreelancers = freelancerService.countAllFreelancers();
         int totalPages = (int) Math.ceil((double) totalFreelancers / size);
 
+        // 프리랜서 평균 희망 연봉도 함께 응답 데이터에 추가
+        int averageSalary = freelancerService.countAverageFreelancerExpectedSalary();
+
         // 응답 데이터
         Map<String, Object> response = new HashMap<>();
         response.put("freelancers", freelancers);
@@ -321,6 +333,7 @@ public class FreelancerController {
         response.put("currentPage", page);
         response.put("pageSize", size);
         response.put("totalPages", totalPages);
+        response.put("averageSalary", averageSalary);
 
         return response; // JSON 형태로 응답
     }

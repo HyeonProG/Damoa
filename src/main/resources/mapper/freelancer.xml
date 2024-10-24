@@ -18,11 +18,7 @@
         f.working_style,
         f.expected_salary,
         f.salary_type,
-        f.origin_file_name,
-        f.upload_file_name,
         f.detail,
-        f.link,
-        f.created_at,
         GROUP_CONCAT(DISTINCT s.name) AS skills, -- 스킬 리스트
         GROUP_CONCAT(DISTINCT c.career) AS careers -- 경력 리스트
     FROM 
@@ -39,8 +35,7 @@
         career c ON fc.career_id = c.id
     GROUP BY 
         f.id, f.user_id, u.username, f.job_part, f.working_style, 
-        f.expected_salary, f.salary_type, f.origin_file_name, 
-        f.upload_file_name, f.detail, f.link, f.created_at
+        f.expected_salary, f.salary_type, f.detail
     LIMIT #{size} OFFSET #{offset}
     </select>
 
@@ -176,6 +171,11 @@
         f.id, f.user_id, u.username, f.job_part, f.working_style, 
         f.expected_salary, f.salary_type, f.origin_file_name, 
         f.upload_file_name, f.detail, f.link, f.created_at
+    </select>
+
+    <select id="countAverageFreelancerExpectedSalary">
+        SELECT FLOOR(AVG(expected_salary)) AS average_expected_salary
+        FROM freelancer_tb;
     </select>
 
 </mapper>

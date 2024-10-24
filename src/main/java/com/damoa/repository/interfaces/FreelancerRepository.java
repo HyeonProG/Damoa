@@ -54,4 +54,7 @@ public interface FreelancerRepository {
     // 프리랜서 디테일 조회
     public Freelancer findFreelancerDetailById(int userId);
 
+    // 프리랜서 평균 희망 연봉 카운트
+    public int countAverageFreelancerExpectedSalary();
+
 }
