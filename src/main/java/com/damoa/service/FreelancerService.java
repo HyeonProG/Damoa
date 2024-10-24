@@ -15,9 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.damoa.dto.freelancer.FreelancerBasicInfoDTO;
 import com.damoa.dto.freelancer.RegisterFreelancerDTO;
+import com.damoa.dto.user.UserSignUpDTO;
 import com.damoa.handler.exception.DataDeliveryException;
 import com.damoa.repository.interfaces.FreelancerRepository;
 import com.damoa.repository.interfaces.SkillRepository;
+import com.damoa.repository.interfaces.UserRepository;
 import com.damoa.repository.model.Career;
 import com.damoa.repository.model.Freelancer;
 import com.damoa.repository.model.Skill;
@@ -30,6 +32,9 @@ public class FreelancerService {
 
     @Autowired
     private final FreelancerRepository freelancerRepository;
+
+    @Autowired
+    private final UserRepository userRepository;
 
     @Autowired
     private final SkillRepository skillRepository;
@@ -107,7 +112,7 @@ public class FreelancerService {
      * @param dto
      */
     @Transactional
-    public void updateFreelancerBasicInfo(FreelancerBasicInfoDTO dto) {
+    public void insertFreelancerBasicInfo(FreelancerBasicInfoDTO dto, UserSignUpDTO user) {
         // 파일 업로드 수행
         if (dto.getMFile() != null && !dto.getMFile().isEmpty()) {
             String[] fileNames = uploadFile(dto.getMFile());
@@ -115,8 +120,20 @@ public class FreelancerService {
             dto.setUploadFileName(fileNames[1]);
         }
 
+        // 회원가입한 사용자가 프리랜서일 경우, freelancer_tb에 자동 등록
+        if ("freelancer".equals(user.getUserType())) {
+            // userRepository에서 방금 삽입된 유저의 id 가져오기
+            int userId = userRepository.findByEmail(user.getEmail()).getId();
+
+            // 기본 프리랜서 정보를 추가 (기본값 설정)
+            Freelancer freelancer = new Freelancer();
+            freelancer.setUserId(userId);
+            // 나머지 값은 필요에 따라 기본값으로 설정하거나 초기 값으로 설정 가능
+            freelancerRepository.insertFreelancer(freelancer);
+        }
+
         // 프리랜서 기본 정보 업데이트
-        freelancerRepository.updateFreelancerBasicInfo(dto);
+        freelancerRepository.insertFreelancerBasicInfo(dto);
     }
 
     /**
@@ -131,6 +148,7 @@ public class FreelancerService {
 
     /**
      * 경력 정보 리스트 조회
+     * 
      * @return
      */
     public List<Career> findAllCareers() {
@@ -139,6 +157,7 @@ public class FreelancerService {
 
     /**
      * 프리랜서 경력 추가
+     * 
      * @param userId
      * @param careerId
      */
@@ -149,6 +168,7 @@ public class FreelancerService {
 
     /**
      * 프리랜서 경력 삭제
+     * 
      * @param userId
      * @param careerId
      */
@@ -159,6 +179,7 @@ public class FreelancerService {
 
     /**
      * 프리랜서 경력 조회
+     * 
      * @param userId
      * @return
      */
@@ -168,6 +189,7 @@ public class FreelancerService {
 
     /**
      * 모든 스킬 가져오기
+     * 
      * @return
      */
     public List<Skill> findAllSkills() {
@@ -176,6 +198,7 @@ public class FreelancerService {
 
     /**
      * 프리랜서 스킬 조회
+     * 
      * @param userId
      * @return
      */
@@ -185,6 +208,7 @@ public class FreelancerService {
 
     /**
      * 프리랜서 스킬 추가
+     * 
      * @param userId
      * @param skillId
      */
@@ -195,6 +219,7 @@ public class FreelancerService {
 
     /**
      * 프리랜서 스킬 삭제
+     * 
      * @param userId
      * @param skillId
      */
@@ -212,6 +237,7 @@ public class FreelancerService {
 
     /**
      * 프리랜서 평균 희망 연봉 조회
+     * 
      * @return
      */
     public int countAverageFreelancerExpectedSalary() {

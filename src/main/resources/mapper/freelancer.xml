@@ -52,19 +52,29 @@
     </select>
 
     <!-- 프리랜서 기본 정보 업데이트 쿼리 -->
-    <update id="updateFreelancerBasicInfo">
-        UPDATE freelancer_tb
-        SET
-            job_part = #{jobPart},
-            working_style = #{workingStyle},
-            expected_salary = #{expectedSalary},
-            salary_type = #{salaryType},
-            origin_file_name = #{originFileName},
-            upload_file_name = #{uploadFileName},
-            detail = #{detail},
-            link = #{link}
-        WHERE user_id = #{userId}
-    </update>
+    <insert id="insertFreelancerBasicInfo">
+    INSERT INTO freelancer_tb (
+        user_id,
+        job_part,
+        working_style,
+        expected_salary,
+        salary_type,
+        origin_file_name,
+        upload_file_name,
+        detail,
+        link
+    ) VALUES (
+        #{userId},           -- 사용자 ID (user_tb의 id와 연결)
+        #{jobPart},         -- 직무 (ex. 프론트엔드, 백엔드)
+        #{workingStyle},     -- 근무 방식 (재택, 출퇴근)
+        #{expectedSalary},   -- 희망 연봉
+        #{salaryType},       -- 급여 방식 (시급, 월급)
+        #{originFileName},   -- 포트폴리오 원본 파일명
+        #{uploadFileName},   -- 저장된 포트폴리오 파일명
+        #{detail},           -- 상세 소개
+        #{link}              -- 링크 (ex. github, tistory, notion)
+    );
+    </insert>
 
     <!-- 프리랜서 기본 정보 조회 쿼리 -->
     <select id="findFreelancerBasicInfo">

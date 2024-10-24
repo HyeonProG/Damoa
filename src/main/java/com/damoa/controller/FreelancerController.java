@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.damoa.dto.freelancer.FreelancerBasicInfoDTO;
+import com.damoa.dto.user.UserSignUpDTO;
 import com.damoa.repository.model.Career;
 import com.damoa.repository.model.Freelancer;
 import com.damoa.repository.model.Skill;
@@ -107,7 +108,7 @@ public class FreelancerController {
      * @return
      */
     @PostMapping("/update-basic-info")
-    public String updateBasicInfo(@ModelAttribute FreelancerBasicInfoDTO updateDTO, HttpSession session) {
+    public String updateBasicInfo(@ModelAttribute FreelancerBasicInfoDTO dto, UserSignUpDTO userSignUpDTO, HttpSession session) {
         // 세션에서 사용자 정보 가져오기
         User user = (User) session.getAttribute("principal");
 
@@ -122,7 +123,7 @@ public class FreelancerController {
         }
 
         // 업데이트 로직
-        freelancerService.updateFreelancerBasicInfo(updateDTO);
+        freelancerService.insertFreelancerBasicInfo(dto, userSignUpDTO);
 
         // 업데이트 완료 후 적절한 페이지로 리디렉션 (예: 기본 정보 페이지)
         return "redirect:/freelancer/basic-info";

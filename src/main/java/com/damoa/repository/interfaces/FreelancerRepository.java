@@ -23,7 +23,8 @@ public interface FreelancerRepository {
 
     public Freelancer findUserIdJoinFreelancerTb(int id); // 유저 id로 프리랜서 조회
 
-    public int updateFreelancerBasicInfo(FreelancerBasicInfoDTO dto);
+    // 프리랜서 기본정보 추가
+    public int insertFreelancerBasicInfo(FreelancerBasicInfoDTO dto);
 
     public FreelancerBasicInfoDTO findFreelancerBasicInfo(int userId);
 
