@@ -1,117 +1,52 @@
 {{> layout/header}}
 
-<style>
-    h1, h2 {
-        text-align: center;
-        color: #333;
-        font-family: Arial, sans-serif;
-        margin-bottom: 20px;
-    }
-
-    ul {
-        list-style: none;
-        padding: 0;
-        margin: 20px 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    li {
-        background-color: #f9f9f9;
-        padding: 10px 20px;
-        margin: 5px 0;
-        width: 50%;
-        display: flex;
-        justify-content: space-between;
-        border-radius: 5px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    }
-
-    form {
-        display: inline;
-    }
-
-    button {
-        background-color: #ff4d4d;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background-color: #ff3333;
-    }
-
-    select, input[type="submit"] {
-        padding: 10px;
-        margin: 10px 0;
-        border-radius: 5px;
-        border: 1px solid #ddd;
-    }
-
-    .form-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .back-link {
-        display: block;
-        text-align: center;
-        margin-top: 20px;
-        font-size: 14px;
-    }
-
-    .back-link a {
-        color: #3498db;
-        text-decoration: none;
-    }
-
-    .back-link a:hover {
-        text-decoration: underline;
-    }
-</style>
-
 <div class="container">
-    <h1>프리랜서 스킬 스택 관리</h1>
+    <!-- 사이드바 -->
+    {{> layout/mypage}}
 
-    <!-- 프리랜서의 스킬 스택이 있는지 확인 -->
-    {{#freelancerSkills}}
-    <ul>
-        <li>{{name}} 
-            <!-- 스킬 삭제 버튼 -->
-            <form action="/freelancer/delete-skill" method="post">
-                <input type="hidden" name="skillId" value="{{id}}">
-                <button type="submit">삭제</button>
-            </form>
-        </li>
-    </ul>
-    {{/freelancerSkills}}
+    <!-- 메인 콘텐츠 -->
+    <div class="main-content">
+        <h1 class="text-center mb-4 font-weight-bold">프리랜서 스킬 스택 관리</h1>
 
-    {{^freelancerSkills}}
-    <h2>등록된 스킬 스택이 없습니다</h2>
-    {{/freelancerSkills}}
+        <div class="main-board">
+            <!-- 프리랜서의 스킬 스택 리스트 -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title font-weight-bold">등록된 스킬 스택</h5>
+                    {{#freelancerSkills}}
+                    <ul>
+                        <li>{{name}} 
+                            <form action="/freelancer/delete-skill" method="post">
+                                <input type="hidden" name="skillId" value="{{id}}">
+                                <button type="submit">삭제</button>
+                            </form>
+                        </li>
+                    </ul>
+                    {{/freelancerSkills}}
+                    {{^freelancerSkills}}
+                    <p class="text-muted">등록된 스킬 스택이 없습니다.</p>
+                    {{/freelancerSkills}}
+                </div>
+            </div>
 
-    <h2>스킬 스택 추가</h2>
-    
-    <div class="form-container">
-        <!-- 스킬 스택 추가 폼 -->
-        <form action="/freelancer/insert-skill" method="post">
-            <label for="skills">추가할 스킬:</label>
-            <select name="skillId" id="skills">
-                {{#skills}}
-                <option value="{{id}}">{{name}}</option>
-                {{/skills}}
-            </select>
-            <input type="submit" value="추가">
-        </form>
-    </div>
-
-    <div class="text-center mt-3">
-        <a href="/freelancer/dashboard" class="btn btn-secondary">뒤로 가기</a>
+            <!-- 스킬 스택 추가 -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title font-weight-bold">스킬 스택 추가</h5>
+                    <div class="form-container">
+                        <form action="/freelancer/insert-skill" method="post">
+                            <label for="skills">추가할 스킬:</label>
+                            <select name="skillId" id="skills">
+                                {{#skills}}
+                                <option value="{{id}}">{{name}}</option>
+                                {{/skills}}
+                            </select>
+                            <input type="submit" value="추가" class="btn btn-primary mt-2">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

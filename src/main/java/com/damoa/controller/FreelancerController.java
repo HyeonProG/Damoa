@@ -1,10 +1,12 @@
 
 package com.damoa.controller;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.damoa.dto.freelancer.FreelancerBasicInfoDTO;
+import com.damoa.dto.user.UserSignUpDTO;
 import com.damoa.repository.model.Career;
 import com.damoa.repository.model.Freelancer;
 import com.damoa.repository.model.Skill;
@@ -83,15 +85,20 @@ public class FreelancerController {
             throw new IllegalArgumentException("프리랜서만 접근할 수 있습니다.");
         }
 
+        // 모든 경력 조회
+        List<Career> careers = freelancerService.findAllCareers();
+
         // 프리랜서의 기본 정보 가져오기
         Freelancer freelancer = freelancerService.findUserIdJoinFreelancerTb(user.getId());
         if (freelancer != null) {
+            model.addAttribute("careers", careers);
             model.addAttribute("jobPart", freelancer.getJobPart());
             model.addAttribute("workingStyle", freelancer.getWorkingStyle());
             model.addAttribute("expectedSalary", freelancer.getExpectedSalary());
             model.addAttribute("salaryType", freelancer.getSalaryType());
             model.addAttribute("detail", freelancer.getDetail());
             model.addAttribute("link", freelancer.getLink());
+            model.addAttribute("freelancer", user.getUserType());
         }
 
         model.addAttribute("userId", user.getId()); // userId 추가
@@ -106,7 +113,8 @@ public class FreelancerController {
      * @return
      */
     @PostMapping("/update-basic-info")
-    public String updateBasicInfo(@ModelAttribute FreelancerBasicInfoDTO updateDTO, HttpSession session) {
+    public String updateBasicInfo(@ModelAttribute FreelancerBasicInfoDTO dto, UserSignUpDTO userSignUpDTO,
+            HttpSession session) {
         // 세션에서 사용자 정보 가져오기
         User user = (User) session.getAttribute("principal");
 
@@ -121,7 +129,7 @@ public class FreelancerController {
         }
 
         // 업데이트 로직
-        freelancerService.updateFreelancerBasicInfo(updateDTO);
+        freelancerService.insertFreelancerBasicInfo(dto, userSignUpDTO);
 
         // 업데이트 완료 후 적절한 페이지로 리디렉션 (예: 기본 정보 페이지)
         return "redirect:/freelancer/basic-info";
@@ -152,6 +160,8 @@ public class FreelancerController {
 
         List<Career> freelancerCareers = freelancerService.findCareersByFreelancerId(user.getId());
         model.addAttribute("freelancerCareers", freelancerCareers);
+
+        model.addAttribute("freelancer", user.getUserType());
 
         return "freelancer/career"; // 경력 관리 템플릿 반환
     }
@@ -230,6 +240,8 @@ public class FreelancerController {
         List<Skill> freelancerSkills = freelancerService.findSkillsByFreelancerId(user.getId());
         model.addAttribute("freelancerSkills", freelancerSkills);
 
+        model.addAttribute("freelancer", user.getUserType());
+
         return "freelancer/skills"; // 스킬 관리 템플릿 반환
 
     }
@@ -294,6 +306,22 @@ public class FreelancerController {
      */
     @GetMapping("/list")
     public String findFreelancerPage(Model model) {
+        // 평균 급여 계산
+        double averageSalary = freelancerService.countAverageFreelancerExpectedSalary();
+
+        // 소수점 없이 처리
+        DecimalFormat df = new DecimalFormat("#");
+        String formattedSalary = df.format(averageSalary);
+
+        // 모든 스킬 조회
+        List<Skill> skills = freelancerService.findAllSkills();
+        model.addAttribute("skills", skills);
+
+        // 모든 직무 조회
+        List<Career> careers = freelancerService.findAllCareers();
+        model.addAttribute("careers", careers);
+
+        model.addAttribute("averageSalary", formattedSalary);
         return "/freelancer/freelancer_list";
     }
 
@@ -302,18 +330,30 @@ public class FreelancerController {
      * 
      * @param page
      * @param size
+     * @param jobPart
+     * @param workingStyle
+     * @param skills
      * @return
      */
     @GetMapping("/list/data")
-    @ResponseBody
-    public Map<String, Object> fetchFreelancerList(@RequestParam(name = "page", defaultValue = "1") int page,
-            @RequestParam(name = "size", defaultValue = "5") int size) {
-
+    public ResponseEntity<Map<String, Object>> fetchFreelancerList(
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "keyword", required = false) String keyword) {
+    
         // 프리랜서 목록을 페이지별로 조회
-        List<Freelancer> freelancers = freelancerService.findAllFreelancers(page, size);
+        List<Freelancer> freelancers;
+        if (keyword != null && !keyword.isEmpty()) {
+            freelancers = freelancerService.findAllFreelancersBySearch(page, size, keyword); // 스킬로 검색
+        } else {
+            freelancers = freelancerService.findAllFreelancers(page, size); // 전체 조회
+        }
         int totalFreelancers = freelancerService.countAllFreelancers();
         int totalPages = (int) Math.ceil((double) totalFreelancers / size);
-
+    
+        // 프리랜서 평균 희망 연봉도 함께 응답 데이터에 추가
+        int averageSalary = freelancerService.countAverageFreelancerExpectedSalary();
+    
         // 응답 데이터
         Map<String, Object> response = new HashMap<>();
         response.put("freelancers", freelancers);
@@ -321,8 +361,9 @@ public class FreelancerController {
         response.put("currentPage", page);
         response.put("pageSize", size);
         response.put("totalPages", totalPages);
-
-        return response; // JSON 형태로 응답
+        response.put("averageSalary", averageSalary);
+    
+        return ResponseEntity.ok(response); // JSON 형태로 응답
     }
 
     @GetMapping("/detail/{userId}")

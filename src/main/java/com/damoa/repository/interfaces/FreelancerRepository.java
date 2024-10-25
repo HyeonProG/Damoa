@@ -10,20 +10,28 @@ import com.damoa.dto.freelancer.FreelancerBasicInfoDTO;
 import com.damoa.repository.model.Career;
 import com.damoa.repository.model.Freelancer;
 import com.damoa.repository.model.Skill;
-import com.damoa.repository.model.User;
 
 @Mapper
 public interface FreelancerRepository {
 
     public int insertFreelancer(Freelancer freelancer); // 프리랜서 등록
 
-    public List<Freelancer> findAllFreelancers(@Param("offset") int offset, @Param("size") int size); // 전체 프리랜서 조회
+    // 전체 프리랜서 조회
+    public List<Freelancer> findAllFreelancers(@Param("offset") int offset, @Param("size") int size);
+    
+    List<Freelancer> findAllFreelancersBySearch(
+        @Param("offset") int offset,
+        @Param("size") int size,
+        @Param("keyword") String keyword);
 
     public int countAllFreelancers(); // 전체 프리랜서 수 조회
 
+    public int countAllFreelancersBySearch(String keyword);
+
     public Freelancer findUserIdJoinFreelancerTb(int id); // 유저 id로 프리랜서 조회
 
-    public int updateFreelancerBasicInfo(FreelancerBasicInfoDTO dto);
+    // 프리랜서 기본정보 추가
+    public int insertFreelancerBasicInfo(FreelancerBasicInfoDTO dto);
 
     public FreelancerBasicInfoDTO findFreelancerBasicInfo(int userId);
 
@@ -53,5 +61,8 @@ public interface FreelancerRepository {
 
     // 프리랜서 디테일 조회
     public Freelancer findFreelancerDetailById(int userId);
+
+    // 프리랜서 평균 희망 연봉 카운트
+    public int countAverageFreelancerExpectedSalary();
 
 }
