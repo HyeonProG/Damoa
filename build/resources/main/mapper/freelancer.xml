@@ -2,19 +2,186 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.damoa.repository.interfaces.FreelancerRepository">
 
+    <!-- 프리랜서 등록 -->
     <insert id="insertFreelancer">
-        INSERT INTO freelancer_tb(user_id, username, email, phone_number, job_part, working_style, expected_salary, salary_type, experience, career, career_year, skill, origin_file_name, upload_file_name, detail, link, created_at)
-        VALUES(#{userId}, #{username}, #{email}, #{phoneNumber}, #{jobPart}, #{workingStyle}, #{expectedSalary}, #{salaryType}, #{experience}, #{career}, #{careerYear}, #{skill}, #{originFileName}, #{uploadFileName}, #{detail}, #{link}, now())
+       INSERT INTO freelancer_tb(user_id)
+       VALUES(#{userId})
     </insert>
 
+    <!-- 프리랜서 리스트 출력 -->
     <select id="findAllFreelancers">
-        SELECT * FROM freelancer_tb
-        ORDER BY created_at DESC
-        LIMIT #{size} OFFSET #{offset}
+    SELECT 
+        f.id,
+        f.user_id,
+        u.username, -- user 테이블에서 username 추가
+        f.job_part,
+        f.working_style,
+        f.expected_salary,
+        f.salary_type,
+        f.origin_file_name,
+        f.upload_file_name,
+        f.detail,
+        f.link,
+        f.created_at,
+        GROUP_CONCAT(DISTINCT s.name) AS skills, -- 스킬 리스트
+        GROUP_CONCAT(DISTINCT c.career) AS careers -- 경력 리스트
+    FROM 
+        freelancer_tb f
+    LEFT JOIN 
+        user_tb u ON f.user_id = u.id -- user_tb 테이블과 조인
+    LEFT JOIN 
+        freelancer_skills_tb fs ON f.user_id = fs.user_id
+    LEFT JOIN 
+        skill_tb s ON fs.skill_id = s.id
+    LEFT JOIN 
+        freelancer_career_tb fc ON f.user_id = fc.user_id
+    LEFT JOIN   
+        career c ON fc.career_id = c.id
+    GROUP BY 
+        f.id, f.user_id, u.username, f.job_part, f.working_style, 
+        f.expected_salary, f.salary_type, f.origin_file_name, 
+        f.upload_file_name, f.detail, f.link, f.created_at
+    LIMIT #{size} OFFSET #{offset}
     </select>
 
-    <select id="countAllFreelancers" resultType="int">
-        SELECT COUNT(*) FROM freelancer_tb
+    <select id="countAllFreelancers">
+        SELECT count(*) FROM freelancer_tb
+    </select>
+
+    <select id="findUserIdJoinFreelancerTb">
+        select *
+        from freelancer_tb as f
+        left join user_tb as u
+        on f.user_id = u.id
+        where u.id = #{id}
+    </select>
+
+    <!-- 프리랜서 기본 정보 업데이트 쿼리 -->
+    <update id="updateFreelancerBasicInfo">
+        UPDATE freelancer_tb
+        SET
+            job_part = #{jobPart},
+            working_style = #{workingStyle},
+            expected_salary = #{expectedSalary},
+            salary_type = #{salaryType},
+            origin_file_name = #{originFileName},
+            upload_file_name = #{uploadFileName},
+            detail = #{detail},
+            link = #{link}
+        WHERE user_id = #{userId}
+    </update>
+
+    <!-- 프리랜서 기본 정보 조회 쿼리 -->
+    <select id="findFreelancerBasicInfo">
+        SELECT 
+            job_part,
+            working_style,
+            expected_salary,
+            salary_type,
+            origin_file_name,
+            upload_file_name,
+            detail,
+            link
+        FROM freelancer_tb
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 경력 추가 -->
+    <insert id="insertCareer">
+        INSERT INTO career (career)
+        VALUES (#{career})
+    </insert>
+
+    <!-- 경력 검색 -->
+    <select id="findAllCareers">
+        SELECT * FROM career
+    </select>
+
+    <!-- 경력 추가 -->
+    <insert id="insertFreelancerCareer">
+        INSERT INTO freelancer_career_tb (user_id, career_id)
+        VALUES (#{userId}, #{careerId});
+    </insert>
+
+    <!-- 프리랜서의 모든 경력 조회 -->
+    <select id="findCareersByFreelancerId">
+        SELECT c.id, c.career
+        FROM career c
+        JOIN freelancer_career_tb fc ON c.id = fc.career_id
+        WHERE fc.user_id = #{userId};
+    </select>
+
+    <!-- 프리랜서 경력 삭제 -->
+    <delete id="deleteFreelancerCareerByFreelancerId">
+        DELETE FROM freelancer_career_tb
+        WHERE user_id = #{userId} AND career_id = #{careerId};
+    </delete>
+
+    <!-- 스킬 리스트 불러오기 -->
+    <select id="findAllSkills">
+        SELECT *
+        FROM skill_tb
+    </select>
+
+    <!-- 프리랜서 - 스킬 매핑 추가 -->
+    <insert id="insertFreelancerSkill">
+        INSERT INTO freelancer_skills_tb (user_id, skill_id)
+        VALUES (#{userId}, #{skillId})
+    </insert>
+
+    <!-- 프리랜서 - 스킬 매핑 삭제 -->
+    <delete id="deleteFreelancerSkillByFreelancerId">
+        DELETE FROM freelancer_skills_tb
+        WHERE user_id = #{userId} AND skill_id = #{skillId}
+    </delete>
+
+    <!-- 프리랜서가 가진 스킬 조회 -->
+    <select id="findSkillsByFreelancerId">
+        SELECT s.id, s.name
+        FROM freelancer_skills_tb fs
+        JOIN skill_tb s ON fs.skill_id = s.id
+        WHERE fs.user_id = #{userId}
+    </select>
+
+    <select id="findFreelancerDetailById">
+        SELECT 
+        f.id,
+        f.user_id,
+        u.username,
+        f.job_part,
+        f.working_style,
+        f.expected_salary,
+        f.salary_type,
+        f.origin_file_name,
+        f.upload_file_name,
+        f.detail,
+        f.link,
+        f.created_at,
+        GROUP_CONCAT(DISTINCT s.name) AS skills,
+        GROUP_CONCAT(DISTINCT c.career) AS career
+    FROM 
+        freelancer_tb f
+    LEFT JOIN 
+        user_tb u ON f.user_id = u.id
+    LEFT JOIN 
+        freelancer_skills_tb fs ON f.user_id = fs.user_id
+    LEFT JOIN 
+        skill_tb s ON fs.skill_id = s.id
+    LEFT JOIN 
+        freelancer_career_tb fc ON f.user_id = fc.user_id
+    LEFT JOIN   
+        career c ON fc.career_id = c.id
+	WHERE f.user_id = #{userId}
+    GROUP BY 
+        f.id, f.user_id, u.username, f.job_part, f.working_style, 
+        f.expected_salary, f.salary_type, f.origin_file_name, 
+        f.upload_file_name, f.detail, f.link, f.created_at
+    </select>
+
+    <select id="getMonthlyFreelancerData" resultType="com.damoa.dto.MonthlyFreelancerDTO">
+        SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, COUNT(*) AS count
+        FROM freelancer_tb
+        GROUP BY DATE_FORMAT(created_at, '%Y-%m')
     </select>
 
 </mapper>

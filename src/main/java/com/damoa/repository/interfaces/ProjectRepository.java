@@ -1,5 +1,6 @@
 package com.damoa.repository.interfaces;
 
+import com.damoa.dto.MonthlyProjectDTO;
 import com.damoa.repository.model.Project;
 import com.damoa.repository.model.ProjectWait;
 import org.apache.ibatis.annotations.Mapper;
@@ -55,4 +56,7 @@ public interface ProjectRepository {
 
     // 프로젝트 대기열 생성
     void addNewWait(ProjectWait reqDTO);
+
+    // 월별 프로젝트 등록 수
+    List<MonthlyProjectDTO> getMonthlyProjectData();
 }

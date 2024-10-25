@@ -19,5 +19,13 @@
         #{timelinessScore}, #{feedbackScore}, #{willingnessScore},
         #{overallScore}, #{reviewDate}, #{responseData})
     </insert>
+
+    <select id="getDailyCompanyReviewData" resultType="com.damoa.dto.DailyCompanyReviewDTO">
+        SELECT DATE_FORMAT(review_date, '%m-%d') AS date, COUNT(*) AS count
+        FROM company_review
+        WHERE review_date BETWEEN #{startDate} AND #{endDate}
+        GROUP BY DATE_FORMAT(review_date, '%m-%d')
+    </select>
+
 </mapper>
 

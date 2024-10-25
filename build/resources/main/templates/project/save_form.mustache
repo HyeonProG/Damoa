@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>Project Form</title>
+{{>layout/header}}
     <style type="text/css">
         .second-box, .third-box, .forth-box{
             display: none;
         }
+        .project-container1{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
-</head>
-<body>
 <div class="container mt-5">
     <h2>프로젝트 정보 입력</h2>
 
@@ -19,10 +17,7 @@
     <div class="project-container1">
         <div class="project-box first-box " id="box1">
             <form action="/project/save" name="reqDTO" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
-                <div class="form-group">
-                    <label for="user_id">사용자 ID</label>
-                    <input type="number" class="form-control" id="userId" name="userId" required>
-                </div>
+                <input type="hidden" class="form-control" id="userId" name="userId" value="1" required>
                 <div class="form-group">
                     <label for="job">직군/직무</label>
                     <select name="job" class="form-control" required>
@@ -56,9 +51,11 @@
                 </div>
         </div>
         <div class="project-box second-box" id="box2">
+            <h4>프로젝트 명</h4>
+            <input type="text" name="projectName" class="form-control" required>
             <h4>프로젝트 시작 희망일</h4>
             <div class="form-group">
-                <input type="date" id="project-start" name="projectStart"class="form-control" max="2077-06-20" min="2024-11-01"
+                <input type="date" id="project-start" name="projectStart" class="form-control" max="2077-06-20" min="2024-11-01"
                        value="2024-11-01" required>
             </div>
 
@@ -120,7 +117,9 @@
         <div class="project-box third-box" id="box3">
             <h4>현재 프로젝트 진행 상황</h4>
             <div class="form-group">
-                <textarea id="progress" name="progress" class="form-control" required></textarea>
+                <input type="radio" name="progress" value="기획단계" required> 기획 단계
+                <input type="radio" name="progress" value="기획서가 준비되어 있음" required> 기획서가 준비되어 있음
+                <input type="radio" name="progress" value="이미 프로젝트가 진행 중임" required> 이미 프로젝트가 진행 중임
             </div>
             <h4>주요 담당 업무</h4>
             <div class="form-group">
@@ -170,9 +169,10 @@
         </div>
     </div>
 </div>
-
-        <button type="submit" onclick="before()">이전</button>
-        <button type="submit" onclick="next()">다음</button>
+<div class="flex-box">
+    <button type="button" class="btn btn-secondary" onclick="before()">이전</button>
+    <button type="button" class="btn btn-primary" onclick="next()">다음</button>
+</div>
 
         <script>
 
@@ -233,3 +233,4 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+{{>layout/footer}}

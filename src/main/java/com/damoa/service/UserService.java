@@ -1,6 +1,7 @@
 package com.damoa.service;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -196,5 +197,29 @@ public class UserService {
         }
     }
 
+    public String formatPhoneNumber(String phoneNumber) {
+        if (phoneNumber != null && phoneNumber.length() == 11) {
+            return phoneNumber.replaceFirst("(\\d{3})(\\d{4})(\\d+)", "$1-$2-$3");
+        }
+        else if (phoneNumber != null && phoneNumber.length() == 10) {
+            return phoneNumber.replaceFirst("(\\d{2})(\\d{4})(\\d+)", "$1-$2-$3");
+        }
+        return phoneNumber;
+    }
+
+    // 사용자 ID로 사용자 정보 조회
+    public PrincipalDTO findUserById(int userId) {
+        return userRepository.findUserById(userId);
+    }
+
+    // 프리랜서 목록 조회
+    public List<User> getAllFreelancers() {
+        return userRepository.findAllFreelancers();
+    }
+
+    // 기업 목록 조회
+    public List<User> getAllCompanies() {
+        return userRepository.findAllCompanies();
+    }
 
 }

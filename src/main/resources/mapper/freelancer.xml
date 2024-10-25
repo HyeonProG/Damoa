@@ -178,4 +178,10 @@
         f.upload_file_name, f.detail, f.link, f.created_at
     </select>
 
+    <select id="getMonthlyFreelancerData" resultType="com.damoa.dto.MonthlyFreelancerDTO">
+        SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, COUNT(*) AS count
+        FROM freelancer_tb
+        GROUP BY DATE_FORMAT(created_at, '%Y-%m')
+    </select>
+
 </mapper>

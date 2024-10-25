@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import com.damoa.dto.MonthlyFreelancerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -210,4 +211,11 @@ public class FreelancerService {
         return freelancerRepository.findFreelancerDetailById(userId);
     }
 
+    /**
+     * 월별 프리랜서 등록 수 데이터
+     * @return
+     */
+    public List<MonthlyFreelancerDTO> getMonthlyFreelancerData() {
+        return freelancerRepository.getMonthlyFreelancerData();
+    }
 }
