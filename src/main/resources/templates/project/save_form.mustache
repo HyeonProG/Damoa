@@ -1,14 +1,30 @@
 {{>layout/header}}
     <style type="text/css">
-        .second-box, .third-box, .forth-box{
-            display: none;
-        }
-        .project-container1{
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+        .second-box, .third-box, .forth-box {
+    display: none;
+}
+.project-container1 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.skill-container {
+    width: 100%; /* 이 너비는 조정 가능합니다 */
+    display: flex;
+    flex-wrap: wrap; /* 줄 바꿈 허용 */
+}
+.skill-box {
+    width: 70px; /* 각 스킬 박스의 너비 */
+    margin: 3px;
+    padding: 2px;
+    border-radius: 15px;
+    background: white;
+    border: 1px solid #DEDEDE;
+}
+.quitbox {
+    background: red;
+}
     </style>
 <div class="container mt-5">
     <h2>프로젝트 정보 입력</h2>
@@ -30,14 +46,13 @@
                 </div>
                 <div class="form-group">
                     <label for="skill">기술</label>
-                    <select name="skill" class="form-control" required>
-                        <option value="" disabled selected>선택하세요</option> <!-- 기본 옵션 추가 -->
-                        <option value="java">java</option>
-                        <option value="python">python</option>
-                        <option value="mysql">mysql</option>
-                        <option value="javascript">javascript</option>
-                        <option value="android">android</option>
+                    <select name="skill" class="form-control skill-form" required>
+                        {{#skillList}}
+                            <option value="{{name}}">{{name}}</option>
+                        {{/skillList}}
                     </select>
+                    <div class="skill-container"></div>
+                    <input type="hidden" id="totalSkills" value="aaaaa" name="totalSkills">
                 </div>
                 <div class="form-group">
                     <label for="minyears">연차</label>
@@ -174,7 +189,7 @@
     <button type="button" class="btn btn-primary" onclick="next()">다음</button>
 </div>
 
-        <script>
+<script>
 
             var progress = 0;
             var currentBox = 0;
@@ -226,11 +241,34 @@
     updateVisibility();
 
 
+    const selectElement = document.querySelector('.skill-form');
+    const skillsDiv = document.querySelector('.skill-container');
+    const hiddenInput = document.getElementById('totalSkills');
+    let selectedSkills = [];
+
+    selectElement.addEventListener('change',function(){
+        const selectedValue = selectElement.value;
+        const selectedText = selectElement.options[selectElement.selectedIndex].text;
+        selectedSkills.push(selectedValue);
+
+        const newSkill = document.createElement('div');
+        newSkill.textContent=selectedText;
+        newSkill.classList.add('skill-box');
+
+        skillsDiv.appendChild(newSkill);
+
+
+        hiddenInput.value = JSON.stringify(selectedSkills);
+        console.log(hiddenInput.value); // 스킬 추가 후 값 확인
+        hiddenInput.value = JSON.stringify(selectedSkills);
+    });
+
+
         </script>
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
 {{>layout/footer}}

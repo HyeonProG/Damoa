@@ -5,6 +5,7 @@ import com.damoa.repository.model.ProjectWait;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -18,11 +19,10 @@ public interface ProjectRepository {
             @Param("id") int id,
             @Param("userId") int userId,
             @Param("job") String job,
-            @Param("skill") String skill,
             @Param("minYears") int minYears,
             @Param("maxYears") int maxYears,
             @Param("projectName") String projectname,
-            @Param("projectStart") Date projectStart,
+            @Param("projectStart") LocalDate projectStart,
             @Param("expectedPeriod") String expectedPeriod,
             @Param("period") int period,
             @Param("salaryType") String salaryType,

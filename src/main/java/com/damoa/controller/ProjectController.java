@@ -5,7 +5,10 @@ import com.damoa.dto.user.ProjectWaitDTO;
 import com.damoa.handler.exception.DataDeliveryException;
 import com.damoa.repository.model.Project;
 import com.damoa.repository.model.ProjectWait;
+import com.damoa.repository.model.Skill;
+import com.damoa.repository.model.User;
 import com.damoa.service.ProjectService;
+import com.damoa.service.SkillService;
 import com.damoa.utils.Define;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,6 +32,8 @@ public class ProjectController {
     private  HttpSession session;
     @Autowired
     private  ProjectService projectService;
+    @Autowired
+    private SkillService skillService;
 
     // DI
     public ProjectController(HttpSession session, ProjectService projectService) {
@@ -40,7 +46,10 @@ public class ProjectController {
      * @return
      */
     @GetMapping("/save")
-    public String projectSavePage(){
+    public String projectSavePage(Model model){
+        List<Skill> skillList = skillService.getAllSkill();
+        model.addAttribute("skillList",skillList);
+
         return "project/save_form";
 
     }
@@ -52,7 +61,20 @@ public class ProjectController {
      */
     @PostMapping("/save")
     public String projectSaveProc(@ModelAttribute("reqDTO") ProjectSaveDTO reqDTO){
+        System.out.println("~~~~~~~~~~~~~~~~~~~~");
+        System.out.println(reqDTO);
+
+
         projectService.createProject(reqDTO);
+
+        List<Skill> skillList=new ArrayList<>();
+        for(int a=0; a<reqDTO.getTotalSkills().size(); a++){
+            String aa=reqDTO.getTotalSkills().get(a);
+            String skill = aa.replaceAll("[^\\w+]", "");
+            System.out.println(a+"~~~~~~~~~~~");
+            System.out.println(skill);
+        }
+
         return "project/save_complete";
     }
 
