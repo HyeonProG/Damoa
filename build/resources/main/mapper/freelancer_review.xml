@@ -41,15 +41,20 @@
     </select>
 
 
-
-
-
-
     <select id="getDailyFreelancerReviewData" resultType="com.damoa.dto.DailyFreelancerReviewDTO">
         SELECT DATE_FORMAT(review_date, '%m-%d') AS date, COUNT(*) AS count
         FROM freelancers_review
         WHERE review_date BETWEEN #{startDate} AND #{endDate}
         GROUP BY DATE_FORMAT(review_date, '%m-%d')
     </select>
+
+    <select id="freelancerReviewDetail" resultType="com.damoa.dto.admin.FreelancerReviewDetailDTO">
+        select * from freelancers_review where id = #{id}
+    </select>
+
+    <delete id="delete">
+        delete from freelancers_review where id = #{id}
+    </delete>
+
 
 </mapper>

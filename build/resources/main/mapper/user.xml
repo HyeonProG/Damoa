@@ -55,7 +55,7 @@
     </update>
     <!-- 사용자 ID로 사용자 정보 조회 -->
     <select id="findUserById" parameterType="int" resultType="com.damoa.dto.user.PrincipalDTO">
-        SELECT id, email, username, phone_number, user_type, social_type
+        SELECT *
         FROM user_tb
         WHERE id = #{id}
     </select>

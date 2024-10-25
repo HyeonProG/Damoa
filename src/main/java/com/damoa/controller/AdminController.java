@@ -2,7 +2,9 @@ package com.damoa.controller;
 
 import com.damoa.dto.TossHistoryDTO;
 import com.damoa.dto.admin.CompanyReviewDTO;
+import com.damoa.dto.admin.CompanyReviewDetailDTO;
 import com.damoa.dto.admin.FreelancerReviewDTO;
+import com.damoa.dto.admin.FreelancerReviewDetailDTO;
 import com.damoa.dto.user.MonthlyRegisterDTO;
 import com.damoa.dto.user.MonthlyVisitorDTO;
 import com.damoa.repository.model.Admin;
@@ -23,6 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -266,6 +269,9 @@ public class AdminController {
         return "admin/freelancer_list";
     }
 
+
+
+
     /**
      * 월별 프로젝트 등록 수 데이터 반환
      * @return
@@ -299,6 +305,38 @@ public class AdminController {
         List<DailyFreelancerReviewDTO> freelancerReviewDataList = reviewService.getDailyFreelancerReviewData();
         return new ResponseEntity<>(freelancerReviewDataList, HttpStatus.OK);
     }
+
+    @PostMapping("/companyreview/delete/{id}")
+    public String deleteCompany(@PathVariable int id){
+        reviewService.deleteCompanyReview(id);
+        System.out.println("아무말");
+        return  "admin/list/company/1";
+    }
+
+    @PostMapping("/freelancerreview/delete/{id}")
+    public String deleteFreelancer(@PathVariable int id){
+        reviewService.deleteFreelancerReview(id);
+        System.out.println("프리랜서삭제");
+        return "admin/list/freelancer/1";
+
+    }
+    @GetMapping("/list/company/detail/{id}")
+    public String companyDetail(@PathVariable(name = "id") int id, Model model){
+        CompanyReviewDetailDTO detail = reviewService.getCompanyDetails(id);
+        model.addAttribute("detail",detail);
+        return "admin/company_list_detail";
+    }
+
+
+
+    @GetMapping("/list/freelancer/detail/{id}")
+    public String freelancerDetail(@PathVariable(name = "id")int id, Model model){
+        FreelancerReviewDetailDTO detailDTO = reviewService.getFreelancerDetails(id);
+        model.addAttribute("detailDTO",detailDTO);
+        return "admin/freelancer_list_detail";
+    }
+
+
 
 
 

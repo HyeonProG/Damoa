@@ -2,6 +2,7 @@ package com.damoa.repository.interfaces;
 
 import com.damoa.dto.admin.FreelancerReviewDTO;
 import com.damoa.dto.DailyFreelancerReviewDTO;
+import com.damoa.dto.admin.FreelancerReviewDetailDTO;
 import com.damoa.repository.model.FreelancerReview;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -30,5 +31,10 @@ public interface FreelancerReviewRepository {
     
     // 일별 프리랜서 리뷰 등록 수 데이터
     List<DailyFreelancerReviewDTO> getDailyFreelancerReviewData(@Param("startDate") String startDate, @Param("endDate") String endDate);
+
+    FreelancerReviewDetailDTO freelancerReviewDetail(int id);
+
+    int delete(int id);
+
 
 }
