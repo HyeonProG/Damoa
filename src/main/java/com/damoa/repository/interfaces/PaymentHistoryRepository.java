@@ -21,4 +21,9 @@ public interface PaymentHistoryRepository {
     int findPointById(int userId);
 
     void updateUserPoint(@Param("amount") int amount, @Param("userId") int userId);
+
+    void updateHistoryStatus(int id);
+
+    void insertCancelHistory(TossHistoryDTO tossHistoryDTO);
+
 }

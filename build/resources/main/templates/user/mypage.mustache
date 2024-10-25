@@ -238,7 +238,7 @@
     btn.addEventListener('click', function(event) {
         event.preventDefault();
         if (confirm("포인트를 충전하시겠습니까?")) {
-            window.open('/toss/store', '_blank', 'width=800,height=600');
+            newWindow = window.open('/toss/store', '_blank', 'width=800,height=600');
         }
     });
 });

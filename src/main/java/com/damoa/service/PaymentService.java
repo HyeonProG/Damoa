@@ -89,4 +89,21 @@ public class PaymentService {
         List<TossHistoryDTO> dto = paymentHistoryRepository.findHistoryByStatus();
         return dto;
     }
+
+    @Transactional
+    public void insertCancelHistory(TossHistoryDTO historyDTO) {
+        paymentHistoryRepository.insertCancelHistory(historyDTO);
+    }
+
+    @Transactional
+    public void updateRefundPoint(String amountStr, int id, int userId) {
+        int currentPoint = paymentHistoryRepository.findPointById(userId);
+        if (currentPoint >= Integer.parseInt(amountStr)) {
+            int amount = currentPoint - Integer.parseInt(amountStr);
+            paymentHistoryRepository.updateUserPoint(amount, userId);
+            paymentHistoryRepository.updateHistoryStatus(id);
+        } else {
+            System.out.println("금액이 작아서 작동이 안돼");
+        }
+    }
 }

@@ -1,34 +1,24 @@
 package com.damoa.controller;
 
-import com.damoa.constants.UserType;
 import com.damoa.dto.TossHistoryDTO;
 import com.damoa.dto.admin.CompanyReviewDTO;
 import com.damoa.dto.admin.FreelancerReviewDTO;
 import com.damoa.dto.user.MonthlyRegisterDTO;
 import com.damoa.dto.user.MonthlyVisitorDTO;
-import com.damoa.repository.model.Project;
+import com.damoa.repository.model.Admin;
+import com.damoa.repository.model.User;
 import com.damoa.service.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import lombok.RequiredArgsConstructor;
-
-import com.damoa.dto.admin.AdminSignInDTO;
-import com.damoa.handler.exception.DataDeliveryException;
-import com.damoa.repository.model.Admin;
-import com.damoa.repository.model.User;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
 
 import java.util.List;
 
@@ -87,8 +77,6 @@ public class AdminController {
     /**
      * 관리자 로그인
      *
-     * @param username
-     * @param password
      * @return
      */
 //    @PostMapping("/sign-in")

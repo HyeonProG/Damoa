@@ -50,8 +50,23 @@
 </html>
 
 <script>
-    function refund(id){
+    window.onload = function() {
+        const refundBtns = document.querySelectorAll('#refund--Btn'); // 모든 refund--Btn 요소를 선택
 
+        refundBtns.forEach(refundBtn => {
+            const status = refundBtn.getAttribute('data-status');
+
+            // status 값이 1이면 텍스트를 '환불 신청중'으로 변경하고 클릭 비활성화
+            if (status === '2') {
+                const anchor = refundBtn.querySelector('a');
+                anchor.textContent = '처리 완료';
+                anchor.style.pointerEvents = 'none'; // 클릭 이벤트 비활성화
+                anchor.classList.add('disabled'); // 비활성화 스타일 추가 (선택 사항)
+            }
+        });
+    };
+    function refund(id){
+        if (confirm("정말 환불처리를 하시겠습니까?")) {
         fetch('http://localhost:8080/toss/refund', {
         method: 'POST',
         headers: {
@@ -69,11 +84,12 @@
     })
     .then(data => {
         console.log("응답:", data);
+        location.reload();
     })
 
     .catch(error => {
         console.error("에러 발생:", error);
     });
     }
-
+}
 </script>
