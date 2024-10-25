@@ -105,12 +105,11 @@
         }
         .nav-bar{
             width:80%;
-            height: 40px;
+            height: 20px;
             text-align: center;
             display: flex;
             align-items: center;
             justify-content: space-around;
-            text-align: center;
         }
         .menu-list{
             width: 80%;
@@ -150,6 +149,13 @@
             align-items: center;
             text-align: center;
             margin-bottom: 20px;
+        }
+        .ad-outer{
+            overflow-x: hidden;
+        }
+        .ad-inner{
+            display: flex;
+            transition: .3c ease-out;
         }
         .ad-img{
             margin-left:10px;
@@ -242,6 +248,8 @@
             margin-left: 5px;
             margin-right: 5px;
         }
+
+
     </style>
 
 
@@ -278,8 +286,8 @@
             <div class="upper-div">
                 <div class="search-div">
                     <!-- 로고 -->
-                    <img class="title-img" src="../images/logos/damoa_title_image.png" onclick="location.href='/main'">
-                    <!--검색창-->
+                    <img class="title-img" src="/images/logos/damoa_title_image.png" onclick="location.href='/main'">
+                    <!-- 검색창 -->
                     <form class="search-bar" action="" method="get">
                         <input class="search-box" type="text" placeholder="  프로젝트 중개는 역시 다모아!">
                         <button class="search-btn" type="submit">검색</button>
@@ -287,9 +295,14 @@
                 </div>
                 <!-- 로그인, 회원가입 -->
                 <div class="login-bar">
-                    <p><a href="" class="link"> 로그인 </a></p>
-                    <p class="section-bar"> | </p>
-                    <p><a href="" class="link"> 회원가입 </a></p>
+                    {{#isLogin}} <!-- 로그인된 상태일 때 -->
+                        <p><a href="/user/mypage" class="link">마이페이지</a></p>
+                    {{/isLogin}}
+                    {{^isLogin}} <!-- 로그인되지 않은 상태일 때 -->
+                        <p><a href="/user/sign-in" class="link"> 로그인 </a></p>
+                        <p class="section-bar"> | </p>
+                        <p><a href="" class="link"> 회원가입 </a></p>
+                    {{/isLogin}}
                     <p class="section-bar"> | </p>
                     <p><a href="" class="link"> 기업 서비스 </a></p>
                     <p class="section-bar"> | </p>
@@ -299,24 +312,21 @@
             <hr>
             <div class="nav-bar">
                 <div class="menu-list">
-                    <img class="menu-icon" src="../images/icons/menu_icon.png">
-                          <div class="drop-down-menus">
-                                <div class="company">
-                                    <a>프로젝트 등록하기</a>
-                                    <a>내 프로젝트 관리하기</a>
-                                </div>
-                          </div>
+                    <img class="menu-icon" src="/images/icons/menu_icon.png">
                     <h6><b><a href="/project/save">프로젝트 등록</a></b></h6>
                     <p class="section-bar"> | </p>
                     <h6><b><a href="">개발자 등록</a></b></h6>
                     <p class="section-bar"> | </p>
-                    <h6><b><a href="">프로젝트 매칭</a></b></h6>
+                    <h6><b><a href="/project/list/1">프로젝트 매칭</a></b></h6>
                     <p class="section-bar"> | </p>
                     <h6><b><a href="">개발자 찾기</a></b></h6>
                     <p class="section-bar"> | </p>
                     <h6><b><a href="/notice/1">공지사항</a></b></h6>
                     <p class="section-bar"> | </p>
-                    <h5><b><a href="/user/mypage">마이 페이지</a></b></h5>
+                    <h6><b><a href="/user/faq">FAQ</a></b></h6>
+                    <p class="section-bar"> | </p>
+                    <h6><b><a href="/user/mypage">마이페이지</a></b></h6>
+                    <p class="section-bar"> | </p>
                 </div>
             </div>
             <hr class="nav-line">

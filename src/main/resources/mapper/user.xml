@@ -20,6 +20,10 @@
         SELECT * FROM user_tb WHERE email = #{email}
     </select>
 
+    <select id="findById">
+        select * from user_tb where id = #{id}
+    </select>
+
     <insert id="insertDeleteUser">
         INSERT INTO delete_user (id, email, username, password, phone_number, social_type, user_type, created_at, deleted_at, delete_scheduled_at)
         VALUES (#{id}, #{email}, #{username}, #{password}, #{phoneNumber}, #{socialType}, #{userType}, #{createdAt}, NOW(), DATE_ADD(NOW(), INTERVAL 3 YEAR))

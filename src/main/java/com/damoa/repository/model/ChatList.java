@@ -1,9 +1,6 @@
 package com.damoa.repository.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -11,9 +8,12 @@ import java.sql.Timestamp;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class ChatList {
     private int id;
-    private int companyId;
-    private int freelancerId;
+    private int senderId;
+    private int receiverId;
     private Timestamp createdAt;
+    private boolean visibleToSender;
+    private boolean visibleToReceiver;
 }

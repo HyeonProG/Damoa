@@ -377,3 +377,6 @@ filehashes.bin
 checksums.lock
 checksums.bin
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,eclipse,intellij
+*.class
+*.lock
+/.gradle/8.10.2

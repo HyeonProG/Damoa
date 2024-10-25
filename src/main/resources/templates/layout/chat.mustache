@@ -57,7 +57,7 @@
             cursor: pointer;
         }
 
-        /* 채팅방 목록 스타일 */
+        /* 채팅 목록 스타일 */
         #chat-list {
             display: none;
             position: fixed;
@@ -71,16 +71,35 @@
             border-radius: 10px;
             z-index: 999;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            padding-bottom: 10px; /* 추가된 패딩 */
         }
 
-        .chat-room-item {
-            padding: 10px;
-            border-bottom: 1px solid #A8E05C;
+        /* 채팅 목록의 각 항목 스타일 */
+        .chat-item {
+            padding: 15px; /* 패딩을 크게 하여 터치 영역 증가 */
+            border-bottom: 1px solid #A8E05C; /* 항목 사이 경계선 */
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease;
         }
 
-        .chat-room-item:hover {
-            background-color: rgba(168, 224, 92, 0.3);
+        .chat-item:hover {
+            background-color: rgba(168, 224, 92, 0.2); /* 항목 선택 시 부드러운 배경 변화 */
+        }
+
+        .chat-item p {
+            margin: 0;
+            font-size: 16px; /* 텍스트 크기 조정 */
+            color: #333; /* 글자 색상 */
+            flex: 1; /* 글자 부분 확장 */
+            white-space: nowrap; /* 긴 이름 처리 */
+            overflow: hidden; /* 넘치는 텍스트 처리 */
+            text-overflow: ellipsis; /* ... 표시 */
+        }
+
+        .chat-item:last-child {
+            border-bottom: none; /* 마지막 항목에 경계선 제거 */
         }
 
         /* 채팅방 및 메시지 스타일들은 유지 */
@@ -126,7 +145,7 @@
 
         #messages {
             background-color: #FFFFFF;
-            height: 400px;
+            height: 350px; /* 높이를 400px에서 350px로 줄임 */
             overflow-y: auto;
             border: 1px solid #A8E05C;
             padding: 10px;
@@ -136,10 +155,43 @@
             border-radius: 10px;
         }
 
+         /* 메시지 스타일 */
+        .message {
+            padding: 10px; /* 메시지 안의 여백 */
+            border-radius: 10px; /* 모서리 둥글게 */
+            margin: 5px; /* 메시지 간의 여백 */
+            max-width: 70%; /* 메시지의 최대 너비 */
+            word-wrap: break-word; /* 긴 단어는 줄 바꿈 */
+        }
+
+        /* 오른쪽에 표시되는 메시지 스타일 */
+        #chat-room .message-right {
+            background-color: #A8E05C; /* 메시지 배경색 */
+            color: white; /* 메시지 글자 색상 */
+            align-self: flex-end; /* 오른쪽 정렬 */
+            padding: 10px;
+            border-radius: 10px;
+            margin: 5px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+
+        /* 왼쪽에 표시되는 메시지 스타일 */
+        #chat-room .message-left {
+            background-color: #EAEAEA; /* 메시지 배경색 */
+            color: #333; /* 메시지 글자 색상 */
+            align-self: flex-start; /* 왼쪽 정렬 */
+            padding: 10px;
+            border-radius: 10px;
+            margin: 5px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+
         .input-group {
             display: none;
             position: fixed;
-            bottom: 70px;
+            bottom: 50px;
             right: 20px;
             z-index: 999;
             width: 300px;
@@ -150,6 +202,7 @@
             border: 1px solid #A8E05C;
             border-radius: 5px;
             padding: 10px;
+            padding-bottom: 10px;
             font-size: 14px;
             margin: 0;
         }
@@ -160,18 +213,18 @@
     <button class="chat-icon" id="chat-icon" onclick="showChatList()">💬</button> <!-- 채팅 아이콘 -->
 </div>
 
-<div id="chat-list"> <!-- 채팅방 목록 -->
+<div id="chat-list">
     <div class="chat-list-header">
-        <button id="close-button">×</button> <!-- 닫기 버튼 -->
+        <button id="close-button">×</button>
         <h2>채팅 목록</h2>
     </div>
-    <div class="chat-room-item" onclick="openChatRoom('김기석', '프로젝트 A')">
-        김기석님 - 프로젝트 A
+    <div id="chat-list-items">
+        {{#chatList}}
+            <div class="chat-item">
+                <p>{{receiver}}님과의 채팅</p>
+            </div>
+        {{/chatList}}
     </div>
-    <div class="chat-room-item" onclick="openChatRoom('박준형', '프로젝트 B')">
-        박준형님 - 프로젝트 B
-    </div>
-    <!-- 필요한 채팅방 목록들을 추가 -->
 </div>
 
 <div id="chat-room"> <!-- 채팅방 -->
@@ -181,44 +234,67 @@
     </div>
     <div id="messages"></div> <!-- 메시지 로그 -->
 </div>
-
 <div class="input-group" id="input-group">
     <input type="text" id="message" class="form-control" placeholder="메시지를 입력하세요..." />
 </div>
 
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script>
-    let selectedCompanyId = ''; // 선택된 회사 ID
-    let selectedFreelancerId = ''; // 선택된 프리랜서 ID
+    let selectedSenderId = '';  // 클릭 된 대화 목록의 senderId, receiverId 저장을 위한 변수
+    let selectedReceiverId = '';
 
-    const socket = new SockJS('/ws');
-    const stompClient = Stomp.over(socket);
-
-    function connect() {
-        stompClient.connect({}, function (frame) {
-            console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/messages', function (message) {
-                const chatMessage = JSON.parse(message.body);
-                const messageBox = chatMessage.companyId === selectedCompanyId
-                    ? `<div class='message message-right'>${chatMessage.message}</div>`
-                    : `<div class='message message-left'><strong>${chatMessage.companyId}:</strong> ${chatMessage.message}</div>`;
-                const messagesDiv = document.getElementById('messages');
-                messagesDiv.insertAdjacentHTML('afterbegin', messageBox);
-                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            });
-        });
+    // 메시지 박스 생성 함수
+    function createMessageBox(message, isSender) {
+        const className = isSender ? 'message-right' : 'message-left';
+        return `<div class='message ${className}'>${message}</div>`;
     }
 
+    // 3. SockJS WebSocket 연결 설정
+    const socket = new SockJS('http://localhost:8080/ws');      // 서버 config에서 설정한 엔드포인트
+    const stompClient = Stomp.over(socket); // SockJS를 STOMP 클라이언트로 감싸기
+
+    // 4. webSoket 연결
+    function connect() {
+        stompClient.connect({}, function (frame) {
+            console.log('연결 상태: ' + frame);
+
+            stompClient.subscribe('/topic/messages/' + selectedReceiverId, function (message) {
+                console.log('connect data:   1111  '+ message );
+                const chatMessage = JSON.parse(message.body);
+                console.log("수신된 메시지:", chatMessage);
+
+                // 송신자 확인 후 메시지 표시
+                const isSender = chatMessage.senderId === selectedSenderId;
+                const messageBox = createMessageBox(chatMessage.message, isSender);
+
+                const messagesDiv = document.getElementById('messages');
+                
+                messagesDiv.insertAdjacentHTML('afterbegin', messageBox); // 새로운 메시지를 맨 위에 추가
+                messagesDiv.scrollTop = messagesDiv.scrollHeight; // 스크롤을 맨 아래로 이동
+            });
+         });
+    }
+
+    // 채팅 메시지 전송
     function sendMessage() {
         const messageInput = document.getElementById("message");
         const message = messageInput.value.trim();
+
+        console.log(`메시지 보내기 전송: ${message} from ${selectedSenderId} to ${selectedReceiverId}`);
+
         if (message) {
-            stompClient.send("/app/chat/" + selectedCompanyId + "/" + selectedFreelancerId, {}, JSON.stringify({ 'message': message, 'companyId': selectedCompanyId }));
+            stompClient.send(`/app/chat/${selectedSenderId}/${selectedReceiverId}`, {}, JSON.stringify({
+                'message': message,
+                'senderId': selectedSenderId,
+                'receiverId': selectedReceiverId
+            }));
             messageInput.value = "";
         }
     }
 
+    // 메시지 Enter 키로 입력
     document.getElementById("message").addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
             sendMessage();
@@ -226,31 +302,81 @@
         }
     });
 
-    function showChatList() {
-        document.getElementById('chat-list').style.display = 'block';
-        document.getElementById('chat-icon').style.display = 'none';
+    // 1. 채팅 목록 가져오기
+    function fetchChatList() {
+        fetch('/match/chat-list', {
+            method: 'GET',
+            credentials: 'include'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('네트워크 응답이 정상적이지 않습니다.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('채팅목록 가져오기:', data); // 데이터 로그 추가
+            const chatListContainer = document.getElementById('chat-list-items');
+            chatListContainer.innerHTML = '';
+
+            data.forEach(chat => {
+                const chatItem = document.createElement('div');
+                chatItem.className = 'chat-item';
+                chatItem.innerHTML = `<p>${chat.receiver}님과의 채팅</p>`;
+                chatItem.onclick = () => {
+
+                    // 목록 클릭시 클릭 된 list의 id 값 전역 변수에 저장
+                    selectedSenderId = chat.chatList.senderId;
+                    selectedReceiverId = chat.chatList.receiverId;
+
+                    // 채팅방 열기 @param senderId, receiverId, receiverName
+                    openChatRoom(selectedSenderId, selectedReceiverId, chat.receiver);
+                };
+                chatListContainer.appendChild(chatItem);
+            })
+        })
+        .catch(error => console.error('잘못 된 접근 입니다.:', error));
     }
 
-    function openChatRoom(companyId, projectName) {
-        selectedCompanyId = companyId;
-        document.getElementById('chat-header').textContent = companyId + '님과의 채팅 - ' + projectName;
+    // 2. 채팅방 열기
+    function openChatRoom(senderId, receiverId, receiverName) {
+
+        console.log('채팅방 열기 senderId:', senderId, 'receiverId:', receiverId, 'receiverName:', receiverName);
+
+        // 채팅방 제목 업데이트
+        document.getElementById('chat-header').textContent = `${receiverName}님과의 채팅`;
+
+        // 채팅방 열기시 display 이벤트들
         document.getElementById('chat-room').style.display = 'block';
         document.getElementById('input-group').style.display = 'flex';
         document.getElementById('chat-list').style.display = 'none';
+
+        // 소켓 연결 함수 호출
+        connect();
     }
 
+    // 채팅 목록 열기
+    function showChatList() {
+        document.getElementById('chat-list').style.display = 'block';
+        document.getElementById('chat-icon').style.display = 'none';
+        fetchChatList();
+    }
+
+
+    // 뒤로가기 버튼 클릭 시 채팅방 닫기
     document.getElementById('back-button').onclick = function() {
         document.getElementById('chat-room').style.display = 'none';
         document.getElementById('input-group').style.display = 'none';
         document.getElementById('chat-list').style.display = 'block';
-    }
+        document.getElementById('chat-icon').style.display = 'none';
+    };
 
+    // 채팅 목록 닫기 버튼
     document.getElementById('close-button').onclick = function() {
         document.getElementById('chat-list').style.display = 'none';
-        document.getElementById('chat-icon').style.display = 'block'; // 채팅 아이콘 다시 보이게 함
-    }
-
-    connect();
+        document.getElementById('chat-icon').style.display = 'block';
+    };
 </script>
+
 </body>
 </html>
