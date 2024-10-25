@@ -1,10 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper 
-    namespace="com.damoa.repository.interfaces.AdminRepository">
+<mapper
+        namespace="com.damoa.repository.interfaces.AdminRepository">
 
     <select id="findByUsername">
         SELECT * FROM admin WHERE username = #{username}
     </select>
+
+    <!--    전체 유저 목록 가져오기 -->
+    <select id="getAllUser" resultType="com.damoa.repository.model.User">
+        select * from user_tb
+    </select>
+
+    <!--   페이징 처리 및 유저 리스트 가져오기-->
+    <select id="getUserList" resultType="com.damoa.repository.model.User">
+        select * from user_tb limit #{limit} offset #{offset}
+    </select>
+
+    <!--  유저 디테일 가져오기   -->
+    <select id="getUserDetail" resultType="com.damoa.repository.model.User">
+        select * from user_tb where id = #{id}
+    </select>
+
 
 </mapper>

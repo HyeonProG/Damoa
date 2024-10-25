@@ -5,9 +5,11 @@ import com.damoa.dto.user.ProjectWaitDTO;
 import com.damoa.handler.exception.DataDeliveryException;
 import com.damoa.repository.model.Project;
 import com.damoa.repository.model.ProjectWait;
+import com.damoa.repository.model.User;
 import com.damoa.service.ProjectService;
 import com.damoa.utils.Define;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -24,10 +26,8 @@ import java.util.UUID;
 @RequestMapping("/project")
 public class ProjectController {
 
-    @Autowired
-    private  HttpSession session;
-    @Autowired
-    private  ProjectService projectService;
+    private final HttpSession session;
+    private final ProjectService projectService;
 
     // DI
     public ProjectController(HttpSession session, ProjectService projectService) {
@@ -41,7 +41,11 @@ public class ProjectController {
      */
     @GetMapping("/save")
     public String projectSavePage(){
-        return "project/save-form";
+
+        User sessionUser = (User)session.getAttribute("principal");
+
+
+        return "project/save_form";
 
     }
 
