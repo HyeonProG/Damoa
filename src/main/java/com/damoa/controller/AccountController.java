@@ -1,9 +1,12 @@
 package com.damoa.controller;
 
 import com.damoa.dto.BankAuthDTO;
+import com.damoa.repository.model.Freelancer;
 import com.damoa.repository.model.Project;
 import com.damoa.repository.model.User;
+import com.damoa.repository.model.Skill;
 import com.damoa.service.AccountService;
+import com.damoa.service.FreelancerService;
 import com.damoa.service.ProjectService;
 import jakarta.servlet.http.HttpSession;
 import lombok.Builder;
@@ -37,15 +40,19 @@ public class AccountController {
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private FreelancerService freelancerService;
+
     @GetMapping("/main")
     public String mainPage(Model model, HttpSession session){
         User user = (User) session.getAttribute("principal");
 
         List<Project> projectList = projectService.getProjectForPaging(3,0);
-
+        List<Freelancer> freelancerList = freelancerService.findAllFreelancers(1, 3);
         model.addAttribute("projectList",projectList);
         model.addAttribute("isLogin",user);
 
+        model.addAttribute("freelancerList", freelancerList);
         return "user/index";
     }
 
