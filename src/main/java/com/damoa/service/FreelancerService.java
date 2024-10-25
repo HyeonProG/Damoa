@@ -255,6 +255,7 @@ public class FreelancerService {
         return freelancerRepository.countAverageFreelancerExpectedSalary();
     }
 
+    /*
      * 월별 프리랜서 등록 수 데이터
      * @return
      */

@@ -244,6 +244,8 @@ LIMIT #{size} OFFSET #{offset}
     <select id="countAverageFreelancerExpectedSalary">
         SELECT FLOOR(AVG(expected_salary)) AS average_expected_salary
         FROM freelancer_tb;
+    </select>
+    
     <select id="getMonthlyFreelancerData" resultType="com.damoa.dto.MonthlyFreelancerDTO">
         SELECT DATE_FORMAT(created_at, '%Y-%m') AS month, COUNT(*) AS count
         FROM freelancer_tb
