@@ -19,5 +19,28 @@
         #{timelinessScore}, #{feedbackScore}, #{willingnessScore},
         #{overallScore}, #{reviewDate}, #{responseData})
     </insert>
+
+    <select id="findCompanyReview" resultType="com.damoa.dto.admin.CompanyReviewDTO">
+        select c.id, u.username, p.project_name, p.main_tasks, c.overall_score, c.response_data
+        from company_review as c
+        join user_tb as u on u.id = c.company_id
+        join freelancer_tb as f on c.freelancer_id = f.id
+        join project_tb as p on p.user_id = c.company_id
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="countCompanyReview" resultType="int">
+        select count(*)
+        from freelancers_review as r
+        join freelancer_tb as f on f.user_id = r.freelancer_id
+        join user_tb as u on u.id = f.user_id
+        join project_tb as p on r.company_id = p.user_id
+    </select>
+
+    <select id="companyReviewDetail" resultType="com.damoa.dto.admin.CompanyReviewDetailDTO">
+        select * from company_review where id = #{id}
+    </select>
+
+
 </mapper>
 

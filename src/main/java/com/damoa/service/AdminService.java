@@ -22,10 +22,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminService {
 
-    @Autowired
     private final AdminRepository adminRepository;
 
-    @Autowired
     private final UserRepository userRepository;
 
     /**

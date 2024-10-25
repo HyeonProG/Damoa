@@ -7,6 +7,10 @@
         SELECT * FROM freelancers_review ORDER BY id DESC
     </select>
 
+    <select id="findByFreelancerReviewId">
+        select * from freelancers_review where id = #{id}
+    </select>
+
     <!-- GCP 프리랜서 리뷰 데이터 MySQL로 insert-->
     <insert id="insertFreelancerReview" parameterType="com.damoa.repository.model.FreelancerReview">
         INSERT INTO freelancers_review (company_id, freelancer_id, communication_score,
@@ -16,5 +20,29 @@
         #{timelinessScore}, #{supportScore}, #{willingnessScore},
         #{overallScore}, #{reviewDate}, #{responseData})
     </insert>
+
+    <!--    이름 평점 프로젝트명 리뷰평-->
+    <select id="findFreelancerReview" resultType="com.damoa.dto.admin.FreelancerReviewDTO">
+        select r.id, u.username, p.project_name, r.overall_score, r.response_data
+        from freelancers_review as r
+        join freelancer_tb as f on f.user_id = r.freelancer_id
+        join user_tb as u on u.id = f.user_id
+        join project_tb as p on r.company_id = p.user_id
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="countFreelancerReview" resultType="int">
+        select count(*)
+        from freelancers_review as r
+        join freelancer_tb as f on f.user_id = r.freelancer_id
+        join user_tb as u on u.id = f.user_id
+        join project_tb as p on r.company_id = p.user_id;
+
+    </select>
+
+
+
+
+
 
 </mapper>

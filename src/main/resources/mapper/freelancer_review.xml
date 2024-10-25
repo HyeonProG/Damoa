@@ -21,4 +21,28 @@
         #{overallScore}, #{reviewDate}, #{responseData})
     </insert>
 
+    <!--    이름 평점 프로젝트명 리뷰평-->
+    <select id="findFreelancerReview" resultType="com.damoa.dto.admin.FreelancerReviewDTO">
+        select r.id, u.username, p.project_name, r.overall_score, r.response_data
+        from freelancers_review as r
+        join freelancer_tb as f on f.user_id = r.freelancer_id
+        join user_tb as u on u.id = f.user_id
+        join project_tb as p on r.company_id = p.user_id
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="countFreelancerReview" resultType="int">
+        select count(*)
+        from freelancers_review as r
+        join freelancer_tb as f on f.user_id = r.freelancer_id
+        join user_tb as u on u.id = f.user_id
+        join project_tb as p on r.company_id = p.user_id;
+
+    </select>
+
+
+
+
+
+
 </mapper>

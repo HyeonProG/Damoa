@@ -8,7 +8,7 @@
     </select>
 
     <select id="findById" resultType="com.damoa.repository.model.Faq">
-        select * from faq_tb where id = #{id};
+        select * from faq_tb where id = #{id}
     </select>
 
     <update id="updateById" >

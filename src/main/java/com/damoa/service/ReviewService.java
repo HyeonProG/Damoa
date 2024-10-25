@@ -1,5 +1,8 @@
 package com.damoa.service;
 
+import com.damoa.dto.admin.CompanyReviewDTO;
+import com.damoa.dto.admin.CompanyReviewDetailDTO;
+import com.damoa.dto.admin.FreelancerReviewDTO;
 import com.damoa.repository.interfaces.CompanyReviewRepository;
 import com.damoa.repository.interfaces.FreelancerReviewRepository;
 import com.damoa.repository.model.CompanyReview;
@@ -69,5 +72,32 @@ public class ReviewService {
                 () -> { throw new NullPointerException("삭제된 리뷰 입니다."); }
         );
     }
+
+    public List<CompanyReviewDTO> getComapanyReviews(int limit, int offset){
+        List<CompanyReviewDTO> companyReviews = companyReviewRepo.findCompanyReview(limit,offset);
+        return  companyReviews;
+
+    }
+
+    public int countReview(){
+        return companyReviewRepo.countCompanyReview();
+    }
+
+    public List<FreelancerReviewDTO> findFreelancerReview(int limit, int offset){
+        List<FreelancerReviewDTO> freelancerReviews = freelancerReviewRepo.findFreelancerReview(limit, offset);
+        return freelancerReviews;
+
+    }
+
+    public int countFreelancerReview(){
+        return freelancerReviewRepo.countFreelancerReview();
+    }
+
+    public List<CompanyReviewDetailDTO> getCompanyDetails(){
+        List<CompanyReviewDetailDTO> companyReviewDetailDTO = companyReviewRepo.companyReviewDetail();
+        return companyReviewDetailDTO;
+
+    }
+
 
 }

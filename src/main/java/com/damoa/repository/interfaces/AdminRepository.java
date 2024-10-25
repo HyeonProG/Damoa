@@ -12,7 +12,6 @@ import java.util.List;
 public interface AdminRepository {
 
     public Admin findByUsername(String username);
-
     public List<User> getUserList(@Param("limit")int limit, @Param("offset") int offset);
     public List<User> getAllUser();
     public User getUserDetail(int id);

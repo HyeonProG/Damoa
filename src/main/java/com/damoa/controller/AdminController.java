@@ -1,9 +1,16 @@
 package com.damoa.controller;
 
+import com.damoa.constants.UserType;
+import com.damoa.dto.admin.CompanyReviewDTO;
+import com.damoa.dto.admin.FreelancerReviewDTO;
 import com.damoa.dto.user.MonthlyRegisterDTO;
 import com.damoa.dto.user.MonthlyVisitorDTO;
+import com.damoa.repository.model.Project;
+import com.damoa.service.ProjectService;
+import com.damoa.service.ReviewService;
 import com.damoa.service.VisitorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -38,16 +45,22 @@ public class AdminController {
     @Autowired
     private final VisitorService visitorService;
 
+    @Autowired
+    private final ReviewService reviewService;
+
+    @Autowired
+    private final ProjectService projectService;
+
     /**
      * 관리자 메인 페이지
-     * 
+     *
      * @return
      */
     @GetMapping("/main")
     public String mainPage(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         Admin admin = session != null ? (Admin) session.getAttribute("admin") : null;
-        
+
 //        // 로그인을 하지 않았을 경우 로그인 페이지로 리다이렉트
 //        if (admin == null) {
 //            return "redirect:/admin/sign-in";
@@ -62,7 +75,7 @@ public class AdminController {
 
     /**
      * 관리자 로그인 페이지
-     * 
+     *
      * @return
      */
     @GetMapping("/sign-in")
@@ -72,9 +85,7 @@ public class AdminController {
 
     /**
      * 관리자 로그인
-     * 
-     * @param username
-     * @param password
+     *
      * @return
      */
 //    @PostMapping("/sign-in")
@@ -105,7 +116,7 @@ public class AdminController {
 //    }
 
     @GetMapping("/management/{currentPageNum}")
-    public String UserListPage(@PathVariable(required = false) Integer currentPageNum, Model model){
+    public String UserListPage(@PathVariable(required = false)Integer currentPageNum, Model model){
 
         List<User> allUser = adminService.getAllUser();
         int totalUser = allUser.size();
@@ -119,8 +130,6 @@ public class AdminController {
         } else{
             offset = limit*(currentPageNum-1);
         }
-
-
         List<User> userList = adminService.getUserList(limit,offset);
 
         model.addAttribute("userList",userList);
@@ -153,5 +162,94 @@ public class AdminController {
         List<MonthlyVisitorDTO> visitorDataList = visitorService.getMonthlyVisitorData();
         return new ResponseEntity<>(visitorDataList, HttpStatus.OK);
 
-}
+    }
+
+
+    /**
+     *  http://localhost:8080/admin/list/company
+     * @param model
+     * @return
+     */
+    @GetMapping("/list/company/{currentPageNum}") // URL의 {type} 부분을 변수로 처리
+    public String companyReviewList(@PathVariable(required = false)Integer currentPageNum, Model model) {
+        int pageSize = 6;
+        int offset;
+
+        int totallist = reviewService.countReview(); // 총몇개의 row 인지 확인
+        int totalPages = (int) Math.ceil((double) totallist / (double) pageSize); //  2.1 = 13 / 6
+
+        if(currentPageNum == null || currentPageNum <= 1){
+            currentPageNum = 2;
+            offset = 0;
+        } else{
+            offset = (currentPageNum -1) * pageSize;
+        }
+        int nextPageNum;
+        int beforePageNum;
+
+        if(currentPageNum >= totalPages -1 && totalPages > 3){
+            currentPageNum = totalPages -1;
+            nextPageNum = currentPageNum +1;
+            beforePageNum = currentPageNum -1;
+        } else if (currentPageNum >= totalPages -1){
+            currentPageNum = 2;
+            nextPageNum = 3;
+            beforePageNum = 1;
+        }
+
+            List<CompanyReviewDTO> list = reviewService.getComapanyReviews(pageSize,offset);
+
+        model.addAttribute("list",list);
+        model.addAttribute("totallist",totallist);
+        model.addAttribute("totalPages",totalPages);
+        model.addAttribute("currentPageNum",currentPageNum);
+        model.addAttribute("beforePageNum",currentPageNum -1);
+        model.addAttribute("nextPageNum",currentPageNum +1);
+
+        return "admin/company_list";
+    }
+
+    @GetMapping("/list/freelancer/{currentPageNum}")
+    public String freelancerReviewList(@PathVariable(required = false)Integer currentPageNum, Model model){
+        int pageSize = 6;
+        int offset;
+
+        int totallist = reviewService.countFreelancerReview(); // 총몇개의 row 인지 확인
+        int totalPages = (int) Math.ceil((double) totallist / (double) pageSize); //  2.1 = 13 / 6
+
+        if(currentPageNum == null || currentPageNum <= 1){
+            currentPageNum = 2;
+            offset = 0;
+        } else{
+            offset = (currentPageNum -1) * pageSize;
+        }
+        int nextPageNum;
+        int beforePageNum;
+
+        if(currentPageNum >= totalPages -1 && totalPages > 3){
+            currentPageNum = totalPages -1;
+            nextPageNum = currentPageNum +1;
+            beforePageNum = currentPageNum -1;
+        } else if (currentPageNum >= totalPages -1){
+            currentPageNum = 2;
+            nextPageNum = 3;
+            beforePageNum = 1;
+        }
+        List<FreelancerReviewDTO> list = reviewService.findFreelancerReview(pageSize,offset);
+
+        model.addAttribute("list",list);
+        model.addAttribute("totallist",totallist);
+        model.addAttribute("totalPages",totalPages);
+        model.addAttribute("currentPageNum",currentPageNum);
+        model.addAttribute("beforePageNum",currentPageNum -1);
+        model.addAttribute("nextPageNum",currentPageNum +1);
+
+        return "admin/freelancer_list";
+    }
+
+
+
+
+
+
 }
