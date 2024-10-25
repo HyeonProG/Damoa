@@ -6,6 +6,10 @@ import com.damoa.repository.model.CompanyReview;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.damoa.dto.DailyCompanyReviewDTO;
+import com.damoa.repository.model.CompanyReview;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,4 +34,6 @@ public interface CompanyReviewRepository {
     int countCompanyReview();
 
     List<CompanyReviewDetailDTO> companyReviewDetail();
+    // 일별 기업 리뷰 등록 수 데이터 가져오기
+    List<DailyCompanyReviewDTO> getDailyCompanyReviewData(@Param("startDate") String startDate, @Param("endDate") String endDate);
 }

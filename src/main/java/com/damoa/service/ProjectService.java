@@ -1,5 +1,6 @@
 package com.damoa.service;
 
+import com.damoa.dto.MonthlyProjectDTO;
 import com.damoa.dto.ProjectSaveDTO;
 import com.damoa.dto.user.ProjectWaitDTO;
 import com.damoa.handler.exception.DataDeliveryException;
@@ -67,4 +68,10 @@ public class ProjectService {
         projectRepository.addNewWait(reqDTO);
         return;
     }
+    
+    // 월별 프로젝트 등록 데이터
+    public List<MonthlyProjectDTO> getMonthlyProjectData() {
+        return projectRepository.getMonthlyProjectData();
+    }
+
 }

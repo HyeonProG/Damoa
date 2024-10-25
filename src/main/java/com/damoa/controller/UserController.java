@@ -437,6 +437,7 @@ public class UserController {
     }
 
 
+    // 마이페이지
     @GetMapping("/mypage")
     public String myPage(HttpSession session, Model model) {
         User user = (User) session.getAttribute("principal");
@@ -444,20 +445,11 @@ public class UserController {
             return "redirect:/user/sign-in";
         }
 
-        PrincipalDTO principalDTO = PrincipalDTO.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .username(user.getUsername())
-                .userType(user.getUserType())
-                .socialType(user.getSocialType())
-                .phoneNumber(user.getPhoneNumber())
-                .point(user.getPoint())
-                .build();
-
-        boolean isFreelancer = user.getUserType().equals("freelancer");
-        boolean isCompany = user.getUserType().equals("company");
-
+        PrincipalDTO principalDTO = userService.findUserById(user.getId());
         model.addAttribute("user", principalDTO);
+
+        boolean isFreelancer = "freelancer".equals(user.getUserType());
+        boolean isCompany = "company".equals(user.getUserType());
         model.addAttribute("freelancer", isFreelancer);
         model.addAttribute("company", isCompany);
 

@@ -53,4 +53,20 @@
     <update id="updateStatus">
         UPDATE toss_history_tb SET status = 1 WHERE id = #{id}
     </update>
+    <!-- 사용자 ID로 사용자 정보 조회 -->
+    <select id="findUserById" parameterType="int" resultType="com.damoa.dto.user.PrincipalDTO">
+        SELECT id, email, username, phone_number, user_type, social_type
+        FROM user_tb
+        WHERE id = #{id}
+    </select>
+
+    <!-- 프리랜서 목록 조회 -->
+    <select id="findAllFreelancers" resultType="com.damoa.repository.model.User">
+        SELECT * FROM user_tb WHERE user_type = 'freelancer'
+    </select>
+
+    <!-- 기업 목록 조회 -->
+    <select id="findAllCompanies" resultType="com.damoa.repository.model.User">
+        SELECT * FROM user_tb WHERE user_type = 'company'
+    </select>
 </mapper>

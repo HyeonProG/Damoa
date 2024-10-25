@@ -41,4 +41,11 @@
         VALUES (#{projectId}, #{userId}, #{introduce}, #{minimumWage}, #{maximumWage}, #{startDate},
         #{originFileName}, #{uploadFileName}, #{detail})
     </insert>
+
+    <!-- 월별 프로젝트 등록 수 -->
+    <select id="getMonthlyProjectData" resultType="com.damoa.dto.MonthlyProjectDTO">
+        SELECT DATE_FORMAT(project_start, '%Y-%m') AS month, COUNT(*) AS count
+        FROM project_tb
+        GROUP BY DATE_FORMAT(project_start, '%Y-%m')
+    </select>
 </mapper>

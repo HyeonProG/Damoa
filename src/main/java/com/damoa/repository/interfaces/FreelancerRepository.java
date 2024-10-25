@@ -3,6 +3,7 @@ package com.damoa.repository.interfaces;
 
 import java.util.List;
 
+import com.damoa.dto.MonthlyFreelancerDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -65,4 +66,6 @@ public interface FreelancerRepository {
     // 프리랜서 평균 희망 연봉 카운트
     public int countAverageFreelancerExpectedSalary();
 
+    // 월별 프리랜서 등록 수
+    List<MonthlyFreelancerDTO> getMonthlyFreelancerData();
 }

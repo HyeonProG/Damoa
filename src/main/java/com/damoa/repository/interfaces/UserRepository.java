@@ -2,6 +2,7 @@ package com.damoa.repository.interfaces;
 
 import com.damoa.dto.TossHistoryDTO;
 import com.damoa.dto.user.MonthlyRegisterDTO;
+import com.damoa.dto.user.PrincipalDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -31,4 +32,12 @@ public interface UserRepository {
     List<TossHistoryDTO> findPaymentDetailByUserId(int userId);
 
     void updateStatus(int id);
+    // 사용자 ID로 사용자 정보 조회
+    PrincipalDTO findUserById(@Param("id") int id);
+
+    // 프리랜서 목록 조회 (프리랜서 사용자)
+    List<User> findAllFreelancers();
+
+    // 기업 목록 조회 (기업 사용자)
+    List<User> findAllCompanies();
 }

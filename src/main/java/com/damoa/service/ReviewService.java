@@ -3,6 +3,8 @@ package com.damoa.service;
 import com.damoa.dto.admin.CompanyReviewDTO;
 import com.damoa.dto.admin.CompanyReviewDetailDTO;
 import com.damoa.dto.admin.FreelancerReviewDTO;
+import com.damoa.dto.DailyCompanyReviewDTO;
+import com.damoa.dto.DailyFreelancerReviewDTO;
 import com.damoa.repository.interfaces.CompanyReviewRepository;
 import com.damoa.repository.interfaces.FreelancerReviewRepository;
 import com.damoa.repository.model.CompanyReview;
@@ -13,6 +15,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -99,5 +103,23 @@ public class ReviewService {
 
     }
 
+
+    // 일별 기업 리뷰 등록 수 데이터
+    public List<DailyCompanyReviewDTO> getDailyCompanyReviewData() {
+        LocalDate endDate = LocalDate.now();
+        LocalDate startDate = endDate.minusMonths(1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        return companyReviewRepo.getDailyCompanyReviewData(startDate.format(formatter), endDate.format(formatter));
+    }
+
+    // 일별 프리랜서 리뷰 등록 수 데이터
+    public List<DailyFreelancerReviewDTO> getDailyFreelancerReviewData() {
+        LocalDate endDate = LocalDate.now();
+        LocalDate startDate = endDate.minusMonths(1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        return freelancerReviewRepo.getDailyFreelancerReviewData(startDate.format(formatter), endDate.format(formatter));
+    }
 
 }

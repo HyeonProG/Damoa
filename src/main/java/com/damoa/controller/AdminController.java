@@ -11,6 +11,13 @@ import com.damoa.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import com.damoa.dto.DailyCompanyReviewDTO;
+import com.damoa.dto.DailyFreelancerReviewDTO;
+import com.damoa.dto.MonthlyFreelancerDTO;
+import com.damoa.dto.MonthlyProjectDTO;
+import com.damoa.dto.user.MonthlyRegisterDTO;
+import com.damoa.dto.user.MonthlyVisitorDTO;
+import com.damoa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +25,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
+
+import lombok.RequiredArgsConstructor;
+
+import com.damoa.dto.admin.AdminSignInDTO;
+import com.damoa.handler.exception.DataDeliveryException;
+import com.damoa.repository.model.Admin;
+import com.damoa.repository.model.User;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -42,6 +61,12 @@ public class AdminController {
     @Autowired
     private final PaymentService payService;
 
+    @Autowired
+    private final FreelancerService freelancerService;
+
+    @Autowired
+    private final ReviewService reviewService;
+
     /**
      * 관리자 메인 페이지
      *
@@ -61,7 +86,7 @@ public class AdminController {
         String userIp = request.getRemoteAddr(); // 클라이언트의 IP 주소를 얻음
         visitorService.recordVisitor(userIp); // 방문자 기록
 
-        return "/admin/admin_main";
+        return "/admin/main";
     }
 
     /**
@@ -264,3 +289,38 @@ public class AdminController {
 
 
 }
+    /**
+     * 월별 프로젝트 등록 수 데이터 반환
+     * @return
+     */
+    @GetMapping("/monthly-projects")
+    public ResponseEntity<List<MonthlyProjectDTO>> getMonthlyProjectData() {
+        List<MonthlyProjectDTO> projectDataList = projectService.getMonthlyProjectData();
+        return new ResponseEntity<>(projectDataList, HttpStatus.OK); 
+    }
+
+    /**
+     * 월별 프리랜서 등록 수 데이터 반환
+     * @return
+     */
+    @GetMapping("/monthly-freelancers")
+    public ResponseEntity<List<MonthlyFreelancerDTO>> getMonthlyFreelancerData() {
+        List<MonthlyFreelancerDTO> freelancerDataList = freelancerService.getMonthlyFreelancerData();
+        return new ResponseEntity<>(freelancerDataList, HttpStatus.OK);
+    }
+
+    // 일별 기업 리뷰 데이터 반환 API
+    @GetMapping("/daily-company-reviews")
+    public ResponseEntity<List<DailyCompanyReviewDTO>> getDailyCompanyReviewData() {
+        List<DailyCompanyReviewDTO> companyReviewDataList = reviewService.getDailyCompanyReviewData();
+        return new ResponseEntity<>(companyReviewDataList, HttpStatus.OK);
+    }
+
+    // 일별 프리랜서 리뷰 데이터 반환 API
+    @GetMapping("/daily-freelancer-reviews")
+    public ResponseEntity<List<DailyFreelancerReviewDTO>> getDailyFreelancerReviewData() {
+        List<DailyFreelancerReviewDTO> freelancerReviewDataList = reviewService.getDailyFreelancerReviewData();
+        return new ResponseEntity<>(freelancerReviewDataList, HttpStatus.OK);
+    }
+}
+
