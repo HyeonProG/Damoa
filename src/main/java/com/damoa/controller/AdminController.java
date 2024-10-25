@@ -15,9 +15,6 @@ import com.damoa.dto.DailyCompanyReviewDTO;
 import com.damoa.dto.DailyFreelancerReviewDTO;
 import com.damoa.dto.MonthlyFreelancerDTO;
 import com.damoa.dto.MonthlyProjectDTO;
-import com.damoa.dto.user.MonthlyRegisterDTO;
-import com.damoa.dto.user.MonthlyVisitorDTO;
-import com.damoa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,17 +22,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.*;
-
-import lombok.RequiredArgsConstructor;
-
-import com.damoa.dto.admin.AdminSignInDTO;
-import com.damoa.handler.exception.DataDeliveryException;
-import com.damoa.repository.model.Admin;
-import com.damoa.repository.model.User;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -63,9 +49,6 @@ public class AdminController {
 
     @Autowired
     private final FreelancerService freelancerService;
-
-    @Autowired
-    private final ReviewService reviewService;
 
     /**
      * 관리자 메인 페이지
@@ -233,7 +216,7 @@ public class AdminController {
             beforePageNum = 1;
         }
 
-            List<CompanyReviewDTO> list = reviewService.getComapanyReviews(pageSize,offset);
+        List<CompanyReviewDTO> list = reviewService.getComapanyReviews(pageSize,offset);
 
         model.addAttribute("list",list);
         model.addAttribute("totallist",totallist);
@@ -283,12 +266,6 @@ public class AdminController {
         return "admin/freelancer_list";
     }
 
-
-
-
-
-
-}
     /**
      * 월별 프로젝트 등록 수 데이터 반환
      * @return
@@ -296,7 +273,7 @@ public class AdminController {
     @GetMapping("/monthly-projects")
     public ResponseEntity<List<MonthlyProjectDTO>> getMonthlyProjectData() {
         List<MonthlyProjectDTO> projectDataList = projectService.getMonthlyProjectData();
-        return new ResponseEntity<>(projectDataList, HttpStatus.OK); 
+        return new ResponseEntity<>(projectDataList, HttpStatus.OK);
     }
 
     /**
@@ -322,5 +299,11 @@ public class AdminController {
         List<DailyFreelancerReviewDTO> freelancerReviewDataList = reviewService.getDailyFreelancerReviewData();
         return new ResponseEntity<>(freelancerReviewDataList, HttpStatus.OK);
     }
+
+
+
+
 }
+
+
 
