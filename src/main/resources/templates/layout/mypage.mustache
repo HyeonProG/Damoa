@@ -1,0 +1,24 @@
+<link rel="stylesheet" type="text/css" href="../css/mypage.css">
+
+    {{#freelancer}}
+        <div class="sidebar">
+            <h2>프리랜서 메뉴</h2>
+            <a href="/user/mypage">마이페이지</a>
+            <a href="/freelancer/basic-info">기본 정보</a>
+            <a href="/freelancer/skills">스킬 스택 관리</a>
+            <a href="/freelancer/career">경력 관리</a>
+            <a href="/project/list/{currentPageNum}">프로젝트 찾기</a>
+        </div>
+    {{/freelancer}}
+
+    <!-- 사이드바 - 기업 전용 메뉴 -->
+    {{#company}}
+        <div class="sidebar">
+            <h2>기업 메뉴</h2>
+            <a href="/user/mypage">마이페이지</a>
+            <a href="/company/projects">내 프로젝트 관리</a>
+            <a href="/company/find-freelancers">프리랜서 찾기</a>
+            <a href="/company/income">결제 내역</a>
+            <a href="/user/logout">로그아웃</a>
+        </div>
+    {{/company}}

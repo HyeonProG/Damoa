@@ -98,6 +98,7 @@ public class FreelancerController {
             model.addAttribute("salaryType", freelancer.getSalaryType());
             model.addAttribute("detail", freelancer.getDetail());
             model.addAttribute("link", freelancer.getLink());
+            model.addAttribute("freelancer", user.getUserType());
         }
 
         model.addAttribute("userId", user.getId()); // userId 추가
@@ -159,6 +160,8 @@ public class FreelancerController {
 
         List<Career> freelancerCareers = freelancerService.findCareersByFreelancerId(user.getId());
         model.addAttribute("freelancerCareers", freelancerCareers);
+
+        model.addAttribute("freelancer", user.getUserType());
 
         return "freelancer/career"; // 경력 관리 템플릿 반환
     }
@@ -236,6 +239,8 @@ public class FreelancerController {
 
         List<Skill> freelancerSkills = freelancerService.findSkillsByFreelancerId(user.getId());
         model.addAttribute("freelancerSkills", freelancerSkills);
+
+        model.addAttribute("freelancer", user.getUserType());
 
         return "freelancer/skills"; // 스킬 관리 템플릿 반환
 
