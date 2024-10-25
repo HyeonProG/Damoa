@@ -1,11 +1,14 @@
 package com.damoa.dto;
 
 import com.damoa.repository.model.Project;
+import com.damoa.repository.model.Skill;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 
 @Data
@@ -14,10 +17,11 @@ public class ProjectSaveDTO {
     private int userId;
     private String job;
     private String skill;
+    private List<String> totalSkills;
     private String projectName;
     private int minYears;
     private int maxYears;
-    private Date projectStart;
+    private LocalDate projectStart;
     private String expectedPeriod;
     private int period;
     private String salaryType;

@@ -4,14 +4,14 @@
         namespace="com.damoa.repository.interfaces.ProjectRepository">
     <insert id="insertProject">
         INSERT INTO project_tb (
-        user_id, job, skill, min_years, max_years, project_name,
+        user_id, job, min_years, max_years, project_name,
         project_start, expected_period, period,
         salary_type, working_style, meeting, address,
         worktime, work_adjust, vacation, progress,
         main_tasks, detail_task, delivered, files,
         company, manager_name, contact, email, agree
         ) VALUES (
-        #{userId}, #{job}, #{skill}, #{minYears}, #{maxYears},#{projectName},
+        #{userId}, #{job},  #{minYears}, #{maxYears},#{projectName},
         #{projectStart}, #{expectedPeriod}, #{period},
         #{salaryType}, #{workingStyle}, #{meeting}, #{address},
         #{worktime}, #{workAdjust}, #{vacation}, #{progress},
