@@ -506,10 +506,11 @@ public class UserController {
 
     @ResponseBody
     @GetMapping("/fetchRefundStatus")
-    public ResponseEntity<?> updateRefundReqStatus(@RequestParam("id") int historyId) {
+    public ResponseEntity<Map<String, String>> updateRefundReqStatus(@RequestParam("id") int historyId) {
         userService.updateTossHistoryStat(historyId);
-        String msg = "업데이트 완료";
-        return ResponseEntity.ok(msg);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "업데이트 완료");
+        return ResponseEntity.ok(response);
     }
 
 }

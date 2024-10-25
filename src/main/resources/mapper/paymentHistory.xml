@@ -29,4 +29,15 @@
     <select id="findPointById" resultType="int">
         SELECT point FROM user_tb WHERE id = #{userId}
     </select>
+
+    <insert id="insertCancelHistory">
+        INSERT INTO cancel_toss_history_tb(payment_key, user_id, order_id, order_name, amount, method, requested_at,
+        approved_at, cancel_at)
+        VALUES(#{paymentKey}, #{userId}, #{orderId}, #{orderName}, #{amount}, #{method}, #{requestedAt}, #{approvedAt},
+        now())
+    </insert>
+
+    <update id="updateHistoryStatus">
+        UPDATE toss_history_tb SET status = 2 WHERE id = #{id}
+    </update>
 </mapper>

@@ -6,6 +6,7 @@ import com.damoa.dto.user.MonthlyVisitorDTO;
 import com.damoa.service.PaymentService;
 import com.damoa.service.VisitorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -177,5 +179,10 @@ public class AdminController {
 
         model.addAttribute("paymentList", paymentList);
         return "/admin/admin_refund_approval";
+    }
+
+    @GetMapping("/settlement")
+    public String settlementPage() {
+        return "/admin/admin_settlement";
     }
 }

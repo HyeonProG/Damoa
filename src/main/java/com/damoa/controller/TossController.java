@@ -47,7 +47,7 @@ public class TossController {
 
     @Transactional
     @GetMapping("/success")
-    public String successPage(@SessionAttribute(name = "principal") User principal, @RequestParam(name = "orderId") String orderId, @RequestParam(name = "paymentKey") String paymentKey, @RequestParam(name = "amount") String amount) throws IOException, InterruptedIOException {
+    public ResponseEntity<String> successPage(@SessionAttribute(name = "principal") User principal, @RequestParam(name = "orderId") String orderId, @RequestParam(name = "paymentKey") String paymentKey, @RequestParam(name = "amount") String amount) throws IOException, InterruptedIOException {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -74,15 +74,17 @@ public class TossController {
         } catch (HttpClientErrorException e) {
             System.err.println("Error response body: " + e.getResponseBodyAsString());
         }
-
-        return "redirect:/chat";
+        String script = "<script>window.close();</script>";
+        return ResponseEntity.ok()
+                .header("Content-Type", "text/html")
+                .body(script);
     }
 
 
     @GetMapping("/fail")
     public String fail() {
 
-        return "/chat";
+        return "/main";
     }
 
     @ResponseBody
@@ -98,6 +100,9 @@ public class TossController {
                 .header("Content-Type", "application/json")
                 .method("POST", HttpRequest.BodyPublishers.ofString("{\"cancelReason\":\"고객이 취소를 원함\"}")).build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+
+        payService.updateRefundPoint(historyDTO.getAmount(), historyDTO.getId(), historyDTO.getUserId());
+        payService.insertCancelHistory(historyDTO);
 
         return response.body();
     }
