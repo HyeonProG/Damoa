@@ -59,4 +59,13 @@ public interface ProjectRepository {
 
     // 월별 프로젝트 등록 수
     List<MonthlyProjectDTO> getMonthlyProjectData();
+
+    // 프로젝트 명으로 프로젝트 검색하기
+    List<Project> selectProjectByName(String keyword);
+
+    // 마이페이지용 프로젝트 검색
+    List<Project> getProjectForPagingForMyPage(@Param("userId")int userId, @Param("limit")int limit, @Param("offset")int offset);
+
+    // 광고받은 프로젝트들 검색
+    List<Project> getProjectForAd(@Param("limit")int limit, @Param("offset")int offset);
 }

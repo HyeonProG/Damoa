@@ -21,6 +21,12 @@ public class ChatController {
     private final ChatMessageService chatMessageService;
     private final SimpMessagingTemplate messagingTemplate; // STOMP 메시지 전송을 위한 템플릿 클래스
 
+    @GetMapping("/my-project")
+    public String myProjectPage(){
+
+        return null;
+    }
+
     /**
      * 클라이언트가 "/app/chat" 경로로 보낸 메시지를 처리
      * @param chatMessage 클라이언트가 보낸 채팅 메시지

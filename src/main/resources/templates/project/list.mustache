@@ -42,16 +42,50 @@
 <h3>프로젝트 목록 ({{totalProjectNum}})</h3>
 <p>프로젝트를 찾고 매칭해보세요</p>
 
+<div class="search-div">
+    <div class="major-class">
+        <button>직무</button>
+        <button>근무 방식</button>
+    </div>
+    <div class="minor-class">
+        <select name="">
+            <option value="" selected disabled hidden>미팅 방식</option>
+        </select>
+        <select name="">
+            <option value="" selected disabled hidden>근무 주소</option>
+        </select>
+        <select name="">
+            <option value="" selected disabled hidden>최소 금액</option>
+        </select>
+        <select name="">
+            <option value="" selected disabled hidden>진행 상황</option>
+        </select>
+    </div>
+    <div>
+        <button>조회순</button>
+        <button>최신순</button>
+    </div>
+</div>
 <div class="project-container">
-    {{#projectList}}
+    {{#projectListForAdvertise}}
         <div class="project-list-item" onclick="location.href='/project/detail/{{id}}'">
             <h4>{{projectName}}</h4>
             <h5 class="project-job">{{job}}</h5>
-            <p>{{skill}}</p>
             <p>{{projectStart}}</p>
             <button class="btn btn-primary">자세히 보기</button> <!-- 추가 버튼 -->
         </div>
-    {{/projectList}}
+    {{/projectListForAdvertise}}
+</div>
+
+<div class="project-container">
+    {{#projectListForPaging}}
+        <div class="project-list-item" onclick="location.href='/project/detail/{{id}}'">
+            <h4>{{projectName}}</h4>
+            <h5 class="project-job">{{job}}</h5>
+            <p>{{projectStart}}</p>
+            <button class="btn btn-primary">자세히 보기</button> <!-- 추가 버튼 -->
+        </div>
+    {{/projectListForPaging}}
 </div>
 
 <div class="page-nation" id="page-nation">

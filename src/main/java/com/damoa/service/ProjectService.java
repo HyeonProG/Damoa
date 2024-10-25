@@ -74,4 +74,33 @@ public class ProjectService {
         return projectRepository.getMonthlyProjectData();
     }
 
+    /**
+     * 프로젝트 명으로 프로젝트 검색하기
+     * @param keyword
+     * @return
+     */
+    public List<Project> findByProjectName(String keyword) {
+        return projectRepository.selectProjectByName(keyword);
+    }
+
+    /**
+     * 마이페이지용 프로젝트 조회
+     * @param i
+     * @param limit
+     * @param offset
+     * @return
+     */
+    public List<Project> getProjectForPagingForMyPage(int userId, int limit, int offset) {
+        return projectRepository.getProjectForPagingForMyPage(userId,limit,offset);
+    }
+
+    /**
+     * 광고받은 프로젝트들 조회
+     * @param limit
+     * @param offset
+     * @return
+     */
+    public List<Project> getProjectForAdvertise(int limit, int offset) {
+        return projectRepository.getProjectForAd(limit,offset);
+    }
 }

@@ -94,7 +94,7 @@ public class ProjectController {
      * @return
      */
     @GetMapping("/list/{currentPageNum}")
-    public String projectListPage(@PathVariable(required=false)int currentPageNum, Model model){
+    public String projectListPage(@PathVariable(name="currentPageNum", required=false)int currentPageNum, Model model){
         // 모든 프로젝트 가져오기
         List<Project> projectList = projectService.getAllProject();
         int totalProjectNum = projectList.size();
@@ -111,11 +111,14 @@ public class ProjectController {
         offset=limit*(currentPageNum-1);
         // 페이징 처리 된 프로젝트들
         List<Project> projectListForPaging = projectService.getProjectForPaging(limit,offset);
+        // 광고 받은 프로젝트들
+        List<Project> projectListForAdvertise = projectService.getProjectForAdvertise(2,0);
 
         model.addAttribute("totalPageNum",totalPageNum);
         model.addAttribute("totalProjectNum",totalProjectNum);
         model.addAttribute("currentPageNum",currentPageNum);
-        model.addAttribute("projectList",projectList);
+        model.addAttribute("projectListForPaging",projectListForPaging);
+        model.addAttribute("projectListForAdvertise",projectListForAdvertise);
 
 
         return "project/list";
@@ -128,32 +131,32 @@ public class ProjectController {
      * @return
      */
     @GetMapping("/detail/{projectId}")
-    public String projectDetailPage(@PathVariable(required=false)int projectId, Model model){
+    public String projectDetailPage(@PathVariable(name="projectId",required=false)int projectId, Model model){
         Project project = projectService.findProjectById(projectId);
         model.addAttribute("project",project);
         return "project/detail";
     }
-
-    @PostMapping("/wait")
-    public String projectWaitProc(@ModelAttribute ProjectWaitDTO reqDTO, Model model){
-        System.out.println(reqDTO);
-
-        ProjectWait newProWait = reqDTO.toProWait(reqDTO);
-
-        if(reqDTO.getFile() != null){
-            // 포트폴리오 파일 저장
-            String[] fileNames = uploadFile(reqDTO.getFile());
-            newProWait.setOriginFileName(fileNames[0]);
-            newProWait.setUploadFileName(fileNames[1]);
-        }
-
-        projectService.makeNewWait(newProWait);
-        System.out.println(newProWait);
-
-        Project project = projectService.findProjectById(reqDTO.getProjectId());
-        model.addAttribute("project",project);
-        return "project/detail";
-    }
+//
+//    @PostMapping("/wait")
+//    public String projectWaitProc(@ModelAttribute ProjectWaitDTO reqDTO, Model model){
+//        System.out.println(reqDTO);
+//
+//        ProjectWait newProWait = reqDTO.toProWait(reqDTO);
+//
+//        if(reqDTO.getFile() != null){
+//            // 포트폴리오 파일 저장
+//            String[] fileNames = uploadFile(reqDTO.getFile());
+//            newProWait.setOriginFileName(fileNames[0]);
+//            newProWait.setUploadFileName(fileNames[1]);
+//        }
+//
+//        projectService.makeNewWait(newProWait);
+//        System.out.println(newProWait);
+//
+//        Project project = projectService.findProjectById(reqDTO.getProjectId());
+//        model.addAttribute("project",project);
+//        return "project/detail";
+//    }
 
     /**
      * 파일 업로드 및 이름 암호화
@@ -189,14 +192,28 @@ public class ProjectController {
         return new String[] {mFile.getOriginalFilename(), uploadFileName};
     }
 
+    /**
+     * 나의 프로젝트
+     * @param currentPageNum
+     * @param model
+     * @return
+     */
     @GetMapping("/my-project/{currentPageNum}")
-    private String myProjectPage(@PathVariable(required=false)int currentPageNum, Model model){
+    private String myProjectPage(@PathVariable(name="currentPageNum",required=false)int currentPageNum, Model model){
         int limit=10;
         int offset=limit*(currentPageNum-1);
-        List<Project> projectListForPaging = projectService.getProjectForPaging(limit,offset);
+        List<Project> projectListForPaging = projectService.getProjectForPagingForMyPage(1,limit,offset);
 
         model.addAttribute("projectListForPaging",projectListForPaging);
-        return "project/my_project";
+        return "user/my_project";
+    }
+
+    @GetMapping("/my-project/detail/{id}")
+    private String myProjectDetailPage(@PathVariable(name="id", required = false)int id, Model model){
+        Project project = projectService.findProjectById(id);
+        model.addAttribute("project",project);
+
+        return "user/my_project_detail";
     }
 
 

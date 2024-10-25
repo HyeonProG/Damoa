@@ -1,8 +1,10 @@
 package com.damoa.controller;
 
 import com.damoa.dto.BankAuthDTO;
+import com.damoa.repository.model.Freelancer;
 import com.damoa.repository.model.Project;
 import com.damoa.service.AccountService;
+import com.damoa.service.FreelancerService;
 import com.damoa.service.ProjectService;
 import lombok.Builder;
 import lombok.Data;
@@ -14,10 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
@@ -35,6 +34,15 @@ public class AccountController {
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private FreelancerService freelancerService;
+
+
+    /**
+     * 메인 페이지 이동
+     * @param model
+     * @return
+     */
     @GetMapping("/main")
     public String mainPage(Model model){
 
@@ -42,6 +50,22 @@ public class AccountController {
 
         model.addAttribute("projectList",projectList);
         return "user/index";
+    }
+
+    /**
+     * 검색 화면
+     * @param keyword
+     * @param model
+     * @return
+     */
+    @PostMapping("/search")
+    public String searchPage(@ModelAttribute("keyword") String keyword, Model model){
+        System.out.println("~~~~~~~~"+keyword);
+
+        List<Project> projectList = projectService.findByProjectName(keyword);
+
+        model.addAttribute("projectList",projectList);
+        return "user/search";
     }
 
     // 계좌 인증 페이지 입장

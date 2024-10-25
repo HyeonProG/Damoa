@@ -48,4 +48,21 @@
         FROM project_tb
         GROUP BY DATE_FORMAT(project_start, '%Y-%m')
     </select>
+
+    <select id="selectProjectByName" resultType="com.damoa.repository.model.Project">
+        SELECT * FROM project_tb WHERE project_name LIKE CONCAT('%', #{keyword}, '%');
+    </select>
+
+    <select id="getProjectForPagingForMyPage"  parameterType="com.damoa.repository.model.Project">
+        SELECT * FROM project_tb
+        WHERE status = 1 and user_id =#{userId}
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="getProjectForAd"  parameterType="com.damoa.repository.model.Project">
+        SELECT * FROM project_tb
+        WHERE status = 1 and advertise_status = 2
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
 </mapper>
