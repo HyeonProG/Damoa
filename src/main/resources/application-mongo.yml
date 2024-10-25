@@ -10,7 +10,7 @@ spring:
     mongodb:
       # user: username
       # password: password
-      uri: mongodb://host:27017/damoa
+      uri: mongodb://localhost:27017/damoa
 
 logging:
   level:

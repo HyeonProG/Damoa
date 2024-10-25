@@ -10,7 +10,7 @@ server:
 
 spring:
   profiles:
-    active: default
+    active: default, secure, mongo
     include: secure
   devtools:
     livereload:
@@ -30,9 +30,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver # MySQL driver 
-    url: jdbc:mysql://localhost:3306/damoa?serverTimezone=Asia/Seoul
-    username: root # 데이터베이스 연결 시 기본 사용자 이름
-    password: asd123
+    url: jdbc:mysql://192.168.0.46:3306/damoa?serverTimezone=Asia/Seoul
+    username: ush # 데이터베이스 연결 시 기본 사용자 이름
+    password: 1234
   sql:
     init:
       schema-locations:
@@ -63,8 +63,6 @@ mybatis:
 logging:
   level:
     org.apache.ibatis: DEBUG # myBatis 로깅 레벨을 DEBUG로 설정하여 실행되는 SQL쿼리와 내부 로깅 정보를 콘솔에 출력
-    org.mongodb: DEBUG # MongoDB 로깅 콘솔 출력
-    org.springframework.data.mongodb: DEBUG # MongoDB 로깅 콘솔 출력
 
 # 초기 파라메터 설정
 file:

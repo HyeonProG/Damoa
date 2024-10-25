@@ -295,9 +295,14 @@
                 </div>
                 <!-- 로그인, 회원가입 -->
                 <div class="login-bar">
-                    <p><a href="" class="link"> 로그인 </a></p>
-                    <p class="section-bar"> | </p>
-                    <p><a href="" class="link"> 회원가입 </a></p>
+                    {{#isLogin}} <!-- 로그인된 상태일 때 -->
+                        <p><a href="/user/mypage" class="link">마이페이지</a></p>
+                    {{/isLogin}}
+                    {{^isLogin}} <!-- 로그인되지 않은 상태일 때 -->
+                        <p><a href="/user/sign-in" class="link"> 로그인 </a></p>
+                        <p class="section-bar"> | </p>
+                        <p><a href="" class="link"> 회원가입 </a></p>
+                    {{/isLogin}}
                     <p class="section-bar"> | </p>
                     <p><a href="" class="link"> 기업 서비스 </a></p>
                     <p class="section-bar"> | </p>

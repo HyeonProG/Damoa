@@ -2,8 +2,10 @@ package com.damoa.controller;
 
 import com.damoa.dto.BankAuthDTO;
 import com.damoa.repository.model.Project;
+import com.damoa.repository.model.User;
 import com.damoa.service.AccountService;
 import com.damoa.service.ProjectService;
+import jakarta.servlet.http.HttpSession;
 import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
@@ -36,11 +38,14 @@ public class AccountController {
     private ProjectService projectService;
 
     @GetMapping("/main")
-    public String mainPage(Model model){
+    public String mainPage(Model model, HttpSession session){
+        User user = (User) session.getAttribute("principal");
 
         List<Project> projectList = projectService.getProjectForPaging(3,0);
 
         model.addAttribute("projectList",projectList);
+        model.addAttribute("isLogin",user);
+
         return "user/index";
     }
 
