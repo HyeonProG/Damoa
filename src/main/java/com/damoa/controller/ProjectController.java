@@ -67,13 +67,22 @@ public class ProjectController {
 
         projectService.createProject(reqDTO);
 
+        List<String> strList=new ArrayList<>();
         List<Skill> skillList=new ArrayList<>();
         for(int a=0; a<reqDTO.getTotalSkills().size(); a++){
             String aa=reqDTO.getTotalSkills().get(a);
-            String skill = aa.replaceAll("[^\\w+]", "");
-            System.out.println(a+"~~~~~~~~~~~");
-            System.out.println(skill);
+            String skill = aa.replaceAll("[^\\w.#/]", "");
+            strList.add(skill);
+            System.out.println("~~~~~~~~~~~~~~"+skill);
         }
+
+        int userId = 1;
+        System.out.println("~~~~~~~~~~");
+        System.out.println(strList);
+        skillList = skillService.findSkillListByName(strList);
+        System.out.println("~~~~~~~~~~");
+        System.out.println(skillList);
+        skillService.addProjectSkillData(skillList, userId);
 
         return "project/save_complete";
     }
