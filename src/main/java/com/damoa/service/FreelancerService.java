@@ -87,6 +87,12 @@ public class FreelancerService {
         return freelancerRepository.findAllFreelancers(offset, size);
     }
 
+    public List<Freelancer> findAllFreelancersBySearch(int page, int size, String keyword) {
+        // 페이지네이션
+        int offset = (page - 1) * size;
+        return freelancerRepository.findAllFreelancersBySearch(offset, size, keyword);
+    }
+
     /**
      * 프리랜서 리스트 카운트
      * 
@@ -94,6 +100,10 @@ public class FreelancerService {
      */
     public int countAllFreelancers() {
         return freelancerRepository.countAllFreelancers();
+    }
+
+    public int countAllFreelancersBySearch(String keyword) {
+        return freelancerRepository.countAllFreelancersBySearch(keyword);
     }
 
     /**

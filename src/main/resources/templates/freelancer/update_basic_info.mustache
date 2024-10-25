@@ -10,17 +10,10 @@
                 <div class="form-group">
                     <label for="jobPart">직무</label>
                     <select class="form-control" id="jobPart" name="jobPart" required>
-                        <option value="">직무 선택</option>
-                        <option value="풀스택">풀스택</option>
-                        <option value="프론트엔드">프론트엔드</option>
-                        <option value="백엔드">백엔드</option>
-                        <option value="모바일 개발">모바일 개발</option>
-                        <option value="데브옵스">데브옵스</option>
-                        <option value="UI/UX 디자인">UI/UX 디자인</option>
-                        <option value="게임 개발">게임 개발</option>
-                        <option value="데이터베이스 관리">데이터베이스 관리</option>
-                        <option value="클라우드 엔지니어링">클라우드 엔지니어링</option>
-                        <option value="AI/머신러닝">AI/머신러닝</option>
+                    <option value="">직무 선택</option>
+                    {{#careers}}
+                    <option value="{{id}}">{{career}}</option>
+                    {{/careers}}
                     </select>
                 </div>
 
