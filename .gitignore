@@ -381,3 +381,6 @@ checksums.bin
 *.bin
 *.lock
 *.class
+*.lock
+*.bin
+/.gradle/8.10.2
