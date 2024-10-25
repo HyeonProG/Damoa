@@ -54,7 +54,7 @@ public class ChatBotController {
     @GetMapping("/chat")
     public String chatPage() {
 
-        return "chat";
+        return "chatbot";
     }
 
     @ResponseBody

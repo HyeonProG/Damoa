@@ -5,11 +5,28 @@
 <mapper namespace="com.damoa.repository.interfaces.PaymentHistoryRepository">
     <!-- 데이터베이스에 결제내역 추가하기-->
     <insert id="insertTossHistory">
-        INSERT INTO toss_history_tb(payment_key, user_id, order_id, order_name, amount, method, requested_at, approved_at)
+        INSERT INTO toss_history_tb(payment_key, user_id, order_id, order_name, amount, method, requested_at,
+        approved_at)
         VALUES (#{paymentKey}, #{userId}, #{orderId}, #{orderName}, #{amount}, #{method}, #{requestedAt}, #{approvedAt})
     </insert>
 
-        <select id="viewAll" resultType="com.damoa.dto.TossHistoryDTO">
-            SELECT * FROM toss_history_tb
-        </select>
+    <select id="viewAll" resultType="com.damoa.dto.TossHistoryDTO">
+        SELECT * FROM toss_history_tb
+    </select>
+    <select id="findHistoryByStatus" resultType="com.damoa.dto.TossHistoryDTO">
+        SELECT * FROM toss_history_tb WHERE status > 0
+    </select>
+
+    <select id="findById" resultType="com.damoa.dto.TossHistoryDTO">
+        SELECT * FROM toss_history_tb WHERE id = #{id}
+    </select>
+
+
+    <update id="updateUserPoint">
+        UPDATE user_tb SET point = #{amount} WHERE id = #{userId}
+    </update>
+
+    <select id="findPointById" resultType="int">
+        SELECT point FROM user_tb WHERE id = #{userId}
+    </select>
 </mapper>

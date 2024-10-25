@@ -13,10 +13,11 @@ import lombok.ToString;
 @ToString
 public class PrincipalDTO {
     private Integer id;
-	private String username;
+    private String username;
     private String email;
     private String password;
     private String phoneNumber;
     private String socialType; // 소셜로그인, 로컬로 나누는 변수
     private String userType; // 프리랜서인지 기업인지 나누는 변수
+    private Integer point; // 프로젝트 등록할 때 필요한 포인트!
 }

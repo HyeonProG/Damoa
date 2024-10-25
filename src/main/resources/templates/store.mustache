@@ -1,0 +1,125 @@
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>포인트 충전</title>
+    <style>
+        .popcorn--pay {
+            width: 100%;
+            max-width: 500px; /* 필요에 따라 조절 */
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 제목 박스 스타일 */
+        .title--box {
+            text-align: center; /* 제목을 가운데 정렬 */
+            margin-bottom: 20px;
+        }
+
+        .title--box p {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+            border: 2px solid #007BFF; /* 테두리 추가 */
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            display: inline-block;
+        }
+
+        .popcorn--charge--box {
+            margin-bottom: 20px;
+        }
+
+        /* 결제 금액 박스 스타일 */
+        .amount--box {
+            display: flex;
+            justify-content: space-between; /* 왼쪽과 오른쪽 끝으로 배치 */
+            font-size: 16px;
+        }
+
+        .amount-left, .amount-right {
+            font-size: 16px;
+        }
+
+        /* 버튼 스타일 */
+        .popcorn--charge--box button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007BFF;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .popcorn--charge--box button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="popcorn--pay">
+    <div class="title--box">
+        <p>포인트 충전</p>
+    </div>
+    <div class="popcorn--charge--box">
+        <form id="popcorn-form" action="/toss/pay" method="POST">
+            <label> <input type="radio" name="amount"
+                           value="10000" data-price="10000"/> 1만원
+            </label><br/> <label> <input type="radio"
+                                         name="amount"
+                                         value="50000"
+                                         data-price="50000"/>
+            5만원
+        </label><br/> <label> <input type="radio"
+                                     name="amount"
+                                     value="100000"
+                                     data-price="100000"/>
+            10만원
+        </label><br/> <label> <input type="radio"
+                                     name="amount"
+                                     value="200000"
+                                     data-price="200000"/>
+            20만원
+        </label><br/> <label> <input type="radio"
+                                     name="amount"
+                                     value="500000"
+                                     data-price="500000"/>
+            50만원
+        </label><br/>
+            <button type="submit" value="제출" onclick="calculateTotal()">충전하기</button>
+        </form>
+    </div>
+    <div class="amount--box">
+        <div class="amount-left">결제금액</div>
+        <div class="amount-right" id="amount-right">0원</div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const popcornForm = document.getElementById('popcorn-form');
+        const amountRight = document.getElementById('amount-right');
+
+        popcornForm.addEventListener('change', (event) => {
+            if (event.target.type === 'radio' && event.target.name === 'amount') {
+                const selectedInput = event.target; // 클릭된 input 요소
+                const value = selectedInput.value; // value 값
+                const price = selectedInput.dataset.price; // data-price 값
+
+                console.log('Selected Value:', value);
+                console.log('Selected Price:', price);
+
+                // amount-right에 해당 가격 표시
+                if (price) {
+                    amountRight.textContent = value + `원`; // 가격을 "원" 단위로 표시
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

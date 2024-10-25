@@ -1,7 +1,9 @@
 package com.damoa.service;
 
 import java.util.HashMap;
+import java.util.List;
 
+import com.damoa.dto.TossHistoryDTO;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,7 +49,7 @@ public class UserService {
 
     /**
      * 회원가입 서비스 기능 트랜잭션 처리
-     * 
+     *
      * @param dto
      */
     @Transactional
@@ -81,7 +83,7 @@ public class UserService {
 
     /**
      * 이메일 중복 체크
-     * 
+     *
      * @param email
      * @return
      */
@@ -97,7 +99,7 @@ public class UserService {
 
     /**
      * 전화번호 인증 api
-     * 
+     *
      * @param phoneNumber
      * @param cerNum
      */
@@ -124,7 +126,7 @@ public class UserService {
 
     /**
      * 휴대폰 번호 체크
-     * 
+     *
      * @param phoneNumber
      * @return
      */
@@ -138,7 +140,7 @@ public class UserService {
 
     /**
      * 이메일로 유저 찾기
-     * 
+     *
      * @param email
      * @return
      */
@@ -160,7 +162,7 @@ public class UserService {
 
     /**
      * 입력한 이메일, 비밀번호가 DB와 동일한지 확인
-     * 
+     *
      * @param userSignInDTO
      * @return
      */
@@ -197,4 +199,13 @@ public class UserService {
     }
 
 
+    public List<TossHistoryDTO> findPayHistoryById(int userId) {
+        List<TossHistoryDTO> dto = userRepository.findPaymentDetailByUserId(userId);
+        return dto;
+    }
+
+    @Transactional
+    public void updateTossHistoryStat(int historyId) {
+        userRepository.updateStatus(historyId);
+    }
 }

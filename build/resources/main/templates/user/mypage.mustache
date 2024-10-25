@@ -133,6 +133,28 @@
         background-color: #c82333;
     }
 
+    /* a.purchase--btn에 버튼 스타일 적용 */
+.purchase--btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007BFF;
+    text-decoration: none;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+    .purchase--btn:hover {
+        background-color: #0056b3;
+    }
+
+    .purchase--btn:active {
+        background-color: #004085;
+    }
+
 </style>
 
 <div class="container">
@@ -154,7 +176,7 @@
             <a href="/user/mypage">마이페이지</a>
             <a href="/company/projects">내 프로젝트 관리</a>
             <a href="/company/find-freelancers">프리랜서 찾기</a>
-            <a href="/company/income">결제 내역</a>
+            <a href="/user/income">결제 내역</a>
             <a href="/user/logout">로그아웃</a>
         </div>
     {{/company}}
@@ -169,7 +191,10 @@
             <p><strong>휴대전화:</strong> {{user.phoneNumber}}</p>
             <p><strong>사용자 유형:</strong> {{user.userType}}</p>
             <p><strong>소셜 로그인 유형:</strong> {{user.socialType}}</p>
+            <p><strong>보유 포인트:</strong> {{user.point}}</p>
 
+            <!-- 충전 버튼 -->
+            <a class="purchase--btn">충전하기</a>
             <button id="editButton" class="btn btn-secondary">정보 수정</button>
         </div>
 
@@ -208,6 +233,16 @@
         document.querySelector(".edit-info").style.display = "none";
         document.querySelector(".user-info").style.display = "block";
     });
+
+    document.querySelectorAll('.purchase--btn').forEach(function(btn) {
+    btn.addEventListener('click', function(event) {
+        event.preventDefault();
+        if (confirm("포인트를 충전하시겠습니까?")) {
+            window.open('/toss/store', '_blank', 'width=800,height=600');
+        }
+    });
+});
+
 </script>
 
 {{> layout/footer }}

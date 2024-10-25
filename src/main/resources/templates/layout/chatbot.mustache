@@ -66,20 +66,19 @@
 </head>
 <body>
 
-<!-- 결제하기 버튼 -->
-<a href="/toss/pay" class="btn btn-primary">결제하기</a>
+
 
 <!-- 채팅 사이드바 버튼 -->
 <div class="chatbot-toggle">
     <button type="button" class="btn btn-info" id="toggleChatSidebar">
-        다모봇
+        <img src="/images/icons/chatbot.png" alt="모아봇" style="width: 30px; height: 30px;">
     </button>
 </div>
 
 <!-- 채팅 사이드바 -->
 <div class="sidebar" id="chatSidebar">
     <div class="sidebar-header">
-        <h5 class="modal-title" id="chatModalLabel">다모봇</h5>
+        <h5 class="modal-title" id="chatModalLabel">모아봇</h5>
         <button type="button" class="close" id="closeChatSidebar" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -91,7 +90,8 @@
             <form id="chatForm">
                 <div class="form-group">
                     <label for="message"></label>
-                    <input type="text" class="form-control" id="message" name="message" placeholder="메시지를 입력하세요"
+                    <input type="text" class="form-control" id="bot--message" name="bot--message"
+                           placeholder="메시지를 입력하세요"
                            required>
                 </div>
                 <button type="submit" class="btn btn-success">입력</button>

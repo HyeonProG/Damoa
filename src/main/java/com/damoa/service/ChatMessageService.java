@@ -21,8 +21,9 @@ public class ChatMessageService {
 
     /**
      * 클라이언트가 WebSocket 연결 시 처리하는 메서드
+     *
      * @param headerAccessor WebSocket 연결 요청의 헤더 정보를 담고 있는 객체
-     * @param message 클라이언트가 보낸 채팅 메시지
+     * @param message        클라이언트가 보낸 채팅 메시지
      * @return 저장된 메시지
      */
     public void connectAndSaveMessage(SimpMessageHeaderAccessor headerAccessor, ChatMessage message) {

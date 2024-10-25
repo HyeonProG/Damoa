@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper 
-    namespace="com.damoa.repository.interfaces.UserRepository">
+<mapper
+        namespace="com.damoa.repository.interfaces.UserRepository">
 
     <insert id="insertUser">
         INSERT INTO user_tb(email, username, password, phone_number, social_type, user_type, created_at)
@@ -21,8 +21,10 @@
     </select>
 
     <insert id="insertDeleteUser">
-        INSERT INTO delete_user (id, email, username, password, phone_number, social_type, user_type, created_at, deleted_at, delete_scheduled_at)
-        VALUES (#{id}, #{email}, #{username}, #{password}, #{phoneNumber}, #{socialType}, #{userType}, #{createdAt}, NOW(), DATE_ADD(NOW(), INTERVAL 3 YEAR))
+        INSERT INTO delete_user (id, email, username, password, phone_number, social_type, user_type, created_at,
+        deleted_at, delete_scheduled_at)
+        VALUES (#{id}, #{email}, #{username}, #{password}, #{phoneNumber}, #{socialType}, #{userType}, #{createdAt},
+        NOW(), DATE_ADD(NOW(), INTERVAL 3 YEAR))
     </insert>
 
     <delete id="deleteUser">
@@ -41,4 +43,14 @@
         FROM user_tb
         GROUP BY DATE_FORMAT(created_at, '%Y-%m')
     </select>
+
+    <!-- 결제내역   -->
+    <select id="findPaymentDetailByUserId" resultType="com.damoa.dto.TossHistoryDTO">
+        SELECT * FROM toss_history_tb WHERE user_id = #{id}
+    </select>
+
+    <!-- 업데이트 토스 히스토리 상태   -->
+    <update id="updateStatus">
+        UPDATE toss_history_tb SET status = 1 WHERE id = #{id}
+    </update>
 </mapper>

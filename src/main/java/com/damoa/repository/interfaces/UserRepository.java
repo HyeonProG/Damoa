@@ -1,5 +1,6 @@
 package com.damoa.repository.interfaces;
 
+import com.damoa.dto.TossHistoryDTO;
 import com.damoa.dto.user.MonthlyRegisterDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -13,7 +14,7 @@ public interface UserRepository {
 
     public int insertUser(User user); // 사용자 등록
 
-    public int checkDuplicateEmail(@Param("email")String email); // 이메일 중복 체크
+    public int checkDuplicateEmail(@Param("email") String email); // 이메일 중복 체크
 
     public User findByEmail(String email); // 이메일로 유저 확인
 
@@ -27,4 +28,7 @@ public interface UserRepository {
 
     List<MonthlyRegisterDTO> getMonthlyRegisterData();  // 월별 회원가입 수 데이터
 
+    List<TossHistoryDTO> findPaymentDetailByUserId(int userId);
+
+    void updateStatus(int id);
 }

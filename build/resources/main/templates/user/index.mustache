@@ -1,9 +1,15 @@
 {{>layout/header}}
+{{>layout/chatbot}}
+{{>layout/chat}}
 <div class="main-board-box">
     <div class="ad-board">
         <div class="ad-bar">
             <img src="images/icons/left.png" class="icons" onclick="next()" style="curser: pointer">
-            <img src="images/ads/ad2.png" class="ad-img" style="box-shadow: 2px 2px 5px #d0ccc9">
+            <div class="ad-outer">
+                <div class="ad-inner">
+                    <img src="images/ads/ad2.png" class="ad-img" style="box-shadow: 2px 2px 5px #d0ccc9">
+                </div>
+            </div>
             <img src="images/icons/right.png" class="icons" onclick="next()">
         </div>
         <div class="ad-progress">
@@ -11,33 +17,19 @@
         </div>
     </div>
     <div class="freelancer-board main-inner-board">
-        <h3><b> 많이 찾는 프로젝트 공고들<img src="images/3d_icons/file.png" class="icons"> ></b></h3>
+        <h3><b> 많이 찾는 프로젝트 공고들<img src="images/3d_icons/file.png" style="cursor:pointer;" class="icons"
+                                   onclick="location.href='/project/list/1'"> ></b></h3>
         <p>프로젝트를 시작해볼까요?</p>
         <div class="project-container">
-            <div class="project-box">
-                <h5><b>프로젝트명</b></h5>
-                <p>회사명</p>
-                <p>대체 인력</p>
-                <p>~10/31</p>
-            </div>
-            <div class="project-box">
-                <h5><b>프로젝트명</b></h5>
-                <p>회사명</p>
-                <p>에러 수정</p>
-                <p>~10/31</p>
-            </div>
-            <div class="project-box">
-                <h5><b>프로젝트명</b></h5>
-                <p>회사명</p>
-                <p>기능 추가 개발</p>
-                <p>~10/31</p>
-            </div>
-            <div class="project-box">
-                <h5><b>프로젝트명</b></h5>
-                <p>회사명</p>
-                <p>홈페이지 유지보수</p>
-                <p>~10/31</p>
-            </div>
+            {{#projectList}}
+                <div class="project-box" onclick="location.href='/project/detail/{{id}}'">
+                    <h5><b>{{projectName}}</b></h5>
+                    <p>{{job}}</p>
+                    <p>{{skill}}</p>
+                    <h5><b>{{worktime}}</b></h5>
+                    <p>{{period}}</p>
+                </div>
+            {{/projectList}}
         </div>
     </div>
     <div class="main-inner-board">
@@ -48,7 +40,7 @@
                 <h5><b>계좌 인증 및 등록하기 ></b></h5>
                 <p>계좌 등록으로 더욱 편하게 다모아를 이용해보세요</p>
             </div>
-            <div class="asset-box">
+            <div class="asset-box" onclick="location.href='/sign/list'">
                 <h5><b>날인 등록하기 ></b></h5>
                 <p>직접 사인하지 않아도 돼요</p>
             </div>
@@ -57,41 +49,45 @@
     <div class="project-board main-inner-board">
         <h3><b> 현재 핫한 프리랜서 개발자들<img src="/images/3d_icons/paper.png" class="icons"> ></b></h3>
         <p>함께 프로젝트를 시작해보세요</p>
-         <div class="freelancer-container">
-             <div class="freelancer-box">
-                 <h5><b>개발자명</b></h5>
-                 <p>프론트엔드 개발자</p>
-                 <p>경력 9년</p>
-                 <p>Java, JavaScript, Node.js, Jquery</p>
-             </div>
-             <div class="freelancer-box">
-                 <h5><b>개발자명</b></h5>
-                 <p>프론트엔드 개발자</p>
-                 <p>경력 9년</p>
-                 <p>Java, JavaScript, Node.js, Jquery</p>
-             </div>
-             <div class="freelancer-box">
-                 <h5><b>개발자명</b></h5>
-                 <p>프론트엔드 개발자</p>
-                 <p>경력 9년</p>
-                 <p>Java, JavaScript, Node.js, Jquery</p>
-             </div>
-             <div class="freelancer-box">
-                 <h5><b>개발자명</b></h5>
-                 <p>프론트엔드 개발자</p>
-                 <p>경력 9년</p>
-                 <p>Java, JavaScript, Node.js, Jquery</p>
-             </div>
-             <div class="freelancer-box">
-                 <h5><b>개발자명</b></h5>
-                 <p>프론트엔드 개발자</p>
-                 <p>경력 9년</p>
-                 <p>Java, JavaScript, Node.js, Jquery</p>
-             </div>
-         </div>
+        <div class="freelancer-container">
+            <div class="freelancer-box">
+                <h5><b>개발자명</b></h5>
+                <p>프론트엔드 개발자</p>
+                <p>경력 9년</p>
+                <p>Java, JavaScript, Node.js, Jquery</p>
+            </div>
+            <div class="freelancer-box">
+                <h5><b>개발자명</b></h5>
+                <p>프론트엔드 개발자</p>
+                <p>경력 9년</p>
+                <p>Java, JavaScript, Node.js, Jquery</p>
+            </div>
+            <div class="freelancer-box">
+                <h5><b>개발자명</b></h5>
+                <p>프론트엔드 개발자</p>
+                <p>경력 9년</p>
+                <p>Java, JavaScript, Node.js, Jquery</p>
+            </div>
+            <div class="freelancer-box">
+                <h5><b>개발자명</b></h5>
+                <p>프론트엔드 개발자</p>
+                <p>경력 9년</p>
+                <p>Java, JavaScript, Node.js, Jquery</p>
+            </div>
+            <div class="freelancer-box">
+                <h5><b>개발자명</b></h5>
+                <p>프론트엔드 개발자</p>
+                <p>경력 9년</p>
+                <p>Java, JavaScript, Node.js, Jquery</p>
+            </div>
+        </div>
     </div>
-    </div>
-    <img src="images/ads/assets_ad.png">
 </div>
+<img src="images/ads/assets_ad.png">
+</div>
+<script>
+    const outer = document.querySelector('.ad-outer');
+    const inner = document.querySelector('.ad-inner');
 
+</script>
 {{>layout/footer}}

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.damoa.dto.TossHistoryDTO;
+import com.damoa.repository.interfaces.UserRepository;
 import com.damoa.repository.model.Faq;
 import com.damoa.service.FaqService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,7 @@ import com.damoa.dto.user.UserSignUpDTO;
 import com.damoa.handler.exception.DataDeliveryException;
 import com.damoa.repository.model.User;
 import com.damoa.service.UserService;
+
 import java.io.PrintWriter;
 import java.io.IOException;
 
@@ -79,7 +82,7 @@ public class UserController {
 
     /**
      * 회원가입 페이지
-     * 
+     *
      * @param model
      * @return
      */
@@ -116,7 +119,7 @@ public class UserController {
 
     /**
      * 이메일 중복 체크
-     * 
+     *
      * @param email
      * @return
      */
@@ -140,7 +143,7 @@ public class UserController {
     /**
      * 휴대폰 인증 기능
      * coolsms
-     * 
+     *
      * @param phoneNumber
      * @return
      */
@@ -161,7 +164,7 @@ public class UserController {
 
     /**
      * 휴대폰 번호 중복 체크
-     * 
+     *
      * @param phoneNumber
      * @return
      */
@@ -176,7 +179,7 @@ public class UserController {
 
     /**
      * 회원가입 로직
-     * 
+     *
      * @param dto
      * @return
      */
@@ -200,7 +203,7 @@ public class UserController {
 
     /**
      * 카카오 로그인 API
-     * 
+     *
      * @param code
      * @param response
      * @return
@@ -208,7 +211,7 @@ public class UserController {
      */
     @GetMapping("/kakao")
     public String KakaoLoginPage(@RequestParam(name = "code", required = false) String code,
-            HttpServletResponse response, HttpSession session) throws IOException {
+                                 HttpServletResponse response, HttpSession session) throws IOException {
         // Access Token 발급 요청
         RestTemplate rt1 = new RestTemplate();
         HttpHeaders header1 = new HttpHeaders();
@@ -250,7 +253,7 @@ public class UserController {
 
     /**
      * 카카오 소셜 로그인 추가 정보 요구 페이지
-     * 
+     *
      * @param addKakaoUserInfoDTO
      * @param session
      * @return
@@ -278,7 +281,7 @@ public class UserController {
 
     /**
      * 구글 소셜 로그인 API
-     * 
+     *
      * @param code
      * @param response
      * @return
@@ -330,7 +333,7 @@ public class UserController {
 
     /**
      * 구글 소셜 로그인 추가 정보 요구 페이지
-     * 
+     *
      * @param addGoogleUserInfoDTO
      * @param session
      * @return
@@ -358,7 +361,7 @@ public class UserController {
 
     /**
      * 로그인 페이지
-     * 
+     *
      * @return
      */
     @GetMapping("/sign-in")
@@ -409,6 +412,7 @@ public class UserController {
 
     /**
      * 로그아웃
+     *
      * @param session
      * @return
      */
@@ -417,17 +421,18 @@ public class UserController {
         session.invalidate();
         return "redirect:/main";
     }
+
     @GetMapping("/faq")
-    public String qna(Model model){
+    public String qna(Model model) {
         List<Faq> faqList = faqService.getAllQna();
-        model.addAttribute("faqList",faqList);
+        model.addAttribute("faqList", faqList);
         return "user/faq_list";
     }
 
     @GetMapping("/faq-detail/{id}")
-    public String qnaDetail(@PathVariable int id, Model model){
+    public String qnaDetail(@PathVariable int id, Model model) {
         Faq faq = faqService.getFaqById(id);
-        model.addAttribute("faq",faq);
+        model.addAttribute("faq", faq);
         return "user/faq_detail";
     }
 
@@ -446,6 +451,7 @@ public class UserController {
                 .userType(user.getUserType())
                 .socialType(user.getSocialType())
                 .phoneNumber(user.getPhoneNumber())
+                .point(user.getPoint())
                 .build();
 
         boolean isFreelancer = user.getUserType().equals("freelancer");
@@ -485,5 +491,25 @@ public class UserController {
         return "redirect:/user/mypage";
     }
 
+    @GetMapping("/income")
+    public String payDetailPage(@SessionAttribute(name = "principal") User principal, Model model) {
+
+        List<TossHistoryDTO> paymentList = userService.findPayHistoryById(principal.getId());
+        boolean isFreelancer = principal.getUserType().equals("freelancer");
+        boolean isCompany = principal.getUserType().equals("company");
+
+        model.addAttribute("freelancer", isFreelancer);
+        model.addAttribute("company", isCompany);
+        model.addAttribute("paymentList", paymentList);
+        return "user/paymentsDetail";
+    }
+
+    @ResponseBody
+    @GetMapping("/fetchRefundStatus")
+    public ResponseEntity<?> updateRefundReqStatus(@RequestParam("id") int historyId) {
+        userService.updateTossHistoryStat(historyId);
+        String msg = "업데이트 완료";
+        return ResponseEntity.ok(msg);
+    }
 
 }

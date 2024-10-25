@@ -41,12 +41,8 @@ public class PaymentService {
     }
 
 
-    public List<TossHistoryDTO> test(){
-        return paymentHistoryRepository.viewAll();
-    }
-
     @Transactional
-    public void insertTossHistory(TossApproveResponse response, int principalId){
+    public void insertTossHistory(TossApproveResponse response, int principalId) {
         int result = 0;
         TossHistoryDTO dto = TossHistoryDTO.builder()
                 .paymentKey(response.getPaymentKey())
@@ -61,9 +57,36 @@ public class PaymentService {
         result = paymentHistoryRepository.insertTossHistory(dto);
 
 
-        if(result != 1){
+        if (result != 1) {
             System.out.println("결제 실패 했어요..");
         }
 
+    }
+
+    public TossHistoryDTO findPaymentHistory(int id) {
+
+        TossHistoryDTO entity = paymentHistoryRepository.findById(id);
+
+        return entity;
+    }
+
+    public List<TossHistoryDTO> findAll() {
+
+        List<TossHistoryDTO> entity = paymentHistoryRepository.viewAll();
+
+        return entity;
+    }
+
+    @Transactional
+    public void updatePoint(String amountStr, Integer id) {
+
+        int currentPoint = paymentHistoryRepository.findPointById(id);
+        int amount = currentPoint + Integer.parseInt(amountStr);
+        paymentHistoryRepository.updateUserPoint(amount, id);
+    }
+
+    public List<TossHistoryDTO> findRequestedRefund() {
+        List<TossHistoryDTO> dto = paymentHistoryRepository.findHistoryByStatus();
+        return dto;
     }
 }
