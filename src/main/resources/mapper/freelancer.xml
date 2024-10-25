@@ -133,6 +133,21 @@ LIMIT #{size} OFFSET #{offset}
     );
     </insert>
 
+    <update id="updateFreelancerBasicInfo">
+    UPDATE freelancer_tb
+    SET 
+    job_part = #{jobPart},           -- 직무 (ex. 프론트엔드, 백엔드)
+    working_style = #{workingStyle},  -- 근무 방식 (재택, 출퇴근)
+    expected_salary = #{expectedSalary}, -- 희망 연봉
+    salary_type = #{salaryType},      -- 급여 방식 (시급, 월급)
+    origin_file_name = #{originFileName}, -- 포트폴리오 원본 파일명
+    upload_file_name = #{uploadFileName}, -- 저장된 포트폴리오 파일명
+    detail = #{detail},               -- 상세 소개
+    link = #{link}                    -- 링크 (ex. github, tistory, notion)
+    WHERE 
+    user_id = #{userId};
+    </update>
+
     <!-- 프리랜서 기본 정보 조회 쿼리 -->
     <select id="findFreelancerBasicInfo">
         SELECT 

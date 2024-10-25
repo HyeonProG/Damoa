@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ import com.damoa.repository.model.Freelancer;
 import com.damoa.repository.model.Skill;
 import com.damoa.repository.model.User;
 import com.damoa.service.FreelancerService;
+import com.damoa.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/freelancer")
 public class FreelancerController {
 
+    @Autowired
     private final FreelancerService freelancerService;
 
     /**
@@ -61,6 +64,53 @@ public class FreelancerController {
 
         model.addAttribute("freelancer", freelancer); // userId 추가
         return "freelancer/basic_info"; // 템플릿 반환
+    }
+
+    @GetMapping("/insert-basic-info")
+    public String insertBasicInfoPage(HttpSession session, Model model) {
+        // 세션에서 사용자 정보 가져오기
+        User user = (User) session.getAttribute("principal");
+
+        // 사용자가 로그인하지 않았을 경우 로그인 페이지로 리디렉션
+        if (user == null) {
+            return "redirect:/user/sign-in";
+        }
+
+        // 사용자가 프리랜서인지 확인
+        if (!"freelancer".equals(user.getUserType())) {
+            throw new IllegalArgumentException("프리랜서만 접근할 수 있습니다.");
+        }
+
+        // 모든 경력 조회
+        List<Career> careers = freelancerService.findAllCareers();
+
+        model.addAttribute("careers", careers);
+        model.addAttribute("userId", user.getId()); // userId 추가
+        return "freelancer/insert_basic_info"; // 템플릿 반환
+    }
+
+    
+    @PostMapping("/insert-basic-info")
+    public String insertBasicInfo(@ModelAttribute FreelancerBasicInfoDTO dto, UserSignUpDTO userSignUpDTO,
+            HttpSession session) {
+        // 세션에서 사용자 정보 가져오기
+        User user = (User) session.getAttribute("principal");
+
+        // 사용자가 로그인하지 않았을 경우 로그인 페이지로 리디렉션
+        if (user == null) {
+            return "redirect:/user/sign-in";
+        }
+
+        // 사용자가 프리랜서인지 확인
+        if (!"freelancer".equals(user.getUserType())) {
+            throw new IllegalArgumentException("프리랜서만 접근할 수 있습니다.");
+        }
+
+        // 업데이트 로직
+        freelancerService.insertFreelancerBasicInfo(dto, userSignUpDTO);
+
+        // 업데이트 완료 후 적절한 페이지로 리디렉션 (예: 기본 정보 페이지)
+        return "redirect:/freelancer/basic-info";
     }
 
     /**
@@ -129,7 +179,7 @@ public class FreelancerController {
         }
 
         // 업데이트 로직
-        freelancerService.insertFreelancerBasicInfo(dto, userSignUpDTO);
+        freelancerService.updateFreelancerBasicInfo(dto, userSignUpDTO);
 
         // 업데이트 완료 후 적절한 페이지로 리디렉션 (예: 기본 정보 페이지)
         return "redirect:/freelancer/basic-info";

@@ -57,7 +57,12 @@
             </div>
 
             <div class="text-center">
+                {{#freelancer.jobPart}}
                 <a href="/freelancer/update-basic-info" class="btn btn-primary btn-lg">정보 수정</a>
+                {{/freelancer.jobPart}}
+                {{^freelancer.jobPart}}
+                <a href="/freelancer/insert-basic-info" class="btn btn-success btn-lg">등록하기</a>
+                {{/freelancer.jobPart}}
             </div>
         </div>
     </div>
