@@ -117,7 +117,7 @@ public class AdminController {
 //        return "admin/admin_user_list";
 //    }
     @GetMapping("/management/{currentPageNum}")
-    public String UserListPage(@PathVariable(required = false)Integer currentPageNum, Model model){
+    public String UserListPage(@PathVariable(required = false) Integer currentPageNum, Model model) {
 
         List<User> allUser = adminService.getAllUser();
         int totalUser = allUser.size();
@@ -188,92 +188,92 @@ public class AdminController {
     }
 
     /**
-     *  http://localhost:8080/admin/list/company
+     * http://localhost:8080/admin/list/company
+     *
      * @param model
      * @return
      */
     @GetMapping("/list/company/{currentPageNum}") // URL의 {type} 부분을 변수로 처리
-    public String companyReviewList(@PathVariable(required = false)Integer currentPageNum, Model model) {
+    public String companyReviewList(@PathVariable(required = false) Integer currentPageNum, Model model) {
         int pageSize = 6;
         int offset;
 
         int totallist = reviewService.countReview(); // 총몇개의 row 인지 확인
         int totalPages = (int) Math.ceil((double) totallist / (double) pageSize); //  2.1 = 13 / 6
 
-        if(currentPageNum == null || currentPageNum <= 1){
+        if (currentPageNum == null || currentPageNum <= 1) {
             currentPageNum = 2;
             offset = 0;
-        } else{
-            offset = (currentPageNum -1) * pageSize;
+        } else {
+            offset = (currentPageNum - 1) * pageSize;
         }
         int nextPageNum;
         int beforePageNum;
 
-        if(currentPageNum >= totalPages -1 && totalPages > 3){
-            currentPageNum = totalPages -1;
-            nextPageNum = currentPageNum +1;
-            beforePageNum = currentPageNum -1;
-        } else if (currentPageNum >= totalPages -1){
+        if (currentPageNum >= totalPages - 1 && totalPages > 3) {
+            currentPageNum = totalPages - 1;
+            nextPageNum = currentPageNum + 1;
+            beforePageNum = currentPageNum - 1;
+        } else if (currentPageNum >= totalPages - 1) {
             currentPageNum = 2;
             nextPageNum = 3;
             beforePageNum = 1;
         }
 
-        List<CompanyReviewDTO> list = reviewService.getComapanyReviews(pageSize,offset);
+        List<CompanyReviewDTO> list = reviewService.getComapanyReviews(pageSize, offset);
 
-        model.addAttribute("list",list);
-        model.addAttribute("totallist",totallist);
-        model.addAttribute("totalPages",totalPages);
-        model.addAttribute("currentPageNum",currentPageNum);
-        model.addAttribute("beforePageNum",currentPageNum -1);
-        model.addAttribute("nextPageNum",currentPageNum +1);
+        model.addAttribute("list", list);
+        model.addAttribute("totallist", totallist);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPageNum", currentPageNum);
+        model.addAttribute("beforePageNum", currentPageNum - 1);
+        model.addAttribute("nextPageNum", currentPageNum + 1);
 
         return "admin/company_list";
     }
 
     @GetMapping("/list/freelancer/{currentPageNum}")
-    public String freelancerReviewList(@PathVariable(required = false)Integer currentPageNum, Model model){
+    public String freelancerReviewList(@PathVariable(required = false) Integer currentPageNum, Model model) {
         int pageSize = 6;
         int offset;
 
         int totallist = reviewService.countFreelancerReview(); // 총몇개의 row 인지 확인
         int totalPages = (int) Math.ceil((double) totallist / (double) pageSize); //  2.1 = 13 / 6
 
-        if(currentPageNum == null || currentPageNum <= 1){
+        if (currentPageNum == null || currentPageNum <= 1) {
             currentPageNum = 2;
             offset = 0;
-        } else{
-            offset = (currentPageNum -1) * pageSize;
+        } else {
+            offset = (currentPageNum - 1) * pageSize;
         }
         int nextPageNum;
         int beforePageNum;
 
-        if(currentPageNum >= totalPages -1 && totalPages > 3){
-            currentPageNum = totalPages -1;
-            nextPageNum = currentPageNum +1;
-            beforePageNum = currentPageNum -1;
-        } else if (currentPageNum >= totalPages -1){
+        if (currentPageNum >= totalPages - 1 && totalPages > 3) {
+            currentPageNum = totalPages - 1;
+            nextPageNum = currentPageNum + 1;
+            beforePageNum = currentPageNum - 1;
+        } else if (currentPageNum >= totalPages - 1) {
             currentPageNum = 2;
             nextPageNum = 3;
             beforePageNum = 1;
         }
-        List<FreelancerReviewDTO> list = reviewService.findFreelancerReview(pageSize,offset);
+        List<FreelancerReviewDTO> list = reviewService.findFreelancerReview(pageSize, offset);
 
-        model.addAttribute("list",list);
-        model.addAttribute("totallist",totallist);
-        model.addAttribute("totalPages",totalPages);
-        model.addAttribute("currentPageNum",currentPageNum);
-        model.addAttribute("beforePageNum",currentPageNum -1);
-        model.addAttribute("nextPageNum",currentPageNum +1);
+        model.addAttribute("list", list);
+        model.addAttribute("totallist", totallist);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPageNum", currentPageNum);
+        model.addAttribute("beforePageNum", currentPageNum - 1);
+        model.addAttribute("nextPageNum", currentPageNum + 1);
 
         return "admin/freelancer_list";
     }
 
 
-
-
     /**
      * 월별 프로젝트 등록 수 데이터 반환
+     *
      * @return
      */
     @GetMapping("/monthly-projects")
@@ -284,6 +284,7 @@ public class AdminController {
 
     /**
      * 월별 프리랜서 등록 수 데이터 반환
+     *
      * @return
      */
     @GetMapping("/monthly-freelancers")
@@ -307,38 +308,32 @@ public class AdminController {
     }
 
     @PostMapping("/companyreview/delete/{id}")
-    public String deleteCompany(@PathVariable int id){
+    public String deleteCompany(@PathVariable int id) {
         reviewService.deleteCompanyReview(id);
-        System.out.println("아무말");
-        return  "admin/list/company/1";
+        return "redirect:/admin/list/company/1";
     }
 
     @PostMapping("/freelancerreview/delete/{id}")
-    public String deleteFreelancer(@PathVariable int id){
+    public String deleteFreelancer(@PathVariable int id) {
         reviewService.deleteFreelancerReview(id);
-        System.out.println("프리랜서삭제");
-        return "admin/list/freelancer/1";
+        return "redirect:/admin/list/freelancer/1";
 
     }
+
     @GetMapping("/list/company/detail/{id}")
-    public String companyDetail(@PathVariable(name = "id") int id, Model model){
+    public String companyDetail(@PathVariable(name = "id") int id, Model model) {
         CompanyReviewDetailDTO detail = reviewService.getCompanyDetails(id);
-        model.addAttribute("detail",detail);
+        model.addAttribute("detail", detail);
         return "admin/company_list_detail";
     }
 
 
-
     @GetMapping("/list/freelancer/detail/{id}")
-    public String freelancerDetail(@PathVariable(name = "id")int id, Model model){
+    public String freelancerDetail(@PathVariable(name = "id") int id, Model model) {
         FreelancerReviewDetailDTO detailDTO = reviewService.getFreelancerDetails(id);
-        model.addAttribute("detailDTO",detailDTO);
+        model.addAttribute("detailDTO", detailDTO);
         return "admin/freelancer_list_detail";
     }
-
-
-
-
 
 
 }
