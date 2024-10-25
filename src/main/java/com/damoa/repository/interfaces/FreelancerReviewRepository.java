@@ -1,5 +1,6 @@
 package com.damoa.repository.interfaces;
 
+import com.damoa.dto.admin.FreelancerReviewDTO;
 import com.damoa.repository.model.FreelancerReview;
 import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
@@ -19,4 +20,8 @@ public interface FreelancerReviewRepository {
 
     // GCP 프리랜서 리뷰 데이터 실행 후 MySQL로 데이터 insert
     void insertFreelancerReview(FreelancerReview freelancerReview);
+
+    List<FreelancerReviewDTO> findFreelancerReview(int limit, int offset);
+
+    int countFreelancerReview();
 }

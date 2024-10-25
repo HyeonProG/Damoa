@@ -1,0 +1,53 @@
+{{> admin/admin_header}}
+
+<div class="container mt-4">
+    <h2 class="mb-4">기업 리뷰</h2>
+
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>프로젝트 이름</th>
+                <th>사용자 이름</th>
+                <th>주요 작업</th>
+                <th>전체 점수</th>
+                <th>응답</th>
+                <th>상세 보기</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#list}}
+                <tr>
+                    <td>{{projectName}}</td>
+                    <td>{{username}}</td>
+                    <td>{{mainTasks}}</td>
+                    <td>{{overallScore}}</td>
+                    <td>{{responseData}}</td>
+                    <td>
+                        <a href="/admin/company/list/detail/{{id}}" class="btn btn-primary">리뷰 상세 보기</a>
+                    </td>
+                </tr>
+            {{/list}}
+            {{^list}}
+                <tr>
+                    <td colspan="6" class="text-center">
+                        <div class="alert alert-warning" role="alert">
+                            기업리뷰가 없습니다.
+                        </div>
+                    </td>
+                </tr>
+            {{/list}}
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="text-center mt-4">
+        <button onclick="location.href='/admin/list/company/{{beforePageNum}}'">{{beforePageNum}}</button>
+        <button onclick="location.href='/admin/list/company/{{currentPageNum}}'">{{currentPageNum}}</button>
+        <button onclick="location.href='/admin/list/company/{{nextPageNum}}'">{{nextPageNum}}</button>
+        </div>
+
+
+    </div>
+</div>
