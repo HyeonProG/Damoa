@@ -38,8 +38,9 @@
     </select>
 
     <select id="companyReviewDetail" resultType="com.damoa.dto.admin.CompanyReviewDetailDTO">
-        select * from company_review
+        select * from company_review where id = #{id}
     </select>
+
 
 </mapper>
 

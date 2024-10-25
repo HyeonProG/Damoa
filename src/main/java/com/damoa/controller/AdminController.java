@@ -1,14 +1,13 @@
 package com.damoa.controller;
 
 import com.damoa.constants.UserType;
+import com.damoa.dto.TossHistoryDTO;
 import com.damoa.dto.admin.CompanyReviewDTO;
 import com.damoa.dto.admin.FreelancerReviewDTO;
 import com.damoa.dto.user.MonthlyRegisterDTO;
 import com.damoa.dto.user.MonthlyVisitorDTO;
 import com.damoa.repository.model.Project;
-import com.damoa.service.ProjectService;
-import com.damoa.service.ReviewService;
-import com.damoa.service.VisitorService;
+import com.damoa.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -23,7 +22,6 @@ import com.damoa.dto.admin.AdminSignInDTO;
 import com.damoa.handler.exception.DataDeliveryException;
 import com.damoa.repository.model.Admin;
 import com.damoa.repository.model.User;
-import com.damoa.service.AdminService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -50,6 +48,9 @@ public class AdminController {
 
     @Autowired
     private final ProjectService projectService;
+
+    @Autowired
+    private final PaymentService payService;
 
     /**
      * 관리자 메인 페이지
