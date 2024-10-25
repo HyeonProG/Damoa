@@ -51,7 +51,10 @@ public class AccountController {
         List<Freelancer> freelancerList = freelancerService.findAllFreelancers(1, 3);
         model.addAttribute("projectList",projectList);
         model.addAttribute("isLogin",user);
-
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+        }
         model.addAttribute("freelancerList", freelancerList);
         return "user/index";
     }

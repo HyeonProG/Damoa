@@ -61,7 +61,7 @@ public class FreelancerController {
 
         // 프리랜서의 기본 정보 가져오기
         Freelancer freelancer = freelancerService.findUserIdJoinFreelancerTb(user.getId());
-
+        model.addAttribute("isLogin", user);
         model.addAttribute("freelancer", freelancer); // userId 추가
         return "freelancer/basic_info"; // 템플릿 반환
     }
@@ -84,6 +84,7 @@ public class FreelancerController {
         // 모든 경력 조회
         List<Career> careers = freelancerService.findAllCareers();
 
+        model.addAttribute("isLogin", user);
         model.addAttribute("careers", careers);
         model.addAttribute("userId", user.getId()); // userId 추가
         return "freelancer/insert_basic_info"; // 템플릿 반환
@@ -151,6 +152,7 @@ public class FreelancerController {
             model.addAttribute("freelancer", user.getUserType());
         }
 
+        model.addAttribute("isLogin", user);
         model.addAttribute("userId", user.getId()); // userId 추가
         return "freelancer/update_basic_info"; // 템플릿 반환
     }
@@ -211,6 +213,7 @@ public class FreelancerController {
         List<Career> freelancerCareers = freelancerService.findCareersByFreelancerId(user.getId());
         model.addAttribute("freelancerCareers", freelancerCareers);
 
+        model.addAttribute("isLogin", user);
         model.addAttribute("freelancer", user.getUserType());
 
         return "freelancer/career"; // 경력 관리 템플릿 반환
@@ -290,6 +293,7 @@ public class FreelancerController {
         List<Skill> freelancerSkills = freelancerService.findSkillsByFreelancerId(user.getId());
         model.addAttribute("freelancerSkills", freelancerSkills);
 
+        model.addAttribute("isLogin", user);
         model.addAttribute("freelancer", user.getUserType());
 
         return "freelancer/skills"; // 스킬 관리 템플릿 반환
@@ -355,7 +359,8 @@ public class FreelancerController {
      * @return
      */
     @GetMapping("/list")
-    public String findFreelancerPage(Model model) {
+    public String findFreelancerPage(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("principal");
         // 평균 급여 계산
         double averageSalary = freelancerService.countAverageFreelancerExpectedSalary();
 
@@ -370,7 +375,11 @@ public class FreelancerController {
         // 모든 직무 조회
         List<Career> careers = freelancerService.findAllCareers();
         model.addAttribute("careers", careers);
-
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+        }
+        model.addAttribute("isLogin", user);
         model.addAttribute("averageSalary", formattedSalary);
         return "/freelancer/freelancer_list";
     }
@@ -435,6 +444,7 @@ public class FreelancerController {
 
         // 모델에 프리랜서 정보 추가
         model.addAttribute("freelancer", freelancer);
+        model.addAttribute("isLogin", user);
 
         return "freelancer/detail";
     }
