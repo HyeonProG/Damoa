@@ -35,7 +35,7 @@ public interface UserRepository {
 
     void updateStatus(int id);
     // 사용자 ID로 사용자 정보 조회
-    PrincipalDTO findUserById(@Param("id") int id);
+    PrincipalDTO findUserById(int id);
 
     // 프리랜서 목록 조회 (프리랜서 사용자)
     List<User> findAllFreelancers();

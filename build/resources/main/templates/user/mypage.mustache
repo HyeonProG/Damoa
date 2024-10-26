@@ -186,19 +186,20 @@
     <div class="content">
         <h1>마이페이지</h1>
 
-        <div class="user-info">
-            <p><strong>이메일:</strong> {{user.email}}</p>
-            <p><strong>이름:</strong> {{user.username}}</p>
-            <p><strong>휴대전화:</strong> {{user.phoneNumber}}</p>
-            <p><strong>사용자 유형:</strong> {{user.userType}}</p>
-            <p><strong>소셜 로그인 유형:</strong> {{user.socialType}}</p>
-            <p><strong>보유 포인트:</strong> {{user.point}}</p>
+        {{#user}}
+            <div class="user-info">
+                <p><strong>이메일:</strong> {{email}}</p>
+                <p><strong>이름:</strong> {{username}}</p>
+                <p><strong>휴대전화:</strong> {{phoneNumber}}</p>
+                <p><strong>사용자 유형:</strong> {{userType}}</p>
+                <p><strong>소셜 로그인 유형:</strong> {{socialType}}</p>
+                <p><strong>보유 포인트:</strong> {{point}}</p>
 
-            <!-- 충전 버튼 -->
-            <a class="purchase--btn">충전하기</a>
-            <button id="editButton" class="btn btn-secondary">정보 수정</button>
-        </div>
-
+                <!-- 충전 버튼 -->
+                <a class="purchase--btn">충전하기</a>
+                <button id="editButton" class="btn btn-secondary">정보 수정</button>
+            </div>
+        {{/user}}
         <div class="edit-info">
             <form action="/user/update" method="POST">
                 <p><strong>이름 수정:</strong>
@@ -239,7 +240,7 @@
     btn.addEventListener('click', function(event) {
         event.preventDefault();
         if (confirm("포인트를 충전하시겠습니까?")) {
-            newWindow = window.open('/toss/store', '_blank', 'width=800,height=600');
+            newWindow = window.open('/toss/store', '_blank', 'width=650,height=650');
         }
     });
 });

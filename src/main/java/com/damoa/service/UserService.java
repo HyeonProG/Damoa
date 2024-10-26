@@ -190,8 +190,7 @@ public class UserService {
     public String formatPhoneNumber(String phoneNumber) {
         if (phoneNumber != null && phoneNumber.length() == 11) {
             return phoneNumber.replaceFirst("(\\d{3})(\\d{4})(\\d+)", "$1-$2-$3");
-        }
-        else if (phoneNumber != null && phoneNumber.length() == 10) {
+        } else if (phoneNumber != null && phoneNumber.length() == 10) {
             return phoneNumber.replaceFirst("(\\d{2})(\\d{4})(\\d+)", "$1-$2-$3");
         }
         return phoneNumber;
