@@ -83,7 +83,8 @@ public class FreelancerService {
      * @return
      */
     public List<Freelancer> findAllFreelancers(int page, int size) {
-        return freelancerRepository.findAllFreelancers(page, size);
+        int offset = (page - 1) * size;
+        return freelancerRepository.findAllFreelancers(offset, size);
     }
 
     public List<Freelancer> findAllFreelancersBySearch(int page, int size, String keyword) {

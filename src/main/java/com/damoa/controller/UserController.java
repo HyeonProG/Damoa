@@ -415,7 +415,7 @@ public class UserController {
     }
 
     @GetMapping("/faq-detail/{id}")
-    public String qnaDetail(@PathVariable int id, Model model) {
+    public String qnaDetail(@PathVariable(name = "id") int id, Model model) {
         Faq faq = faqService.getFaqById(id);
         model.addAttribute("faq", faq);
         return "user/faq_detail";

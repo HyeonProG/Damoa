@@ -10,70 +10,70 @@
 
     <!-- 프리랜서 리스트 출력 -->
     <select id="findAllFreelancers">
- SELECT 
-    f.id, 
-    f.user_id, 
-    u.username, 
-    f.job_part, 
-    f.working_style, 
-    f.expected_salary, 
-    f.salary_type, 
-    f.detail, 
-    GROUP_CONCAT(DISTINCT s.name) AS skills, 
-    GROUP_CONCAT(DISTINCT c.career) AS careers 
-FROM 
-    freelancer_tb f 
-LEFT JOIN 
-    user_tb u ON f.user_id = u.id 
-LEFT JOIN 
-    freelancer_skills_tb fs ON f.user_id = fs.user_id 
-LEFT JOIN 
-    skill_tb s ON fs.skill_id = s.id 
-LEFT JOIN 
-    freelancer_career_tb fc ON f.user_id = fc.user_id 
-LEFT JOIN 
-    career c ON fc.career_id = c.id  
-GROUP BY 
-    f.id, f.user_id, u.username, f.job_part, f.working_style, f.expected_salary, f.salary_type, f.detail 
-LIMIT #{size} OFFSET #{offset}
+    SELECT 
+        f.id, 
+        f.user_id, 
+        u.username, 
+        f.job_part, 
+        f.working_style, 
+        f.expected_salary, 
+        f.salary_type, 
+        f.detail, 
+        GROUP_CONCAT(DISTINCT s.name) AS skills, 
+        GROUP_CONCAT(DISTINCT c.career) AS careers 
+    FROM 
+        freelancer_tb f 
+    LEFT JOIN 
+        user_tb u ON f.user_id = u.id 
+    LEFT JOIN 
+        freelancer_skills_tb fs ON f.user_id = fs.user_id 
+    LEFT JOIN 
+        skill_tb s ON fs.skill_id = s.id 
+    LEFT JOIN 
+        freelancer_career_tb fc ON f.user_id = fc.user_id 
+    LEFT JOIN 
+        career c ON fc.career_id = c.id  
+    GROUP BY 
+        f.id, f.user_id, u.username, f.job_part, f.working_style, f.expected_salary, f.salary_type, f.detail 
+    LIMIT #{size} OFFSET #{offset}
     </select>
 
     <select id="findAllFreelancersBySearch">
-SELECT 
-    f.id, 
-    f.user_id, 
-    u.username, 
-    f.job_part, 
-    f.working_style, 
-    f.expected_salary, 
-    f.salary_type, 
-    f.detail, 
-    GROUP_CONCAT(DISTINCT s.name) AS skills, 
-    GROUP_CONCAT(DISTINCT c.career) AS careers 
-FROM 
-    freelancer_tb f 
-LEFT JOIN 
-    user_tb u ON f.user_id = u.id 
-LEFT JOIN 
-    freelancer_skills_tb fs ON f.user_id = fs.user_id 
-LEFT JOIN 
-    skill_tb s ON fs.skill_id = s.id 
-LEFT JOIN 
-    freelancer_career_tb fc ON f.user_id = fc.user_id 
-LEFT JOIN 
-    career c ON fc.career_id = c.id 
-WHERE 
-    f.user_id IN (
-        SELECT DISTINCT fs2.user_id 
-        FROM freelancer_skills_tb fs2 
-        LEFT JOIN skill_tb s2 ON fs2.skill_id = s2.id 
-        WHERE s2.name LIKE CONCAT('%', #{keyword}, '%') 
-    ) 
-    OR f.job_part LIKE CONCAT('%', #{keyword}, '%') 
-    OR f.working_style LIKE CONCAT('%', #{keyword}, '%') 
-GROUP BY 
-    f.id, f.user_id, u.username, f.job_part, f.working_style, f.expected_salary, f.salary_type, f.detail 
-LIMIT #{size} OFFSET #{offset}
+    SELECT 
+        f.id, 
+        f.user_id, 
+        u.username, 
+        f.job_part, 
+        f.working_style, 
+        f.expected_salary, 
+        f.salary_type, 
+        f.detail, 
+        GROUP_CONCAT(DISTINCT s.name) AS skills, 
+        GROUP_CONCAT(DISTINCT c.career) AS careers 
+    FROM 
+        freelancer_tb f 
+    LEFT JOIN 
+        user_tb u ON f.user_id = u.id 
+    LEFT JOIN 
+        freelancer_skills_tb fs ON f.user_id = fs.user_id 
+    LEFT JOIN 
+        skill_tb s ON fs.skill_id = s.id 
+    LEFT JOIN 
+        freelancer_career_tb fc ON f.user_id = fc.user_id 
+    LEFT JOIN 
+        career c ON fc.career_id = c.id 
+    WHERE 
+        f.user_id IN (
+            SELECT DISTINCT fs2.user_id 
+            FROM freelancer_skills_tb fs2 
+            LEFT JOIN skill_tb s2 ON fs2.skill_id = s2.id 
+            WHERE s2.name LIKE CONCAT('%', #{keyword}, '%') 
+        ) 
+        OR f.job_part LIKE CONCAT('%', #{keyword}, '%') 
+        OR f.working_style LIKE CONCAT('%', #{keyword}, '%') 
+    GROUP BY 
+        f.id, f.user_id, u.username, f.job_part, f.working_style, f.expected_salary, f.salary_type, f.detail 
+    LIMIT #{size} OFFSET #{offset}
     </select>
 
 
