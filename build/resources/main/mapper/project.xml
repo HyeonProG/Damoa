@@ -53,16 +53,21 @@
         SELECT * FROM project_tb WHERE project_name LIKE CONCAT('%', #{keyword}, '%');
     </select>
 
-    <select id="getProjectForPagingForMyPage"  parameterType="com.damoa.repository.model.Project">
+    <select id="getProjectForPagingForMyPage" parameterType="com.damoa.repository.model.Project">
         SELECT * FROM project_tb
         WHERE status = 1 and user_id =#{userId}
         LIMIT #{limit} OFFSET #{offset}
     </select>
 
-    <select id="getProjectForAd"  parameterType="com.damoa.repository.model.Project">
+    <select id="selectProjectForSelect" parameterType="com.damoa.dto.user.SelectDTO" resultType="com.damoa.repository.model.Project">
         SELECT * FROM project_tb
-        WHERE status = 1 and advertise_status = 2
+        <where>
+            <if test="selectDTO.workType != 0">AND working_style = #{selectDTO.workType}</if>
+            <if test="selectDTO.address != 0">AND address = #{selectDTO.address}</if>
+            <if test="selectDTO.progress != 0">AND progress = #{selectDTO.progress}</if>
+        </where>
         LIMIT #{limit} OFFSET #{offset}
     </select>
+
 
 </mapper>

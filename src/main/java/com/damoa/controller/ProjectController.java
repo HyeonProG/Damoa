@@ -2,6 +2,7 @@ package com.damoa.controller;
 
 import com.damoa.dto.ProjectSaveDTO;
 import com.damoa.dto.user.ProjectWaitDTO;
+import com.damoa.dto.user.SelectDTO;
 import com.damoa.handler.exception.DataDeliveryException;
 import com.damoa.repository.model.Project;
 import com.damoa.repository.model.ProjectWait;
@@ -22,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -61,10 +63,7 @@ public class ProjectController {
      */
     @PostMapping("/save")
     public String projectSaveProc(@ModelAttribute("reqDTO") ProjectSaveDTO reqDTO){
-        System.out.println("~~~~~~~~~~~~~~~~~~~~");
-        System.out.println(reqDTO);
-
-
+        
         projectService.createProject(reqDTO);
 
         List<String> strList=new ArrayList<>();
@@ -73,15 +72,10 @@ public class ProjectController {
             String aa=reqDTO.getTotalSkills().get(a);
             String skill = aa.replaceAll("[^\\w.#/]", "");
             strList.add(skill);
-            System.out.println("~~~~~~~~~~~~~~"+skill);
         }
 
         int userId = 1;
-        System.out.println("~~~~~~~~~~");
-        System.out.println(strList);
         skillList = skillService.findSkillListByName(strList);
-        System.out.println("~~~~~~~~~~");
-        System.out.println(skillList);
         skillService.addProjectSkillData(skillList, userId);
 
         return "project/save_complete";
@@ -111,15 +105,11 @@ public class ProjectController {
         offset=limit*(currentPageNum-1);
         // 페이징 처리 된 프로젝트들
         List<Project> projectListForPaging = projectService.getProjectForPaging(limit,offset);
-        // 광고 받은 프로젝트들
-        List<Project> projectListForAdvertise = projectService.getProjectForAdvertise(2,0);
 
         model.addAttribute("totalPageNum",totalPageNum);
         model.addAttribute("totalProjectNum",totalProjectNum);
         model.addAttribute("currentPageNum",currentPageNum);
         model.addAttribute("projectListForPaging",projectListForPaging);
-        model.addAttribute("projectListForAdvertise",projectListForAdvertise);
-
 
         return "project/list";
     }
@@ -208,6 +198,12 @@ public class ProjectController {
         return "user/my_project";
     }
 
+    /**
+     * 프로젝트 상세 페이지 보여주기
+     * @param id
+     * @param model
+     * @return
+     */
     @GetMapping("/my-project/detail/{id}")
     private String myProjectDetailPage(@PathVariable(name="id", required = false)int id, Model model){
         Project project = projectService.findProjectById(id);
@@ -216,6 +212,27 @@ public class ProjectController {
         return "user/my_project_detail";
     }
 
+    @ResponseBody
+    @PostMapping("/send-fetched-data")
+    private List<Project> sendFetchedData(@RequestBody SelectDTO select){
+
+        // 페이징을 위한 전체 리스트 뽑아오기
+        List<Project> projectList = projectService.getAllProject();
+        int totalProjectNum = projectList.size();
+
+        // 페이징 처리
+        // limit - 한 페이지에 몇 개의 프로젝트가 들어갈 건가?
+        int limit =10;
+        // 총 페이지 수
+        int totalPageNum = totalProjectNum/limit;
+
+        // offset - 몇 번째 프로젝트부터 볼 것인가
+        int offset=0;
+        // 페이징 처리 된 프로젝트들
+        List<Project> projectListForSelect = projectService.getProjectForSelect(select, limit,offset);
+
+        return projectListForSelect;
+    }
 
 
 }

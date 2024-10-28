@@ -1,6 +1,7 @@
 package com.damoa.repository.interfaces;
 
 import com.damoa.dto.MonthlyProjectDTO;
+import com.damoa.dto.user.SelectDTO;
 import com.damoa.repository.model.Project;
 import com.damoa.repository.model.ProjectWait;
 import org.apache.ibatis.annotations.Mapper;
@@ -68,4 +69,10 @@ public interface ProjectRepository {
 
     // 광고받은 프로젝트들 검색
     List<Project> getProjectForAd(@Param("limit")int limit, @Param("offset")int offset);
+
+    // 테스트
+    int test(@Param("str")String str);
+
+    // 검색 조건에 따라 검색
+    List<Project> selectProjectForSelect(@Param("selectDTO")SelectDTO selectDTO, @Param("limit")int limit, @Param("offset")int offset);
 }
