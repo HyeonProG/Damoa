@@ -18,4 +18,12 @@
         select * from notice_tb where id = #{id}
     </select>
 
+    <select id="findNoticeList" resultType="com.damoa.repository.model.Notice">
+        select * from notice_tb limit #{page} offset #{offset}
+    </select>
+
+    <select id="getNoticeCount" resultType="int">
+        select count(*) from notice_tb;
+    </select>
+
 </mapper>

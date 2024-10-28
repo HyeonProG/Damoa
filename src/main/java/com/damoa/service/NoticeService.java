@@ -27,4 +27,14 @@ public class NoticeService {
     public Notice getNotice(int id){
         return noticeRepository.getNotice(id);
     }
+
+    public List<Notice> findNoticeList(int page, int size) {
+        int offset = (page - 1) * size;
+        return noticeRepository.findNoticeList(offset, size);
+    }
+
+    public int getNoticeCount() {
+        return noticeRepository.getNoticeCount();
+    }
+
 }
