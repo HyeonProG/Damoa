@@ -17,6 +17,8 @@ public interface UserRepository {
 
     public int checkDuplicateEmail(@Param("email") String email); // 이메일 중복 체크
 
+    User findById(int id);
+
     public User findByEmail(String email); // 이메일로 유저 확인
 
     public int findDuplicatePhoneNumber(String phoneNumber); // 휴대폰 번호 중복 확인
@@ -33,7 +35,7 @@ public interface UserRepository {
 
     void updateStatus(int id);
     // 사용자 ID로 사용자 정보 조회
-    PrincipalDTO findUserById(@Param("id") int id);
+    PrincipalDTO findUserById(int id);
 
     // 프리랜서 목록 조회 (프리랜서 사용자)
     List<User> findAllFreelancers();

@@ -20,6 +20,10 @@
         SELECT * FROM user_tb WHERE email = #{email}
     </select>
 
+    <select id="findById">
+        select * from user_tb where id = #{id}
+    </select>
+
     <insert id="insertDeleteUser">
         INSERT INTO delete_user (id, email, username, password, phone_number, social_type, user_type, created_at,
         deleted_at, delete_scheduled_at)
@@ -55,7 +59,7 @@
     </update>
     <!-- 사용자 ID로 사용자 정보 조회 -->
     <select id="findUserById" parameterType="int" resultType="com.damoa.dto.user.PrincipalDTO">
-        SELECT id, email, username, phone_number, user_type, social_type
+        SELECT *
         FROM user_tb
         WHERE id = #{id}
     </select>

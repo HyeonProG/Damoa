@@ -159,29 +159,7 @@
 
 <div class="container">
     <!-- 사이드바 - 프리랜서 전용 메뉴 -->
-    {{#freelancer}}
-        <div class="sidebar">
-            <h2>프리랜서 메뉴</h2>
-            <a href="/user/mypage">마이페이지</a>
-            <a href="/freelancer/skills/manage">보유기술 관리</a>
-            <a href="/freelancer/projects">내 프로젝트 보기</a>
-            <a href="/freelancer/find_projects">프로젝트 찾기</a>
-            <a href="/freelancer/income">정산 내역</a>
-        </div>
-    {{/freelancer}}
-
-    <!-- 사이드바 - 기업 전용 메뉴 -->
-    {{#company}}
-        <div class="sidebar">
-            <h2>기업 메뉴</h2>
-            <a href="/user/mypage">마이페이지</a>
-            <a href="/company/projects">내 프로젝트 관리</a>
-            <a href="/company/find-freelancers">프리랜서 찾기</a>
-            <a href="/user/income">결제 내역</a>
-            <a href="/user/logout">로그아웃</a>
-        </div>
-    {{/company}}
-
+    {{> layout/mypage}}
     <!-- 메인 컨텐츠 -->
     <div class="content">
         <h1>마이페이지</h1>
@@ -192,10 +170,12 @@
             <p><strong>휴대전화:</strong> {{user.phoneNumber}}</p>
             <p><strong>사용자 유형:</strong> {{user.userType}}</p>
             <p><strong>소셜 로그인 유형:</strong> {{user.socialType}}</p>
+            {{#company}}
             <p><strong>보유 포인트:</strong> {{user.point}}</p>
 
             <!-- 충전 버튼 -->
             <a class="purchase--btn">충전하기</a>
+            {{/company}}
             <button id="editButton" class="btn btn-secondary">정보 수정</button>
         </div>
 

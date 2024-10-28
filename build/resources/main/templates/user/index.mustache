@@ -1,9 +1,19 @@
 {{>layout/header}}
 {{>layout/chatbot}}
 {{>layout/chat}}
+<style>
+    .freelancer-box h5 b {
+        display: inline-block;
+        width: 100%; /* 또는 원하는 너비 */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
 <div class="main-board-box">
     <div class="ad-board">
         <div class="ad-bar">
+<<<<<<< HEAD
             <img src="images/icons/left.png" class="icons" id="prevAd" style="cursor: pointer;">
             <div class="ad-outer">
                 <div class="ad-inner">
@@ -50,34 +60,22 @@
         </div>
     </div>
     <div class="project-board main-inner-board">
-        <h3><b> 현재 핫한 프리랜서 개발자들<img src="/images/3d_icons/paper.png" class="icons"> ></b></h3>
+        <h3 onclick="location.href='/freelancer/list'"><b> 현재 핫한 프리랜서 개발자들<img src="/images/3d_icons/paper.png" class="icons"> ></b></h3>
         <p>함께 프로젝트를 시작해보세요</p>
-        <div class="freelancer-container">
-            <div class="freelancer-box">
-                <img src="/images/logos/freelancer-icon .png">
-                <h5><b>개발자명</b></h5>
-                <p>프론트엔드 개발자</p>
-                <p>경력 9년</p>
-                <p>Java, JavaScript, Node.js, Jquery</p>
-            </div>
-            <div class="freelancer-box">
-                <img src="/images/logos/freelancer-icon .png">
-                <h5><b>개발자명</b></h5>
-                <p>프론트엔드 개발자</p>
-                <p>경력 9년</p>
-                <p>Java, JavaScript, Node.js, Jquery</p>
-            </div>
-            <div class="freelancer-box">
-                <img src="/images/logos/freelancer-icon .png">
-                <h5><b>개발자명</b></h5>
-                <p>프론트엔드 개발자</p>
-                <p>경력 9년</p>
-                <p>Java, JavaScript, Node.js, Jquery</p>
-            </div>
+    <div class="freelancer-container">
+    {{#freelancerList}}
+        <div class="freelancer-box" onclick="location.href='/freelancer/detail/{{userId}}'">
+            <img src="/images/logos/freelancer-icon .png">
+        <h5><b>{{username}}</b></h5>
+            <p>{{jobPart}}</p>
+            <h5><b>{{skills}}</b></h5>
+            <p>{{workingStyle}}</p>
         </div>
+    {{/freelancerList}}
+</div>
     </div>
 </div>
-<img src="images/ads/assets_ad.png">
+<img src="/images/ads/assets_ad.png">
 </div>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
