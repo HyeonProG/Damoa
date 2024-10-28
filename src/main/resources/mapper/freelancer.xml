@@ -39,66 +39,85 @@
     </select>
 
     <select id="findAllFreelancersBySearch">
-    SELECT 
-        f.id, 
-        f.user_id, 
-        u.username, 
-        f.job_part, 
-        f.working_style, 
-        f.expected_salary, 
-        f.salary_type, 
-        f.detail, 
-        GROUP_CONCAT(DISTINCT s.name) AS skills, 
-        GROUP_CONCAT(DISTINCT c.career) AS careers 
-    FROM 
-        freelancer_tb f 
-    LEFT JOIN 
-        user_tb u ON f.user_id = u.id 
-    LEFT JOIN 
-        freelancer_skills_tb fs ON f.user_id = fs.user_id 
-    LEFT JOIN 
-        skill_tb s ON fs.skill_id = s.id 
-    LEFT JOIN 
-        freelancer_career_tb fc ON f.user_id = fc.user_id 
-    LEFT JOIN 
-        career c ON fc.career_id = c.id 
-    WHERE 
-        f.user_id IN (
-            SELECT DISTINCT fs2.user_id 
-            FROM freelancer_skills_tb fs2 
-            LEFT JOIN skill_tb s2 ON fs2.skill_id = s2.id 
-            WHERE s2.name LIKE CONCAT('%', #{keyword}, '%') 
-        ) 
-        OR f.job_part LIKE CONCAT('%', #{keyword}, '%') 
-        OR f.working_style LIKE CONCAT('%', #{keyword}, '%') 
-    GROUP BY 
-        f.id, f.user_id, u.username, f.job_part, f.working_style, f.expected_salary, f.salary_type, f.detail 
-    LIMIT #{size} OFFSET #{offset}
+        SELECT 
+            f.id, 
+            f.user_id, 
+            u.username, 
+            f.job_part, 
+            f.working_style, 
+            f.expected_salary, 
+            f.salary_type, 
+            f.detail, 
+            GROUP_CONCAT(DISTINCT s.name) AS skills, 
+            GROUP_CONCAT(DISTINCT c.career) AS careers 
+        FROM 
+            freelancer_tb f 
+        LEFT JOIN 
+            user_tb u ON f.user_id = u.id 
+        LEFT JOIN 
+            freelancer_skills_tb fs ON f.user_id = fs.user_id 
+        LEFT JOIN 
+            skill_tb s ON fs.skill_id = s.id 
+        LEFT JOIN 
+            freelancer_career_tb fc ON f.user_id = fc.user_id 
+        LEFT JOIN 
+            career c ON fc.career_id = c.id 
+        WHERE 
+            1=1 
+            <if test="skill != null and skill != ''">
+                AND f.user_id IN (
+                    SELECT DISTINCT fs2.user_id 
+                    FROM freelancer_skills_tb fs2 
+                    LEFT JOIN skill_tb s2 ON fs2.skill_id = s2.id 
+                    WHERE s2.name LIKE CONCAT('%', #{skill}, '%')
+                )
+            </if>
+            <if test="workingStyle != null and workingStyle != ''">
+                AND f.working_style = #{workingStyle}
+            </if>
+            <if test="jobPart != null and jobPart != ''">
+                AND f.job_part = #{jobPart}
+            </if>
+        GROUP BY 
+            f.id, f.user_id, u.username, f.job_part, f.working_style, f.expected_salary, f.salary_type, f.detail 
+        LIMIT #{size} OFFSET #{offset}
     </select>
-
 
     <select id="countAllFreelancers">
         SELECT count(*) FROM freelancer_tb
     </select>
 
     <select id="countAllFreelancersBySearch" resultType="int">
-    SELECT COUNT(DISTINCT f.id) 
-    FROM 
-        freelancer_tb f
-    LEFT JOIN 
-        freelancer_skills_tb fs ON f.user_id = fs.user_id
-    LEFT JOIN 
-        skill_tb s ON fs.skill_id = s.id
-    LEFT JOIN 
-        freelancer_career_tb fc ON f.user_id = fc.user_id
-    LEFT JOIN   
-        career c ON fc.career_id = c.id
-    WHERE 
-        (f.job_part IN (#{jobPart, jdbcType=VARCHAR}) OR #{jobPart} IS NULL)
-        AND (f.working_style = #{workingStyle} OR #{workingStyle} IS NULL)
-        AND (s.name IN (#{skills, jdbcType=VARCHAR}) OR #{skills} IS NULL)
+        SELECT COUNT(DISTINCT f.id) 
+        FROM 
+            freelancer_tb f 
+        LEFT JOIN 
+            user_tb u ON f.user_id = u.id 
+        LEFT JOIN 
+            freelancer_skills_tb fs ON f.user_id = fs.user_id 
+        LEFT JOIN 
+            skill_tb s ON fs.skill_id = s.id 
+        LEFT JOIN 
+            freelancer_career_tb fc ON f.user_id = fc.user_id 
+        LEFT JOIN 
+            career c ON fc.career_id = c.id 
+        WHERE 
+            1=1 
+            <if test="skill != null and skill != ''">
+                AND f.user_id IN (
+                    SELECT DISTINCT fs2.user_id 
+                    FROM freelancer_skills_tb fs2 
+                    LEFT JOIN skill_tb s2 ON fs2.skill_id = s2.id 
+                    WHERE s2.name LIKE CONCAT('%', #{skill}, '%')
+                )
+            </if>
+            <if test="workingStyle != null and workingStyle != ''">
+                AND f.working_style = #{workingStyle}
+            </if>
+            <if test="jobPart != null and jobPart != ''">
+                AND f.job_part = #{jobPart}
+            </if>
     </select>
-
 
     <select id="findUserIdJoinFreelancerTb">
         select *

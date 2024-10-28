@@ -87,10 +87,21 @@ public class FreelancerService {
         return freelancerRepository.findAllFreelancers(offset, size);
     }
 
-    public List<Freelancer> findAllFreelancersBySearch(int page, int size, String keyword) {
-        // 페이지네이션
+    public List<Freelancer> findAllFreelancersBySearch(int page, int size, String skill, String workingStyle, String jobPart) {
         int offset = (page - 1) * size;
-        return freelancerRepository.findAllFreelancersBySearch(offset, size, keyword);
+        
+        // 필터가 null이거나 빈 문자열일 경우 처리
+        if (skill == null || skill.isEmpty()) {
+            skill = null;
+        }
+        if (workingStyle == null || workingStyle.isEmpty()) {
+            workingStyle = null;
+        }
+        if (jobPart == null || jobPart.isEmpty()) {
+            jobPart = null;
+        }
+    
+        return freelancerRepository.findAllFreelancersBySearch(offset, size, skill, workingStyle, jobPart);
     }
 
     /**
@@ -102,8 +113,8 @@ public class FreelancerService {
         return freelancerRepository.countAllFreelancers();
     }
 
-    public int countAllFreelancersBySearch(String keyword) {
-        return freelancerRepository.countAllFreelancersBySearch(keyword);
+    public int countAllFreelancersBySearch(String skill, String workingStyle, String jobPart) {
+        return freelancerRepository.countAllFreelancersBySearch(skill, workingStyle, jobPart);
     }
 
     /**

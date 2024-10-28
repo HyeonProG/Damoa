@@ -403,21 +403,29 @@ public class FreelancerController {
     public ResponseEntity<Map<String, Object>> fetchFreelancerList(
             @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "size", defaultValue = "5") int size,
-            @RequestParam(name = "keyword", required = false) String keyword) {
+            @RequestParam(name = "skill", required = false) String skill,
+            @RequestParam(name = "workingStyle", required = false) String workingStyle,
+            @RequestParam(name = "jobPart", required = false) String jobPart) {
     
         // 프리랜서 목록을 페이지별로 조회
         List<Freelancer> freelancers;
-        if (keyword != null && !keyword.isEmpty()) {
-            freelancers = freelancerService.findAllFreelancersBySearch(page, size, keyword); // 스킬로 검색
+        if (skill != null && !skill.isEmpty()) {
+            freelancers = freelancerService.findAllFreelancersBySearch(page, size, skill, workingStyle, jobPart);
+        } else if (jobPart != null && !jobPart.isEmpty()) {
+            freelancers = freelancerService.findAllFreelancersBySearch(page, size, skill, workingStyle, jobPart);
+        } else if (workingStyle != null && !workingStyle.isEmpty()) {
+            freelancers = freelancerService.findAllFreelancersBySearch(page, size, skill, workingStyle, jobPart);
         } else {
             freelancers = freelancerService.findAllFreelancers(page, size); // 전체 조회
         }
-        int totalFreelancers = freelancerService.countAllFreelancers();
+        int totalFreelancers = freelancerService.countAllFreelancersBySearch(skill, workingStyle, jobPart);
         int totalPages = (int) Math.ceil((double) totalFreelancers / size);
     
         // 프리랜서 평균 희망 연봉도 함께 응답 데이터에 추가
         int averageSalary = freelancerService.countAverageFreelancerExpectedSalary();
     
+        System.out.println("Received parameters: page=" + page + ", size=" + size + ", job=" + jobPart + ", workingStyle=" + workingStyle + ", skill=" + skill);
+
         // 응답 데이터
         Map<String, Object> response = new HashMap<>();
         response.put("freelancers", freelancers);
@@ -430,6 +438,13 @@ public class FreelancerController {
         return ResponseEntity.ok(response); // JSON 형태로 응답
     }
 
+    /**
+     * 프리랜서 상세보기
+     * @param userId
+     * @param session
+     * @param model
+     * @return
+     */
     @GetMapping("/detail/{userId}")
     public String freelancerDetailPage(@PathVariable("userId") int userId, HttpSession session, Model model) {
         // 세션에서 사용자 정보 가져오기
