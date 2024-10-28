@@ -285,6 +285,12 @@ function loadFreelancers(page) {
                         <p><span class="card-label">상세 내용:</span> ${freelancer.detail}</p>
                     </div>
                 `;
+
+                // 프리랜서 상세 보기 페이지로 이동하는 클릭 이벤트 추가
+                card.addEventListener('click', () => {
+                    window.location.href = `/freelancer/detail/${freelancer.userId}`; // 프리랜서의 ID를 포함하여 상세 페이지로 이동
+                });
+
                 freelancerList.appendChild(card);
             });
         } else {
