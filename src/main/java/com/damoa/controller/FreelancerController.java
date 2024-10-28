@@ -62,6 +62,7 @@ public class FreelancerController {
         // 프리랜서의 기본 정보 가져오기
         Freelancer freelancer = freelancerService.findUserIdJoinFreelancerTb(user.getId());
         model.addAttribute("isLogin", user);
+        model.addAttribute("isFreelancer", user);
         model.addAttribute("freelancer", freelancer); // userId 추가
         return "freelancer/basic_info"; // 템플릿 반환
     }
@@ -85,6 +86,7 @@ public class FreelancerController {
         List<Career> careers = freelancerService.findAllCareers();
 
         model.addAttribute("isLogin", user);
+        model.addAttribute("isFreelancer", user);
         model.addAttribute("careers", careers);
         model.addAttribute("userId", user.getId()); // userId 추가
         return "freelancer/insert_basic_info"; // 템플릿 반환
@@ -153,6 +155,7 @@ public class FreelancerController {
         }
 
         model.addAttribute("isLogin", user);
+        model.addAttribute("isFreelancer", user);
         model.addAttribute("userId", user.getId()); // userId 추가
         return "freelancer/update_basic_info"; // 템플릿 반환
     }
@@ -214,6 +217,7 @@ public class FreelancerController {
         model.addAttribute("freelancerCareers", freelancerCareers);
 
         model.addAttribute("isLogin", user);
+        model.addAttribute("isFreelancer", user);
         model.addAttribute("freelancer", user.getUserType());
 
         return "freelancer/career"; // 경력 관리 템플릿 반환
@@ -294,6 +298,7 @@ public class FreelancerController {
         model.addAttribute("freelancerSkills", freelancerSkills);
 
         model.addAttribute("isLogin", user);
+        model.addAttribute("isFreelancer", user);
         model.addAttribute("freelancer", user.getUserType());
 
         return "freelancer/skills"; // 스킬 관리 템플릿 반환

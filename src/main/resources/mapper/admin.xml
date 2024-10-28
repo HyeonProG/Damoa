@@ -4,7 +4,7 @@
         namespace="com.damoa.repository.interfaces.AdminRepository">
 
     <select id="findByUsername">
-        SELECT * FROM admin WHERE username = #{username}
+        SELECT * FROM admin_tb WHERE username = #{username}
     </select>
 
     <!--    전체 유저 목록 가져오기 -->

@@ -1,58 +1,97 @@
 <style>
     .detail-container {
-        max-width: 800px;
-        margin: 0 auto;
+        max-width: 700px;
+        margin: 20px auto;
         padding: 20px;
         border: 1px solid #ddd;
-        border-radius: 5px;
-        background-color: #f9f9f9;
+        border-radius: 8px;
+        background-color: #f8f8fc;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif;
     }
+
     .detail-container h2 {
         margin-bottom: 20px;
         text-align: center;
-        font-size: 24px;
+        font-size: 22px;
         color: #333;
     }
+
     .detail-item {
         display: flex;
         justify-content: space-between;
         margin-bottom: 15px;
-        padding: 10px 0;
-        border-bottom: 1px solid #eee;
+        padding: 8px 0;
+        border-bottom: 1px solid #ddd;
     }
+
     .detail-item label {
         font-weight: bold;
-        font-size: 16px;
+        font-size: 14px;
         color: #555;
+        width: 35%;
+        text-align: right;
+        padding-right: 15px;
     }
+
     .detail-item p {
-        font-size: 16px;
+        font-size: 15px;
         color: #444;
         margin: 0;
+        width: 60%;
     }
+
     .detail-item a {
         color: #007bff;
         text-decoration: none;
     }
+
     .detail-item a:hover {
         text-decoration: underline;
     }
-    .detail-item:last-child {
-        border-bottom: none;
+
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding-left: 15px;
     }
+
+    .card {
+        padding: 8px 12px;
+        background-color: #0ac6ff;
+        color: white;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: bold;
+        text-align: center;
+        transition: transform 0.3s;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
     button {
         width: 100%;
-        background-color: #007bff;
+        background-color: #18A8F1;
         color: white;
         padding: 10px;
         border: none;
         border-radius: 5px;
-        font-size: 16px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-weight: bold;
     }
+
     button:hover {
-        background-color: #0056b3;
+        background-color: #0ac6ff;
     }
 </style>
+
+
+<title>Damoa</title>
 
 <div class="detail-container">
     <h2>프리랜서 상세 정보</h2>
