@@ -1,24 +1,34 @@
 {{>layout/header}}
 {{>layout/chatbot}}
 {{>layout/chat}}
+<style>
+    .freelancer-box h5 b {
+        display: inline-block;
+        width: 100%; /* 또는 원하는 너비 */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
 <div class="main-board-box">
     <div class="ad-board">
         <div class="ad-bar">
-            <img src="images/icons/left.png" class="icons" onclick="next()" style="curser: pointer">
+            <img src="/images/icons/left.png" class="icons" onclick="next()" style="curser: pointer">
             <div class="ad-outer">
                 <div class="ad-inner">
-                    <img src="images/ads/ad2.png" class="ad-img" style="box-shadow: 2px 2px 5px #d0ccc9">
+                    <img src="/images/ads/ad2.png" class="ad-img" style="box-shadow: 2px 2px 5px #d0ccc9">
                 </div>
             </div>
-            <img src="images/icons/right.png" class="icons" onclick="next()">
+            <img src="/images/icons/right.png" class="icons" onclick="next()">
         </div>
         <div class="ad-progress">
             <h6 class="ad-progress-text">1/4</h6>
         </div>
     </div>
     <div class="freelancer-board main-inner-board">
-        <h3><b> 많이 찾는 프로젝트 공고들<img src="images/3d_icons/file.png" style="cursor:pointer;" class="icons"
-                                   onclick="location.href='/project/list/1'"> ></b></h3>
+        <h3 onclick="location.href='/project/list/1'">
+        <b> 많이 찾는 프로젝트 공고들<img src="/images/3d_icons/file.png" style="cursor:pointer;" class="icons"> ></b>
+        </h3>
         <p>프로젝트를 시작해볼까요?</p>
         <div class="project-container">
             {{#projectList}}
@@ -46,43 +56,21 @@
         </div>
     </div>
     <div class="project-board main-inner-board">
-        <h3><b> 현재 핫한 프리랜서 개발자들<img src="/images/3d_icons/paper.png" class="icons"> ></b></h3>
+        <h3 onclick="location.href='/freelancer/list'"><b> 현재 핫한 프리랜서 개발자들<img src="/images/3d_icons/paper.png" class="icons"> ></b></h3>
         <p>함께 프로젝트를 시작해보세요</p>
-        <div class="freelancer-container">
-            <div class="freelancer-box">
-                <h5><b>개발자명</b></h5>
-                <p>프론트엔드 개발자</p>
-                <p>경력 9년</p>
-                <p>Java, JavaScript, Node.js, Jquery</p>
-            </div>
-            <div class="freelancer-box">
-                <h5><b>개발자명</b></h5>
-                <p>프론트엔드 개발자</p>
-                <p>경력 9년</p>
-                <p>Java, JavaScript, Node.js, Jquery</p>
-            </div>
-            <div class="freelancer-box">
-                <h5><b>개발자명</b></h5>
-                <p>프론트엔드 개발자</p>
-                <p>경력 9년</p>
-                <p>Java, JavaScript, Node.js, Jquery</p>
-            </div>
-            <div class="freelancer-box">
-                <h5><b>개발자명</b></h5>
-                <p>프론트엔드 개발자</p>
-                <p>경력 9년</p>
-                <p>Java, JavaScript, Node.js, Jquery</p>
-            </div>
-            <div class="freelancer-box">
-                <h5><b>개발자명</b></h5>
-                <p>프론트엔드 개발자</p>
-                <p>경력 9년</p>
-                <p>Java, JavaScript, Node.js, Jquery</p>
-            </div>
+<div class="freelancer-container">
+    {{#freelancerList}}
+        <div class="freelancer-box" onclick="location.href='/freelancer/detail/{{userId}}'">
+        <h5><b>{{username}}</b></h5>
+            <p>{{jobPart}}</p>
+            <h5><b>{{skills}}</b></h5>
+            <p>{{workingStyle}}</p>
         </div>
+    {{/freelancerList}}
+</div>
     </div>
 </div>
-<img src="images/ads/assets_ad.png">
+<img src="/images/ads/assets_ad.png">
 </div>
 <script>
     const outer = document.querySelector('.ad-outer');

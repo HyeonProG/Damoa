@@ -25,7 +25,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.text.NumberFormat;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -114,7 +119,7 @@ public class AdminController {
 //        return "admin/admin_user_list";
 //    }
     @GetMapping("/management/{currentPageNum}")
-    public String UserListPage(@PathVariable(required = false)Integer currentPageNum, Model model){
+    public String UserListPage(@PathVariable(required = false) Integer currentPageNum, Model model) {
 
         List<User> allUser = adminService.getAllUser();
         int totalUser = allUser.size();
@@ -166,108 +171,150 @@ public class AdminController {
 
     }
 
+    /**
+     * 모든 결제 내역
+     *
+     * @param model
+     * @return
+     */
     @GetMapping("/management")
     public String paymemtHistoryPage(Model model) {
+        // 결제 내역 조회
         List<TossHistoryDTO> paymentList = payService.findAll();
 
+        // 날짜 포맷팅을 위한 DateTimeFormatter 설정
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        model.addAttribute("paymentList", paymentList);
+        // 숫자 포맷팅을 위한 NumberFormat 설정
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+
+        // 각 결제 내역의 requestedAt과 amount를 포맷팅하여 새로운 리스트 생성
+        List<TossHistoryDTO> formattedPaymentList = paymentList.stream()
+                .map(payment -> formatPayment(payment, inputFormatter, outputFormatter, numberFormat)) // 메서드 호출
+                .collect(Collectors.toList());
+
+        // 포맷팅된 결제 내역을 모델에 추가
+        model.addAttribute("paymentList", formattedPaymentList);
+
         return "/admin/admin_management_payment";
     }
 
+    /**
+     * 환불
+     *
+     * @param model
+     * @return
+     */
     @GetMapping("/refund")
     public String refundApprovalPage(Model model) {
-        List<TossHistoryDTO> paymentList = payService.findRequestedRefund();
+        // 결제 내역 조회
+        List<TossHistoryDTO> paymentList = payService.findAll();
 
+        // 날짜 포맷팅을 위한 DateTimeFormatter 설정
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        model.addAttribute("paymentList", paymentList);
+        // 숫자 포맷팅을 위한 NumberFormat 설정
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+
+        // 각 결제 내역의 requestedAt과 amount를 포맷팅하여 새로운 리스트 생성
+        List<TossHistoryDTO> formattedPaymentList = paymentList.stream()
+                .map(payment -> formatPayment(payment, inputFormatter, outputFormatter, numberFormat)) // 메서드 호출
+                .collect(Collectors.toList());
+
+        // 포맷팅된 결제 내역을 모델에 추가
+        model.addAttribute("paymentList", formattedPaymentList);
+
         return "/admin/admin_refund_approval";
     }
 
     /**
-     *  http://localhost:8080/admin/list/company
+     * http://localhost:8080/admin/list/company
+     *
      * @param model
      * @return
      */
     @GetMapping("/list/company/{currentPageNum}") // URL의 {type} 부분을 변수로 처리
-    public String companyReviewList(@PathVariable(required = false)Integer currentPageNum, Model model) {
+    public String companyReviewList(@PathVariable(required = false) Integer currentPageNum, Model model) {
         int pageSize = 6;
         int offset;
 
         int totallist = reviewService.countReview(); // 총몇개의 row 인지 확인
         int totalPages = (int) Math.ceil((double) totallist / (double) pageSize); //  2.1 = 13 / 6
 
-        if(currentPageNum == null || currentPageNum <= 1){
+        if (currentPageNum == null || currentPageNum <= 1) {
             currentPageNum = 2;
             offset = 0;
-        } else{
-            offset = (currentPageNum -1) * pageSize;
+        } else {
+            offset = (currentPageNum - 1) * pageSize;
         }
         int nextPageNum;
         int beforePageNum;
 
-        if(currentPageNum >= totalPages -1 && totalPages > 3){
-            currentPageNum = totalPages -1;
-            nextPageNum = currentPageNum +1;
-            beforePageNum = currentPageNum -1;
-        } else if (currentPageNum >= totalPages -1){
+        if (currentPageNum >= totalPages - 1 && totalPages > 3) {
+            currentPageNum = totalPages - 1;
+            nextPageNum = currentPageNum + 1;
+            beforePageNum = currentPageNum - 1;
+        } else if (currentPageNum >= totalPages - 1) {
             currentPageNum = 2;
             nextPageNum = 3;
             beforePageNum = 1;
         }
 
-        List<CompanyReviewDTO> list = reviewService.getComapanyReviews(pageSize,offset);
+        List<CompanyReviewDTO> list = reviewService.getComapanyReviews(pageSize, offset);
 
-        model.addAttribute("list",list);
-        model.addAttribute("totallist",totallist);
-        model.addAttribute("totalPages",totalPages);
-        model.addAttribute("currentPageNum",currentPageNum);
-        model.addAttribute("beforePageNum",currentPageNum -1);
-        model.addAttribute("nextPageNum",currentPageNum +1);
+        model.addAttribute("list", list);
+        model.addAttribute("totallist", totallist);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPageNum", currentPageNum);
+        model.addAttribute("beforePageNum", currentPageNum - 1);
+        model.addAttribute("nextPageNum", currentPageNum + 1);
 
         return "admin/company_list";
     }
 
     @GetMapping("/list/freelancer/{currentPageNum}")
-    public String freelancerReviewList(@PathVariable(required = false)Integer currentPageNum, Model model){
+    public String freelancerReviewList(@PathVariable(required = false) Integer currentPageNum, Model model) {
         int pageSize = 6;
         int offset;
 
         int totallist = reviewService.countFreelancerReview(); // 총몇개의 row 인지 확인
         int totalPages = (int) Math.ceil((double) totallist / (double) pageSize); //  2.1 = 13 / 6
 
-        if(currentPageNum == null || currentPageNum <= 1){
+        if (currentPageNum == null || currentPageNum <= 1) {
             currentPageNum = 2;
             offset = 0;
-        } else{
-            offset = (currentPageNum -1) * pageSize;
+        } else {
+            offset = (currentPageNum - 1) * pageSize;
         }
         int nextPageNum;
         int beforePageNum;
 
-        if(currentPageNum >= totalPages -1 && totalPages > 3){
-            currentPageNum = totalPages -1;
-            nextPageNum = currentPageNum +1;
-            beforePageNum = currentPageNum -1;
-        } else if (currentPageNum >= totalPages -1){
+        if (currentPageNum >= totalPages - 1 && totalPages > 3) {
+            currentPageNum = totalPages - 1;
+            nextPageNum = currentPageNum + 1;
+            beforePageNum = currentPageNum - 1;
+        } else if (currentPageNum >= totalPages - 1) {
             currentPageNum = 2;
             nextPageNum = 3;
             beforePageNum = 1;
         }
-        List<FreelancerReviewDTO> list = reviewService.findFreelancerReview(pageSize,offset);
+        List<FreelancerReviewDTO> list = reviewService.findFreelancerReview(pageSize, offset);
 
-        model.addAttribute("list",list);
-        model.addAttribute("totallist",totallist);
-        model.addAttribute("totalPages",totalPages);
-        model.addAttribute("currentPageNum",currentPageNum);
-        model.addAttribute("beforePageNum",currentPageNum -1);
-        model.addAttribute("nextPageNum",currentPageNum +1);
+        model.addAttribute("list", list);
+        model.addAttribute("totallist", totallist);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("currentPageNum", currentPageNum);
+        model.addAttribute("beforePageNum", currentPageNum - 1);
+        model.addAttribute("nextPageNum", currentPageNum + 1);
 
         return "admin/freelancer_list";
     }
 
     /**
      * 월별 프로젝트 등록 수 데이터 반환
+     *
      * @return
      */
     @GetMapping("/monthly-projects")
@@ -278,6 +325,7 @@ public class AdminController {
 
     /**
      * 월별 프리랜서 등록 수 데이터 반환
+     *
      * @return
      */
     @GetMapping("/monthly-freelancers")
@@ -300,8 +348,34 @@ public class AdminController {
         return new ResponseEntity<>(freelancerReviewDataList, HttpStatus.OK);
     }
 
+    /**
+     * 결제 내역의 amount를 포맷팅하는 메서드
+     *
+     * @param payment 결제 내역 DTO
+     * @return 포맷팅된 결제 내역 DTO
+     */
+    // 결제 내역 포맷팅 메서드
+    private TossHistoryDTO formatPayment(TossHistoryDTO payment, DateTimeFormatter inputFormatter, DateTimeFormatter outputFormatter, NumberFormat numberFormat) {
+        // String 타입의 requestedAt 필드 포맷팅
+        String originalDateStr = payment.getRequestedAt();
+        String formattedDate = OffsetDateTime.parse(originalDateStr, inputFormatter)
+                .format(outputFormatter);
+        payment.setRequestedAt(formattedDate);
 
+        // amount를 쉼표가 포함된 형식으로 포맷팅
+        if (payment.getAmount() != null) { // amount가 null이 아닐 경우만 포맷팅
+            try {
+                double amountValue = Double.parseDouble(payment.getAmount());
+                String formattedAmount = numberFormat.format(amountValue);
+                payment.setAmount(formattedAmount);
+            } catch (NumberFormatException e) {
+                e.printStackTrace(); // 숫자 변환 시 예외 발생 시 로그 출력
+                // 예외가 발생하면 포맷팅하지 않고 그대로 유지
+            }
+        }
 
+        return payment; // 포맷팅된 결제 내역 반환
+    }
 
 }
 
