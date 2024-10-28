@@ -450,6 +450,11 @@ public class UserController {
 
         boolean isFreelancer = "freelancer".equals(user.getUserType());
         boolean isCompany = "company".equals(user.getUserType());
+        model.addAttribute("isLogin",user);
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+        }
         model.addAttribute("freelancer", isFreelancer);
         model.addAttribute("company", isCompany);
 
@@ -493,6 +498,7 @@ public class UserController {
         model.addAttribute("freelancer", isFreelancer);
         model.addAttribute("company", isCompany);
         model.addAttribute("paymentList", paymentList);
+        model.addAttribute("isLogin", principal);
         return "user/paymentsDetail";
     }
 

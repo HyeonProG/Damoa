@@ -33,23 +33,20 @@ public class ChatController {
 
     /*
      * 클라이언트가 http://localhost:8080/ws/match/app/chat 경로로 보낸 메시지를 처리
-     * @param message, senderId, receiverId
+     * @param roomId, message, senderId, receiverId
      * @return chatMessage
      */
-    @MessageMapping("/chat/{senderId}/{receiverId}")
-    public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
-
-        String senderId = chatMessage.getSenderId();
-        String receiverId = chatMessage.getReceiverId();
+    @MessageMapping("/chat/{roomId}/{senderId}/{receiverId}")
+    public ChatMessage sendMessage(@Payload ChatMessage chatMessage,
+                                   @DestinationVariable String roomId) {
 
         // message, senderId, receiverId를 MongoDB에 저장
-        chatMessageService.saveMessage(chatMessage, senderId, receiverId);
+        chatMessageService.saveMessage(chatMessage);
 
-        messagingTemplate.convertAndSend("/topic/messages/" + receiverId, chatMessage);
+        messagingTemplate.convertAndSend("/topic/messages/" + roomId, chatMessage);
 
-        // 클라이언트 간의 연결을 로그에 남김
-        log.info("receiver 아이디 {}", receiverId);
-        log.info("클라이언트 {}이 클라이언트 {}에게 메시지를 보냄: {}", senderId, receiverId, chatMessage);
+        log.info("전송할 메시지: {}", chatMessage);
+        log.info("브로드캐스트할 roomId: {}", roomId);
 
         return chatMessage;
     }
@@ -80,13 +77,11 @@ public class ChatController {
     @GetMapping("/chat-list")
     @ResponseBody
     public List<ChatListDTO> chatList(HttpSession session, Model model) {
-        // 로그인 된 유저 ID 가졍
+        // 로그인 된 유저 세션 정보
         User user = (User) session.getAttribute("principal");
 
         // 서비스의 메서드를 이용해 userName과 list 데이터를 가져옴
         List<ChatListDTO> chatList = chatListService.findByChatList(user.getId());
-
-        model.addAttribute("chatList", chatList);
 
         return chatList;
     }

@@ -83,9 +83,7 @@ public class FreelancerService {
      * @return
      */
     public List<Freelancer> findAllFreelancers(int page, int size) {
-        // 페이지네이션
-        int offset = (page - 1) * size;
-        return freelancerRepository.findAllFreelancers(offset, size);
+        return freelancerRepository.findAllFreelancers(page, size);
     }
 
     public List<Freelancer> findAllFreelancersBySearch(int page, int size, String keyword) {
@@ -118,7 +116,7 @@ public class FreelancerService {
     }
 
     /**
-     * 프리랜서 기본 정보 업데이트
+     * 프리랜서 기본 정보 인서트
      * 
      * @param dto
      */
@@ -145,6 +143,34 @@ public class FreelancerService {
 
         // 프리랜서 기본 정보 업데이트
         freelancerRepository.insertFreelancerBasicInfo(dto);
+    }
+
+    /**
+     * 프리랜서 기본정보 업데이트
+     * @param dto
+     * @param user
+     */
+    @Transactional
+    public void updateFreelancerBasicInfo(FreelancerBasicInfoDTO dto, UserSignUpDTO user) {
+        // 파일 업로드 수행
+        if (dto.getMFile() != null && !dto.getMFile().isEmpty()) {
+            String[] fileNames = uploadFile(dto.getMFile());
+            dto.setOriginFileName(fileNames[0]);
+            dto.setUploadFileName(fileNames[1]);
+        }
+
+        // 회원가입한 사용자가 프리랜서일 경우, freelancer_tb에 자동 등록
+        if ("freelancer".equals(user.getUserType())) {
+            // userRepository에서 방금 삽입된 유저의 id 가져오기
+            int userId = userRepository.findByEmail(user.getEmail()).getId();
+
+            // 기본 프리랜서 정보를 추가 (기본값 설정)
+            Freelancer freelancer = new Freelancer();
+            freelancer.setUserId(userId);
+        }
+
+        // 프리랜서 기본 정보 업데이트
+        freelancerRepository.updateFreelancerBasicInfo(dto);
     }
 
     /**

@@ -27,8 +27,6 @@ public class ReviewService {
 
     private final CompanyReviewRepository companyReviewRepo;
     private final FreelancerReviewRepository freelancerReviewRepo;
-    private final UserService userService;
-    private final ObjectMapper objectMapper;
 
     // 클라이언트 프리랜서 리뷰 데이터 응답
     public void getAllReviews(Model model) {

@@ -5,7 +5,9 @@
 
     <!-- 채팅 목록을 불러오는 query -->
     <select id="findByChatList">
-        select * from chat_list_tb where sender_id = #{senderId} order by id desc
+        select * from chat_list_tb
+        where (sender_id = #{userId} OR receiver_id = #{userId})
+        order by id desc
     </select>
 
     <!-- 테이블 pk id 불러옴 -->

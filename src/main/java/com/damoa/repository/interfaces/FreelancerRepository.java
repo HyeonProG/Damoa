@@ -34,6 +34,8 @@ public interface FreelancerRepository {
     // 프리랜서 기본정보 추가
     public int insertFreelancerBasicInfo(FreelancerBasicInfoDTO dto);
 
+    public int updateFreelancerBasicInfo(FreelancerBasicInfoDTO dto);
+
     public FreelancerBasicInfoDTO findFreelancerBasicInfo(int userId);
 
     // 모든 경력 내용 조회

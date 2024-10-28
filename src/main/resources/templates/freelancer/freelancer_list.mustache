@@ -251,60 +251,56 @@ function loadFreelancers(page) {
     console.log("Query Params:", queryParams.toString()); // 쿼리 파라미터 확인
 
     fetch(`/freelancer/list/data?${queryParams.toString()}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('네트워크 오류');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Data:", data); // 데이터 로그
-            const freelancerList = document.getElementById('freelancer-list');
-            freelancerList.innerHTML = ''; // 기존 목록 초기화
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('네트워크 오류');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Data:", data); // 데이터 로그
+        const freelancerList = document.getElementById('freelancer-list');
+        freelancerList.innerHTML = ''; // 기존 목록 초기화
 
-            if (Array.isArray(data.freelancers)) {
-                const randomIndex = Math.floor(Math.random() * data.freelancers.length); // 랜덤 인덱스 생성
+        // 평균 희망 연봉 카드 추가
+        const salaryCard = document.createElement('div');
+        salaryCard.className = 'freelancer-card';
+        salaryCard.innerHTML = ` 
+            <h4>프리랜서 평균 희망 연봉</h4>
+            <div class="card salary-card">
+                <p><strong>${data.averageSalary} 만원</strong></p>
+            </div>
+        `;
+        freelancerList.appendChild(salaryCard); // 가장 위에 추가
 
-                data.freelancers.forEach((freelancer, index) => {
-                    const card = document.createElement('div');
-                    card.className = 'freelancer-card';
-                    card.innerHTML = `
-                        <h2>${freelancer.username}</h2>
-                        <div class="card freelancer-info-card">
-                            <p><span class="card-label">직무:</span> ${freelancer.jobPart}</p>
-                            <p><span class="card-label">근무 방식:</span> ${freelancer.workingStyle}</p>
-                            <p><span class="card-label">기술 스택:</span> ${freelancer.skills}</p>
-                            <p><span class="card-label">상세 내용:</span> ${freelancer.detail}</p>
-                        </div>
-                    `;
+        if (Array.isArray(data.freelancers)) {
+            data.freelancers.forEach(freelancer => {
+                const card = document.createElement('div');
+                card.className = 'freelancer-card';
+                card.innerHTML = `
+                    <h2>${freelancer.username}</h2>
+                    <div class="card freelancer-info-card">
+                        <p><span class="card-label">직무:</span> ${freelancer.jobPart}</p>
+                        <p><span class="card-label">근무 방식:</span> ${freelancer.workingStyle}</p>
+                        <p><span class="card-label">기술 스택:</span> ${freelancer.skills}</p>
+                        <p><span class="card-label">상세 내용:</span> ${freelancer.detail}</p>
+                    </div>
+                `;
 
-                    card.addEventListener('click', () => {
-                        window.location.href = `/freelancer/detail/${freelancer.userId}`;
-                    });
-
-                    // 무작위로 연봉 카드 추가
-                    if (index === randomIndex) {
-                        const salaryCard = document.createElement('div');
-                        salaryCard.className = 'freelancer-card';
-                        salaryCard.innerHTML = ` 
-                            <h4>프리랜서 평균 희망 연봉</h4>
-                            <div class="card salary-card">
-                                <p><strong>{{averageSalary}} 만원</strong></p>
-                            </div>
-                        `;
-                        freelancerList.appendChild(salaryCard);
-                    }
-
-                    freelancerList.appendChild(card);
+                card.addEventListener('click', () => {
+                    window.location.href = `/freelancer/detail/${freelancer.userId}`;
                 });
-            } else {
-                console.warn("프리랜서가 없습니다.");
-            }
 
-            currentPage = data.currentPage;
-            renderPagination(data.totalCount, currentPage, pageSize, data.totalPages);
-        })
-        .catch(error => console.error('Error:', error));
+                freelancerList.appendChild(card); // 프리랜서 카드 추가
+            });
+        } else {
+            console.warn("프리랜서가 없습니다.");
+        }
+
+        currentPage = data.currentPage;
+        renderPagination(data.totalCount, currentPage, pageSize, data.totalPages);
+    })
+    .catch(error => console.error('Error:', error));
 }
 
 // 최초 프리랜서 목록 로드
