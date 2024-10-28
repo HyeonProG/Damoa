@@ -88,6 +88,11 @@
     button:hover {
         background-color: #0ac6ff;
     }
+    .divider {
+        height: 5px;
+        background-color: #CCCCCC;
+        margin: 20px 20px;
+    }
 </style>
 
 
@@ -95,7 +100,7 @@
 
 <div class="detail-container">
     <h2>프리랜서 상세 정보</h2>
-    
+
     <div class="detail-item">
     {{! 이름 }}
         <label for="username">이름:</label>
@@ -170,8 +175,9 @@
     </div>
     <div class="detail-item">
         <button id="chatRequestButton">채팅 신청하기</button>
+        <div class="divider"></div>
+        <button type="button" onclick="writeReview()">리뷰 남기러 떠나기</button>
     </div>
-
     <div class="detail-item">
         <button onclick="location.href='/freelancer/list'">목록으로 돌아가기</button>
     </div>
@@ -202,6 +208,7 @@
                 // 요청 성공 시 처리
                 if (data.success) {
                     alert("채팅 신청이 성공적으로 보내졌습니다.");
+                    window.location.herf = '/user/main'
                 } else {
                     alert("채팅 신청에 실패했습니다: " + data.message);
                 }
@@ -212,4 +219,10 @@
             });
         }
     });
+
+    function writeReview() {
+        if (confirm("리뷰 페이지로 이동하시겠습니까?")) {
+            location.href = 'https://forms.gle/xTduN8hV4si6z3dm9'; // 리뷰 페이지로 이동
+        }
+    }
 </script>

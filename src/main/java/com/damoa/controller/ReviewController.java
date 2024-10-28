@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor    // DI & final
 public class ReviewController {
 
-    private final HttpSession session;
     private final ReviewService reviewService;
 
     // Review 메인 요청 페이지

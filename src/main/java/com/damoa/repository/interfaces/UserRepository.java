@@ -1,6 +1,7 @@
 package com.damoa.repository.interfaces;
 
 import com.damoa.dto.TossHistoryDTO;
+import com.damoa.dto.review.ReviewUserDTO;
 import com.damoa.dto.user.MonthlyRegisterDTO;
 import com.damoa.dto.user.PrincipalDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -9,6 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import com.damoa.repository.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface UserRepository {
@@ -18,6 +20,9 @@ public interface UserRepository {
     public int checkDuplicateEmail(@Param("email") String email); // 이메일 중복 체크
 
     User findById(int id);
+
+    // 리뷰 데이터 유효성 검사를 위한 이름 조회
+    Optional<User> findByUserName(String userName);
 
     public User findByEmail(String email); // 이메일로 유저 확인
 
