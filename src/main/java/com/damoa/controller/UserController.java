@@ -507,8 +507,8 @@ public class UserController {
                 })
                 .collect(Collectors.toList());
 
-        model.addAttribute("freelancer", isFreelancer);
-        model.addAttribute("company", isCompany);
+        model.addAttribute("isFreelancer", isFreelancer);
+        model.addAttribute("isCompany", isCompany);
         model.addAttribute("paymentList", paymentList);
         model.addAttribute("isLogin", principal);
         return "user/paymentsDetail";

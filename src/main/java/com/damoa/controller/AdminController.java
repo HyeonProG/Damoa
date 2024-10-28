@@ -16,6 +16,9 @@ import com.damoa.dto.DailyFreelancerReviewDTO;
 import com.damoa.dto.MonthlyFreelancerDTO;
 import com.damoa.dto.MonthlyProjectDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -178,9 +181,9 @@ public class AdminController {
      * @return
      */
     @GetMapping("/management")
-    public String paymemtHistoryPage(Model model) {
+    public String paymemtHistoryPage(@PageableDefault(size = 5) Pageable pageable, Model model) {
         // 결제 내역 조회
-        List<TossHistoryDTO> paymentList = payService.findAll();
+        Page<TossHistoryDTO> paymentPage = payService.findAll(pageable);
 
         // 날짜 포맷팅을 위한 DateTimeFormatter 설정
         DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
@@ -190,11 +193,17 @@ public class AdminController {
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
 
         // 각 결제 내역의 requestedAt과 amount를 포맷팅하여 새로운 리스트 생성
-        List<TossHistoryDTO> formattedPaymentList = paymentList.stream()
-                .map(payment -> formatPayment(payment, inputFormatter, outputFormatter, numberFormat)) // 메서드 호출
+        List<TossHistoryDTO> formattedPaymentList = paymentPage.stream()
+                .map(payment -> formatPayment(payment, inputFormatter, outputFormatter, numberFormat))
                 .collect(Collectors.toList());
 
-        // 포맷팅된 결제 내역을 모델에 추가
+        // 페이지 정보를 계산하여 모델에 추가
+        int currentPage = paymentPage.getNumber(); // 현재 페이지 번호 (0부터 시작)
+        model.addAttribute("currentPage", currentPage + 1); // 페이지를 1부터 시작하기 위해 +1
+        model.addAttribute("totalPages", paymentPage.getTotalPages()); // 전체 페이지 수 추가
+        model.addAttribute("nextPage", currentPage + 1 < paymentPage.getTotalPages() ? currentPage + 1 : null); // 다음 페이지 (+2)
+        model.addAttribute("prevPage", currentPage > 0 ? currentPage - 1 : null); // 이전 페이지 번호
+        model.addAttribute("pagination", paymentPage);
         model.addAttribute("paymentList", formattedPaymentList);
 
         return "/admin/admin_management_payment";
@@ -207,9 +216,9 @@ public class AdminController {
      * @return
      */
     @GetMapping("/refund")
-    public String refundApprovalPage(Model model) {
+    public String refundApprovalPage(@PageableDefault(size = 5) Pageable pageable, Model model) {
         // 결제 내역 조회
-        List<TossHistoryDTO> paymentList = payService.findAll();
+        Page<TossHistoryDTO> paymentPage = payService.findRequestedRefund(pageable);
 
         // 날짜 포맷팅을 위한 DateTimeFormatter 설정
         DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
@@ -219,11 +228,17 @@ public class AdminController {
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
 
         // 각 결제 내역의 requestedAt과 amount를 포맷팅하여 새로운 리스트 생성
-        List<TossHistoryDTO> formattedPaymentList = paymentList.stream()
+        List<TossHistoryDTO> formattedPaymentList = paymentPage.stream()
                 .map(payment -> formatPayment(payment, inputFormatter, outputFormatter, numberFormat)) // 메서드 호출
                 .collect(Collectors.toList());
 
-        // 포맷팅된 결제 내역을 모델에 추가
+        // 페이지 정보를 계산하여 모델에 추가
+        int currentPage = paymentPage.getNumber(); // 현재 페이지 번호 (0부터 시작)
+        model.addAttribute("currentPage", currentPage + 1); // 페이지를 1부터 시작하기 위해 +1
+        model.addAttribute("totalPages", paymentPage.getTotalPages()); // 전체 페이지 수 추가
+        model.addAttribute("nextPage", currentPage + 1 < paymentPage.getTotalPages() ? currentPage + 1 : null); // 다음 페이지 (+2)
+        model.addAttribute("prevPage", currentPage > 0 ? currentPage - 1 : null); // 이전 페이지 번호
+        model.addAttribute("pagination", paymentPage);
         model.addAttribute("paymentList", formattedPaymentList);
 
         return "/admin/admin_refund_approval";

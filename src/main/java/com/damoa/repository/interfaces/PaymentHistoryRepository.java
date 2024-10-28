@@ -14,9 +14,9 @@ public interface PaymentHistoryRepository {
 
     TossHistoryDTO findById(int id);
 
-    List<TossHistoryDTO> viewAll();
+    List<TossHistoryDTO> viewAll(@Param("offset") int offset, @Param("pageSize") int pageSize);
 
-    List<TossHistoryDTO> findHistoryByStatus();
+    List<TossHistoryDTO> findHistoryByStatus(@Param("offset") int offset, @Param("pageSize") int pageSize);
 
     int findPointById(int userId);
 
@@ -26,4 +26,7 @@ public interface PaymentHistoryRepository {
 
     void insertCancelHistory(TossHistoryDTO tossHistoryDTO);
 
+    int countAll();
+
+    int countRequestedRefund();
 }
