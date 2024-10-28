@@ -8,6 +8,7 @@ import com.damoa.dto.user.MonthlyRegisterDTO;
 import com.damoa.dto.user.MonthlyVisitorDTO;
 import com.damoa.handler.exception.DataDeliveryException;
 import com.damoa.repository.model.Admin;
+import com.damoa.repository.model.Notice;
 import com.damoa.repository.model.User;
 import com.damoa.service.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +33,10 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/admin")
@@ -57,6 +61,9 @@ public class AdminController {
     @Autowired
     private final FreelancerService freelancerService;
 
+    @Autowired
+    private final NoticeService noticeService;
+
     /**
      * 관리자 메인 페이지
      *
@@ -67,10 +74,10 @@ public class AdminController {
         HttpSession session = request.getSession(false);
         Admin admin = session != null ? (Admin) session.getAttribute("admin") : null;
 
-       // 로그인을 하지 않았을 경우 로그인 페이지로 리다이렉트
-       if (admin == null) {
-           return "redirect:/admin/sign-in";
-       }
+        // 로그인을 하지 않았을 경우 로그인 페이지로 리다이렉트
+        if (admin == null) {
+            return "redirect:/admin/sign-in";
+        }
 
         // 방문자의 IP 주소를 가져와서 방문자 기록
         String userIp = request.getRemoteAddr(); // 클라이언트의 IP 주소를 얻음
@@ -94,25 +101,25 @@ public class AdminController {
      *
      * @return
      */
-   @PostMapping("/sign-in")
-   public String adminSignInProc(AdminSignInDTO adminSignInDTO, HttpServletRequest request) {
-       try {
-           Admin admin = adminService.findAdmin(adminSignInDTO);
-           // 세션 생성
-           HttpSession session = request.getSession(true);
-           session.setAttribute("admin", admin);
-           return "redirect:/admin/main";
-       } catch (Exception e) {
-           if (adminSignInDTO.getUsername() == null || adminSignInDTO.getUsername().isEmpty()) {
-               throw new DataDeliveryException("아이디를 입력하세요.", HttpStatus.BAD_REQUEST);
-           }
-           if (adminSignInDTO.getPassword() == null || adminSignInDTO.getPassword().isEmpty()) {
-               throw new DataDeliveryException("비밀번호를 입력하세요.", HttpStatus.BAD_REQUEST);
-           }
-           e.printStackTrace();
-           return "/admin/sign_in";
-       }
-   }
+    @PostMapping("/sign-in")
+    public String adminSignInProc(AdminSignInDTO adminSignInDTO, HttpServletRequest request) {
+        try {
+            Admin admin = adminService.findAdmin(adminSignInDTO);
+            // 세션 생성
+            HttpSession session = request.getSession(true);
+            session.setAttribute("admin", admin);
+            return "redirect:/admin/main";
+        } catch (Exception e) {
+            if (adminSignInDTO.getUsername() == null || adminSignInDTO.getUsername().isEmpty()) {
+                throw new DataDeliveryException("아이디를 입력하세요.", HttpStatus.BAD_REQUEST);
+            }
+            if (adminSignInDTO.getPassword() == null || adminSignInDTO.getPassword().isEmpty()) {
+                throw new DataDeliveryException("비밀번호를 입력하세요.", HttpStatus.BAD_REQUEST);
+            }
+            e.printStackTrace();
+            return "/admin/sign_in";
+        }
+    }
 
     @GetMapping("/management/{currentPageNum}")
     public String UserListPage(@PathVariable(required = false) Integer currentPageNum, Model model) {
@@ -130,7 +137,6 @@ public class AdminController {
             offset = limit * (currentPageNum - 1);
         }
 
-
         List<User> userList = adminService.getUserList(limit, offset);
 
         model.addAttribute("userList", userList);
@@ -142,7 +148,6 @@ public class AdminController {
 
         return "/admin/admin_user_list";
     }
-
 
     /**
      * 월별 회원 수 데이터 반환
@@ -237,7 +242,7 @@ public class AdminController {
         int offset;
 
         int totallist = reviewService.countReview(); // 총몇개의 row 인지 확인
-        int totalPages = (int) Math.ceil((double) totallist / (double) pageSize); //  2.1 = 13 / 6
+        int totalPages = (int) Math.ceil((double) totallist / (double) pageSize); // 2.1 = 13 / 6
 
         if (currentPageNum == null || currentPageNum <= 1) {
             currentPageNum = 2;
@@ -276,7 +281,7 @@ public class AdminController {
         int offset;
 
         int totallist = reviewService.countFreelancerReview(); // 총몇개의 row 인지 확인
-        int totalPages = (int) Math.ceil((double) totallist / (double) pageSize); //  2.1 = 13 / 6
+        int totalPages = (int) Math.ceil((double) totallist / (double) pageSize); // 2.1 = 13 / 6
 
         if (currentPageNum == null || currentPageNum <= 1) {
             currentPageNum = 2;
@@ -351,7 +356,8 @@ public class AdminController {
      * @return 포맷팅된 결제 내역 DTO
      */
     // 결제 내역 포맷팅 메서드
-    private TossHistoryDTO formatPayment(TossHistoryDTO payment, DateTimeFormatter inputFormatter, DateTimeFormatter outputFormatter, NumberFormat numberFormat) {
+    private TossHistoryDTO formatPayment(TossHistoryDTO payment, DateTimeFormatter inputFormatter,
+            DateTimeFormatter outputFormatter, NumberFormat numberFormat) {
         // String 타입의 requestedAt 필드 포맷팅
         String originalDateStr = payment.getRequestedAt();
         String formattedDate = OffsetDateTime.parse(originalDateStr, inputFormatter)
@@ -373,7 +379,52 @@ public class AdminController {
         return payment; // 포맷팅된 결제 내역 반환
     }
 
+    @GetMapping("/notice/{currentPageNum}")
+    public String noticeListPage(@PathVariable(name = "currentPageNum", required = false) int currentPageNum,Model model){
+        // 모든 공지 가져오기
+        List<Notice> allNotice = noticeService.getAllNotice();
+        int totalNotice = allNotice.size(); // 모든 공지 개수
+        int limit = 10; // 한 페이지 당 공지 수
+        int totalPages = totalNotice/limit; // 총 페이지 수
+        int offset; // 시작하는 게시글 id
+
+        if(currentPageNum == 0 || currentPageNum == 1){
+            currentPageNum = 1;
+            offset = 0;
+        } else {
+            offset = currentPageNum*limit+1;
+        }
+
+        System.out.println("limit"+limit);
+        System.out.println("offset"+offset);
+
+        // 공지 가져오기 (페이징 처리)
+        List<Notice> noticeList = noticeService.getNoticeList(limit,offset);
+
+        // 뷰에 데이터 전송
+        model.addAttribute("noticeList",noticeList);
+        model.addAttribute("totalNotice",totalNotice);
+        model.addAttribute("totalPages",totalPages);
+
+        if(currentPageNum<=1){
+            model.addAttribute("currentPageNum",1);
+            model.addAttribute("lastPage",1);
+            model.addAttribute("nextPage",3);
+        } else{
+            model.addAttribute("currentPageNum",currentPageNum);
+            model.addAttribute("lastPage",currentPageNum-1);
+            model.addAttribute("nextPage",currentPageNum+1);
+        }
+        return "/admin/notice";
+    }
+
+    @GetMapping("/notice/detail/{id}")
+    public String noticeDetailPage(@PathVariable("id")int id,  Model model){
+        Notice notice = noticeService.getNotice(id);
+
+        model.addAttribute("notice",notice);
+        System.out.println(notice);
+        return "/admin/notice_detail";
+    }
+
 }
-
-
-
