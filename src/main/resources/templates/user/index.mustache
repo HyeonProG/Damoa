@@ -1,6 +1,7 @@
 {{>layout/header}}
-{{>layout/chatbot}}
-{{>layout/chat}}
+<div id ="chatbot">{{>layout/chatbot}}</div>
+<div id ="chat">{{>layout/chat}}</div>
+
 <style>
     .freelancer-box h5 b {
         display: inline-block;
@@ -116,7 +117,21 @@
         }, 300); // 슬라이드 전환 효과와 동일한 시간으로 설정
     });
 });
+        // 사이드바 토글 기능
+    document.getElementById('toggleChatSidebar').addEventListener('click', function () {
+        const chatbot = document.getElementById('chatbot');
+        const chat = document.getElementById('chat');
+            chatbot.style.display = 'block';
+            chat.style.display = 'none'; // 챗 레이아웃 숨기기
+    });
 
+    // 사이드바 닫기 기능
+    document.getElementById('closeChatSidebar').addEventListener('click', function () {
+        const chatSidebar = document.getElementById('chatbot');
+        const chatLayout = document.getElementById('chat');
+        
+        chatLayout.style.display = 'block'; // 챗 레이아웃 보이기
+    });
 </script>
 
 {{>layout/footer}}
