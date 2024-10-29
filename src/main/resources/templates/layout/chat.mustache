@@ -39,16 +39,17 @@
         /* 채팅 목록 헤더 */
         .chat-list-header {
             background-color: #007BFF; /* 파란색 배경 */
-            padding: 10px; /* 패딩 추가 */
+            padding: 8px; /* 패딩 추가 */
             color: white; /* 텍스트 색상 */
-            font-size: 18px; /* 글씨 크기 */
+            font-size: 22px; /* 글씨 크기 */
             display: flex;
             justify-content: space-between; /* 제목과 버튼을 양쪽으로 정렬 */
             align-items: center;
-            padding-left: 87px;
+            padding-left: 98px;
         }
 
-        .chat-list-header h2 {
+        .chat-list-header p {
+            color: white; /* 텍스트 색상 */
             margin: 0; /* 기본 여백 제거 */
             text-align: left; /* 제목을 왼쪽 정렬 */
             flex: 1; /* 제목 부분을 확장 */
@@ -66,7 +67,7 @@
         #chat-list {
             display: none;
             position: fixed;
-            bottom: 70px;
+            bottom: 80px;
             right: 20px;
             width: 300px;
             max-height: 500px;
@@ -81,7 +82,7 @@
 
         /* 채팅 목록의 각 항목 스타일 */
         .chat-item {
-            padding: 15px; /* 패딩을 크게 하여 터치 영역 증가 */
+            padding: 12px; /* 패딩을 크게 하여 터치 영역 증가 */
             border-bottom: 1px solid #007BFF; /* 항목 사이 경계선 */
             cursor: pointer;
             display: flex;
@@ -92,7 +93,7 @@
 
         .chat-item p {
             margin: 0;
-            font-size: 16px; /* 텍스트 크기 조정 */
+            font-size: 15px; /* 텍스트 크기 조정 */
             color: #333; /* 글자 색상 */
             flex: 1; /* 글자 부분 확장 */
             white-space: nowrap; /* 긴 이름 처리 */
@@ -112,7 +113,7 @@
         #chat-room {
             display: none;
             position: fixed;
-            bottom: 70px;
+            bottom: 100px;
             right: 20px;
             width: 300px;
             max-height: 500px;
@@ -197,7 +198,7 @@
         .input-group {
             display: none;
             position: fixed;
-            bottom: 50px;
+            bottom: 80px;
             right: 20px;
             z-index: 999;
             width: 300px;
@@ -221,7 +222,7 @@
 
 <div id="chat-list">
     <div class="chat-list-header">
-        <h2>채팅 목록</h2>
+        <p>채팅 목록</p>
         <button id="close-button">×</button>
     </div>
     <div id="chat-list-items">

@@ -468,5 +468,4 @@ public class FreelancerController {
 
         return "freelancer/detail";
     }
-
 }

@@ -235,11 +235,20 @@ public class ProjectController {
      * @return
      */
     @GetMapping("/detail/{projectId}")
-    public String projectDetailPage(@PathVariable(name="projectId",required=false)int projectId, Model model){
+    public String projectDetailPage(@PathVariable(name="projectId",required=false) int projectId,
+                                    Model model,
+                                    HttpSession session) {
+        // Pair 1. 1:1 채팅 신청을 위한 data
+        User user = (User) session.getAttribute("principal");
+
         Project project = projectService.findProjectById(projectId);
         ProjectListDTO dto = toProjectListDTO(project);
         System.out.println("~~~~~~~~~~"+dto.getSkill());
         model.addAttribute("project",dto);
+
+        // Pair 2.
+        model.addAttribute("comapnyId", project.getUserId());
+        model.addAttribute("session",user);
         return "project/detail";
     }
 //
