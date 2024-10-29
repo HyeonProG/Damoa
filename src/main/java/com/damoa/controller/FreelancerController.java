@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ import com.damoa.repository.model.Freelancer;
 import com.damoa.repository.model.Skill;
 import com.damoa.repository.model.User;
 import com.damoa.service.FreelancerService;
+import com.damoa.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/freelancer")
 public class FreelancerController {
 
+    @Autowired
     private final FreelancerService freelancerService;
 
     /**
@@ -58,9 +61,59 @@ public class FreelancerController {
 
         // 프리랜서의 기본 정보 가져오기
         Freelancer freelancer = freelancerService.findUserIdJoinFreelancerTb(user.getId());
-
+        model.addAttribute("isLogin", user);
+        model.addAttribute("isFreelancer", user);
         model.addAttribute("freelancer", freelancer); // userId 추가
         return "freelancer/basic_info"; // 템플릿 반환
+    }
+
+    @GetMapping("/insert-basic-info")
+    public String insertBasicInfoPage(HttpSession session, Model model) {
+        // 세션에서 사용자 정보 가져오기
+        User user = (User) session.getAttribute("principal");
+
+        // 사용자가 로그인하지 않았을 경우 로그인 페이지로 리디렉션
+        if (user == null) {
+            return "redirect:/user/sign-in";
+        }
+
+        // 사용자가 프리랜서인지 확인
+        if (!"freelancer".equals(user.getUserType())) {
+            throw new IllegalArgumentException("프리랜서만 접근할 수 있습니다.");
+        }
+
+        // 모든 경력 조회
+        List<Career> careers = freelancerService.findAllCareers();
+
+        model.addAttribute("isLogin", user);
+        model.addAttribute("isFreelancer", user);
+        model.addAttribute("careers", careers);
+        model.addAttribute("userId", user.getId()); // userId 추가
+        return "freelancer/insert_basic_info"; // 템플릿 반환
+    }
+
+    
+    @PostMapping("/insert-basic-info")
+    public String insertBasicInfo(@ModelAttribute FreelancerBasicInfoDTO dto, UserSignUpDTO userSignUpDTO,
+            HttpSession session) {
+        // 세션에서 사용자 정보 가져오기
+        User user = (User) session.getAttribute("principal");
+
+        // 사용자가 로그인하지 않았을 경우 로그인 페이지로 리디렉션
+        if (user == null) {
+            return "redirect:/user/sign-in";
+        }
+
+        // 사용자가 프리랜서인지 확인
+        if (!"freelancer".equals(user.getUserType())) {
+            throw new IllegalArgumentException("프리랜서만 접근할 수 있습니다.");
+        }
+
+        // 업데이트 로직
+        freelancerService.insertFreelancerBasicInfo(dto, userSignUpDTO);
+
+        // 업데이트 완료 후 적절한 페이지로 리디렉션 (예: 기본 정보 페이지)
+        return "redirect:/freelancer/basic-info";
     }
 
     /**
@@ -101,6 +154,8 @@ public class FreelancerController {
             model.addAttribute("freelancer", user.getUserType());
         }
 
+        model.addAttribute("isLogin", user);
+        model.addAttribute("isFreelancer", user);
         model.addAttribute("userId", user.getId()); // userId 추가
         return "freelancer/update_basic_info"; // 템플릿 반환
     }
@@ -129,7 +184,7 @@ public class FreelancerController {
         }
 
         // 업데이트 로직
-        freelancerService.insertFreelancerBasicInfo(dto, userSignUpDTO);
+        freelancerService.updateFreelancerBasicInfo(dto, userSignUpDTO);
 
         // 업데이트 완료 후 적절한 페이지로 리디렉션 (예: 기본 정보 페이지)
         return "redirect:/freelancer/basic-info";
@@ -161,6 +216,8 @@ public class FreelancerController {
         List<Career> freelancerCareers = freelancerService.findCareersByFreelancerId(user.getId());
         model.addAttribute("freelancerCareers", freelancerCareers);
 
+        model.addAttribute("isLogin", user);
+        model.addAttribute("isFreelancer", user);
         model.addAttribute("freelancer", user.getUserType());
 
         return "freelancer/career"; // 경력 관리 템플릿 반환
@@ -240,6 +297,8 @@ public class FreelancerController {
         List<Skill> freelancerSkills = freelancerService.findSkillsByFreelancerId(user.getId());
         model.addAttribute("freelancerSkills", freelancerSkills);
 
+        model.addAttribute("isLogin", user);
+        model.addAttribute("isFreelancer", user);
         model.addAttribute("freelancer", user.getUserType());
 
         return "freelancer/skills"; // 스킬 관리 템플릿 반환
@@ -305,7 +364,8 @@ public class FreelancerController {
      * @return
      */
     @GetMapping("/list")
-    public String findFreelancerPage(Model model) {
+    public String findFreelancerPage(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("principal");
         // 평균 급여 계산
         double averageSalary = freelancerService.countAverageFreelancerExpectedSalary();
 
@@ -320,7 +380,11 @@ public class FreelancerController {
         // 모든 직무 조회
         List<Career> careers = freelancerService.findAllCareers();
         model.addAttribute("careers", careers);
-
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+        }
+        model.addAttribute("isLogin", user);
         model.addAttribute("averageSalary", formattedSalary);
         return "/freelancer/freelancer_list";
     }
@@ -339,21 +403,29 @@ public class FreelancerController {
     public ResponseEntity<Map<String, Object>> fetchFreelancerList(
             @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "size", defaultValue = "5") int size,
-            @RequestParam(name = "keyword", required = false) String keyword) {
+            @RequestParam(name = "skill", required = false) String skill,
+            @RequestParam(name = "workingStyle", required = false) String workingStyle,
+            @RequestParam(name = "jobPart", required = false) String jobPart) {
     
         // 프리랜서 목록을 페이지별로 조회
         List<Freelancer> freelancers;
-        if (keyword != null && !keyword.isEmpty()) {
-            freelancers = freelancerService.findAllFreelancersBySearch(page, size, keyword); // 스킬로 검색
+        if (skill != null && !skill.isEmpty()) {
+            freelancers = freelancerService.findAllFreelancersBySearch(page, size, skill, workingStyle, jobPart);
+        } else if (jobPart != null && !jobPart.isEmpty()) {
+            freelancers = freelancerService.findAllFreelancersBySearch(page, size, skill, workingStyle, jobPart);
+        } else if (workingStyle != null && !workingStyle.isEmpty()) {
+            freelancers = freelancerService.findAllFreelancersBySearch(page, size, skill, workingStyle, jobPart);
         } else {
             freelancers = freelancerService.findAllFreelancers(page, size); // 전체 조회
         }
-        int totalFreelancers = freelancerService.countAllFreelancers();
+        int totalFreelancers = freelancerService.countAllFreelancersBySearch(skill, workingStyle, jobPart);
         int totalPages = (int) Math.ceil((double) totalFreelancers / size);
     
         // 프리랜서 평균 희망 연봉도 함께 응답 데이터에 추가
         int averageSalary = freelancerService.countAverageFreelancerExpectedSalary();
     
+        System.out.println("Received parameters: page=" + page + ", size=" + size + ", job=" + jobPart + ", workingStyle=" + workingStyle + ", skill=" + skill);
+
         // 응답 데이터
         Map<String, Object> response = new HashMap<>();
         response.put("freelancers", freelancers);
@@ -366,6 +438,13 @@ public class FreelancerController {
         return ResponseEntity.ok(response); // JSON 형태로 응답
     }
 
+    /**
+     * 프리랜서 상세보기
+     * @param userId
+     * @param session
+     * @param model
+     * @return
+     */
     @GetMapping("/detail/{userId}")
     public String freelancerDetailPage(@PathVariable("userId") int userId, HttpSession session, Model model) {
         // 세션에서 사용자 정보 가져오기
@@ -385,6 +464,7 @@ public class FreelancerController {
 
         // 모델에 프리랜서 정보 추가
         model.addAttribute("freelancer", freelancer);
+        model.addAttribute("isLogin", user);
 
         return "freelancer/detail";
     }

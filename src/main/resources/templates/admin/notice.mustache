@@ -1,0 +1,46 @@
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<style type="text/css">
+    .container mt-5 {
+        display: flex;
+        flex-direction: column;
+    }
+    .pageBtn {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+</style>
+
+{{>admin/admin_header}}
+<div class="container mt-5">
+    <h3>다모아의 새로운 소식들</h3>
+    <h5>신규 기능, 이벤트, 점검 일정 등 다양한 이야기를 확인해주세요.</h5>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>제목</th>
+            <th>작성일</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#noticeList}}
+            <tr>
+                <td><a href="/notice/detail/{{id}}">{{title}}</a></td>
+                <td>{{createdAt}}</td>
+            </tr>
+        {{/noticeList}}
+        {{^noticeList}}
+            <tr>
+                <td colspan="2" class="text-center">등록된 공지사항이 없습니다.</td>
+            </tr>
+        {{/noticeList}}
+        </tbody>
+    </table>
+    <div class="pageBtn">
+    <button class="btn btn-secondary" onclick="location.href='/notice/{{lastPage}}'">이전 페이지</button>
+    <button class="btn btn-primary" onclick="location.href='/notice/{{currentPageNum}}'">{{currentPageNum}}</button>
+    <button class="btn btn-secondary" onclick="location.href='/notice/{{nextPage}}'">다음 페이지</button>
+    </div>
+</div>

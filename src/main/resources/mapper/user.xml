@@ -73,4 +73,9 @@
     <select id="findAllCompanies" resultType="com.damoa.repository.model.User">
         SELECT * FROM user_tb WHERE user_type = 'company'
     </select>
+
+    <!-- @relation GoogleSheetsService 유저 PK 이름 조회 -->
+    <select id="findByUserName">
+        select * from user_tb where username = #{userName}
+    </select>
 </mapper>

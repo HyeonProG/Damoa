@@ -7,4 +7,12 @@
         select * from skill_tb
     </select>
 
+    <select id="selectSkillsByName" resultType="com.damoa.repository.model.Skill">
+        select * from skill_tb where name = #{name}
+    </select>
+
+    <insert id="addProjectSkillData" parameterType="com.damoa.repository.model.Skill">
+        insert into project_skills_tb (user_id, skill_id) values (#{skill}, #{userId})
+    </insert>
+
 </mapper>

@@ -10,6 +10,5 @@ import java.util.List;
  * 채팅 메세지 기록
  * */
 public interface ChatMessageRepository extends MongoRepository<ChatMessage, String> {
-    List<ChatMessage> findBySenderIdAndReceiverId(String senderId, String receiverId);
 
 }

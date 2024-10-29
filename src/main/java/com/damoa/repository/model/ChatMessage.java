@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ChatMessage {
     @Id
     private String id;
+    private String roomId;
     private String senderId;
     private String receiverId;
     private String message;

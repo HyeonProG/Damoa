@@ -12,4 +12,9 @@ public interface NoticeRepository {
     public List<Notice> getNoticeList(@Param("limit")int limit, @Param("offset") int offset);
     public List<Notice> getAllNotice();
     public Notice getNotice(int id);
+
+
+    public List<Notice> findNoticeList(@Param("offset") int offset, @Param("size") int size);
+    public int getNoticeCount();
+
 }

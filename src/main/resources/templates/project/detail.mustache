@@ -34,7 +34,6 @@
             <div class="project-box" id="each-project" style="location.href='/project/detail/{{id}}'">
                 <h5>{{id}}</h5>
                 <h5>{{job}}</h5>
-                <h5>{{skill}}</h5>
                 <p>{{minYears}}~{{maxYears}}</p>
                 <p>프로젝트 명: {{projectName}}</p>
                 <p>프로젝트 시작일: {{projectStart}} 예상 기간: {{expectedPeriod}}</p>
@@ -42,7 +41,7 @@
                 <p>근무 방식 : {{workingStyle}}</p>
                 <p>미팅 방식 : {{meeting}}</p>
                 <p>근무 시간 : {{worktime}}</p>
-                <button class="btn btn-primary" onclick="makeWaitForm()">프로젝트 대기하기</button>
+                <button class="btn btn-primary" onclick="makeWaitForm()">지금 바로 대화하기</button>
                 <button class="btn btn-secondary" onclick="location.href='/project/list/1'">목록으로 돌아가기</button>
 
             </div>

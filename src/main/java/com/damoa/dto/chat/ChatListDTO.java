@@ -9,4 +9,5 @@ import lombok.Data;
 public class ChatListDTO {
     private String receiver;    // @param User.getUsername
     private ChatList chatList;
+    private Integer sessionUserId;
 }

@@ -1,21 +1,19 @@
 package com.damoa.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 import com.damoa.dto.TossHistoryDTO;
-import com.damoa.repository.interfaces.UserRepository;
+import com.damoa.dto.user.*;
+import com.damoa.handler.exception.DataDeliveryException;
 import com.damoa.repository.model.Faq;
+import com.damoa.repository.model.User;
 import com.damoa.service.FaqService;
+import com.damoa.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,26 +22,13 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import com.damoa.dto.user.AddSocialUserInfoDTO;
-import com.damoa.dto.user.GoogleResponseDTO;
-import com.damoa.dto.user.GoogleTokenDTO;
-import com.damoa.dto.user.KakaoResponseDTO;
-import com.damoa.dto.user.KakaoTokenDTO;
-import com.damoa.dto.user.PrincipalDTO;
-import com.damoa.dto.user.UserSignInDTO;
-import com.damoa.dto.user.UserSignUpDTO;
-import com.damoa.handler.exception.DataDeliveryException;
-import com.damoa.repository.model.User;
-import com.damoa.service.UserService;
-
-import java.io.PrintWriter;
 import java.io.IOException;
-
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
+import java.io.PrintWriter;
+import java.text.NumberFormat;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -430,7 +415,7 @@ public class UserController {
     }
 
     @GetMapping("/faq-detail/{id}")
-    public String qnaDetail(@PathVariable int id, Model model) {
+    public String qnaDetail(@PathVariable(name = "id") int id, Model model) {
         Faq faq = faqService.getFaqById(id);
         model.addAttribute("faq", faq);
         return "user/faq_detail";
@@ -446,10 +431,17 @@ public class UserController {
         }
 
         PrincipalDTO principalDTO = userService.findUserById(user.getId());
+
+
         model.addAttribute("user", principalDTO);
 
         boolean isFreelancer = "freelancer".equals(user.getUserType());
         boolean isCompany = "company".equals(user.getUserType());
+        model.addAttribute("isLogin", user);
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+        }
         model.addAttribute("freelancer", isFreelancer);
         model.addAttribute("company", isCompany);
 
@@ -490,9 +482,35 @@ public class UserController {
         boolean isFreelancer = principal.getUserType().equals("freelancer");
         boolean isCompany = principal.getUserType().equals("company");
 
-        model.addAttribute("freelancer", isFreelancer);
-        model.addAttribute("company", isCompany);
+        // 날짜 포맷팅을 위한 DateTimeFormatter 설정
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+
+        // 숫자 포맷팅을 위한 NumberFormat 설정
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+
+        // 각 결제 내역의 requestedAt과 amount를 포맷팅하여 새로운 리스트 생성
+        List<TossHistoryDTO> formattedPaymentList = paymentList.stream()
+                .map(payment -> {
+                    // String 타입의 requestedAt 필드 포맷팅
+                    String originalDateStr = payment.getRequestedAt();
+                    String formattedDate = OffsetDateTime.parse(originalDateStr, inputFormatter)
+                            .format(outputFormatter);
+                    payment.setRequestedAt(formattedDate);
+
+                    // amount를 쉼표가 포함된 형식으로 포맷팅
+                    String formattedAmount = numberFormat.format(Double.parseDouble(payment.getAmount()));
+                    payment.setAmount(formattedAmount);
+
+                    return payment;
+                })
+                .collect(Collectors.toList());
+
+        model.addAttribute("isFreelancer", isFreelancer);
+        model.addAttribute("isCompany", isCompany);
         model.addAttribute("paymentList", paymentList);
+        model.addAttribute("isLogin", principal);
         return "user/paymentsDetail";
     }
 

@@ -23,16 +23,23 @@ public interface FreelancerRepository {
     List<Freelancer> findAllFreelancersBySearch(
         @Param("offset") int offset,
         @Param("size") int size,
-        @Param("keyword") String keyword);
+        @Param("skill") String skill,
+        @Param("workingStyle") String workingStyle,
+        @Param("jobPart") String jobPart);
 
     public int countAllFreelancers(); // 전체 프리랜서 수 조회
 
-    public int countAllFreelancersBySearch(String keyword);
+    public int countAllFreelancersBySearch(
+    @Param("skill") String skill,
+    @Param("workingStyle") String workingStyle,
+    @Param("jobPart") String jobPart);
 
     public Freelancer findUserIdJoinFreelancerTb(int id); // 유저 id로 프리랜서 조회
 
     // 프리랜서 기본정보 추가
     public int insertFreelancerBasicInfo(FreelancerBasicInfoDTO dto);
+
+    public int updateFreelancerBasicInfo(FreelancerBasicInfoDTO dto);
 
     public FreelancerBasicInfoDTO findFreelancerBasicInfo(int userId);
 
