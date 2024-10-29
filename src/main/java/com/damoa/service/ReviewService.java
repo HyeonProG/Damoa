@@ -37,8 +37,6 @@ public class ReviewService {
         // 3. 모델에 List로 반환
         model.addAttribute("companyReview", companyReview);
         model.addAttribute("freelancerReview",freelancerReview);
-        // 토탈 리뷰 갯수
-        model.addAttribute("totalReviews", companyReview.size() + freelancerReview.size());
     }
 
     // 프리랜서 리뷰 데이터 호출 메서드

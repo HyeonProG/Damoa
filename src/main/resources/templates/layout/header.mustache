@@ -256,7 +256,31 @@
             margin-left: 5px;
             margin-right: 5px;
         }
+        .drop-down-menus {
+            display: none; /* 기본적으로 숨김 */
+            position: absolute;
+            background: white; /* 배경색 설정 */
+            border: 1px solid #d0ccc9; /* 테두리 색상 */
+            border-radius: 5px; /* 모서리 둥글게 */
+            padding: 10px; /* 패딩 추가 */
+            z-index: 10; /* 다른 요소 위에 표시 */
+        }
 
+        .dropdown:hover .drop-down-menus {
+            display: block; /* 마우스가 올라가면 표시 */
+        }
+
+        .drop-down-menus a {
+            display: block; /* 블록 요소로 만들어 세로로 쌓이게 함 */
+            padding: 5px 10px; /* 패딩 추가 */
+            color: #18A8F1; /* 링크 색상 */
+        }
+
+        .drop-down-menus a:hover {
+            background: #007BFF; /* 마우스 오버 시 배경색 변경 */
+            color: white;
+            text-decoration: none; /* 호버 시 밑줄 제거 */
+        }
     </style>
 
     <!-- font-awesome CSS -->
@@ -327,7 +351,13 @@
             <p class="section-bar"> | </p>
             <h6><b><a href="/freelancer/list">프리랜서 찾기</a></b></h6>
             <p class="section-bar"> | </p>
-            <h6><b><a href="/reviews/home">리뷰 찾아보기</a></b></h6>
+            <h6 class="dropdown">
+                <b><a href="/reviews/home" class="dropdown-toggle">리뷰 찾아보기</a></b>
+                <div class="drop-down-menus">
+                    <a href="/reviews/list/company">기업 리뷰</a>
+                    <a href="/reviews/list/freelancer">프리랜서 리뷰</a>
+                </div>
+            </h6>
             <p class="section-bar"> | </p>
             <h6><b><a href="/notice/1">공지사항</a></b></h6>
             <p class="section-bar"> | </p>
@@ -341,7 +371,13 @@
             <p class="section-bar"> | </p>
             <h6><b><a href="/freelancer/list">프리랜서 찾기</a></b></h6>
             <p class="section-bar"> | </p>
-            <h6><b><a href="/reviews/home">리뷰 찾아보기</a></b></h6>
+            <h6 class="dropdown">
+                <b><a href="/reviews/home" class="dropdown-toggle">리뷰 찾아보기</a></b>
+                <div class="drop-down-menus">
+                    <a href="/reviews/list/company">기업 리뷰</a>
+                    <a href="/reviews/list/freelancer">프리랜서 리뷰</a>
+                </div>
+            </h6>
             <p class="section-bar"> | </p>
             <h6><b><a href="/notice/1">공지사항</a></b></h6>
             <p class="section-bar"> | </p>
@@ -352,7 +388,13 @@
         <p class="section-bar"> | </p>
         <h6><b><a href="/freelancer/list">프리랜서 찾기</a></b></h6>
         <p class="section-bar"> | </p>
-        <h6><b><a href="/reviews/home">리뷰 찾아보기</a></b></h6>
+            <h6 class="dropdown">
+                <b><a href="/reviews/home" class="dropdown-toggle">리뷰 찾아보기</a></b>
+                <div class="drop-down-menus">
+                    <a href="/reviews/list/company">기업 리뷰</a>
+                    <a href="/reviews/list/freelancer">프리랜서 리뷰</a>
+                </div>
+            </h6>
         <p class="section-bar"> | </p>
         <h6><b><a href="/notice/1">공지사항</a></b></h6>
         <p class="section-bar"> | </p>
@@ -363,3 +405,15 @@
             <hr class="nav-line">
         </div>
         <div class="main-board">
+<script>
+    $(document).ready(function() {
+        $('.dropdown').hover(
+            function() {
+                $(this).find('.drop-down-menus').stop(true, true).slideDown(200);
+            }, 
+            function() {
+                $(this).find('.drop-down-menus').stop(true, true).slideUp(200);
+            }
+        );
+    });
+</script>

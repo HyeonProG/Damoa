@@ -1,56 +1,139 @@
 {{> layout/header}}
 
-<div class="container mt-4">
-    <div class="bg-success text-white text-center p-3 mb-3">
-        <h1>다모아 Review 후기</h1>
-    </div>
-    <div class="bg-warning text-center p-2 mb-3">
-        <p>{{totalReviews}}개의 다모아 고객님들의 후기</p>
-    </div>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f8f9fa;
+    }
 
-    <!-- 클라이언트 리뷰 섹션 -->
+    .sub-header {
+        color: #007BFF;
+        font-size: 1rem;
+    }
+
+    .review-title {
+        color: #007BFF;
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .full-width-img {
+        width: 110%;
+        height: 280px;
+        object-fit: cover;
+        border-radius: 15px;
+        margin-left: -5%;
+        margin-bottom: 60px;
+    }
+
+    .scroll-container {
+        display: flex;
+        overflow: hidden; /* 수평 스크롤 숨김 */
+        width: 100%;
+        position: relative;
+        margin-bottom: 80px; /* 각 섹션 아래 여백 추가 */
+    }
+
+    .scroll-content {
+        display: flex;
+        transition: transform 50s linear; /* 애니메이션 속도 및 선형 */
+        animation: scroll 50s linear infinite; /* 카드 애니메이션 추가 */
+    }
+
+    @keyframes scroll {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-50%); /* 이동 거리 조정 */
+        }
+    }
+
+    .card {
+        width: 250px; /* 카드 너비 조정 */
+        margin-right: 20px; /* 카드 간격 조정 */
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+        background-color: #f8f9fa;
+        border-radius: 15px;
+        text-align: center;
+    }
+
+    .btn-review {
+        background-color: #007BFF;
+        color: white;
+        border-radius: 0 0 15px 15px;
+        transition: background-color 0.3s;
+    }
+
+    .btn-review:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="container mt-4">
+    <img src="/images/banner/review-banner.png" class="full-width-img">
+
+    <!-- 기업 리뷰 섹션 -->
     <section class="mt-4">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-            <h2 class="h5">기업 리뷰</h2>
-        </div>
-        <div class="row">
-            {{#companyReview}}
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow">
-                        <div class="card-body text-center">
-                            <img src="https://cdn.wishket.com/profiles/{{companyId}}.png"
-                                 class="img-fluid rounded-circle" alt="프로필 이미지"
-                                 style="width: 100px; height: 100px; margin-bottom: 15px;">
+        <p class="h5 review-title">기업 리뷰</p>
+        <div class="scroll-container">
+            <div class="scroll-content" id="company-scroll-content">
+                {{#companyReview}}
+                    <div class="card">
+                        <div class="card-body">
+                            <p>기업 이름</p>
                             <p class="text-muted">평균 평점: {{overallScore}}점</p>
                             <p class="card-text">{{responseData}}</p>
                         </div>
-                        <button class="btn btn-primary btn-block">리뷰 더보기</button>
+                        <button class="btn btn-review btn-block" onclick="location.href='/reviews/list/company'">리뷰 더보기</button>
                     </div>
-                </div>
-            {{/companyReview}}
+                {{/companyReview}}
+                {{#companyReview}} <!-- 카드 복제 -->
+                    <div class="card">
+                        <div class="card-body">
+                            <p>기업 이름</p>
+                            <p class="text-muted">평균 평점: {{overallScore}}점</p>
+                            <p class="card-text">{{responseData}}</p>
+                        </div>
+                        <button class="btn btn-review btn-block" onclick="location.href='/reviews/list/company'">리뷰 더보기</button>
+                    </div>
+                {{/companyReview}}
+            </div>
         </div>
     </section>
 
     <!-- 프리랜서 리뷰 섹션 -->
     <section class="mt-4">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-            <h2 class="h5">프리랜서 리뷰</h2>
-        </div>
-        <div class="row">
-            {{#freelancerReview}}
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow">
-                        <div class="card-body text-center">
-                            <img src="https://cdn.wishket.com/profiles/{{freelancerId}}.png"
-                                 class="img-fluid rounded-circle" alt="프로필 이미지"
-                                 style="width: 100px; height: 100px;">
+        <p class="h5 review-title">프리랜서 리뷰</p>
+        <div class="scroll-container">
+            <div class="scroll-content" id="freelancer-scroll-content">
+                {{#freelancerReview}}
+                    <div class="card">
+                        <div class="card-body">
+                            <p>프리랜서 이름</p>
                             <p class="text-muted">평균 평점: {{overallScore}}점</p>
                             <p class="card-text">{{responseData}}</p>
                         </div>
-                        <button class="btn btn-primary btn-block">리뷰 더보기</button>
+                        <button class="btn btn-review btn-block" onclick="location.href='/reviews/list/freelancer'">리뷰 더보기</button>
                     </div>
-                </div>
-            {{/freelancerReview}}
+                {{/freelancerReview}}
+                {{#freelancerReview}} <!-- 카드 복제 -->
+                    <div class="card">
+                        <div class="card-body">
+                            <p>프리랜서 이름</p>
+                            <p class="text-muted">평균 평점: {{overallScore}}점</p>
+                            <p class="card-text">{{responseData}}</p>
+                        </div>
+                        <button class="btn btn-review btn-block" onclick="location.href='/reviews/list/freelancer'">리뷰 더보기</button>
+                    </div>
+                {{/freelancerReview}}
+            </div>
         </div>
     </section>
 </div>

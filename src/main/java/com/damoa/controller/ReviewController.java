@@ -2,7 +2,6 @@ package com.damoa.controller;
 
 import com.damoa.constants.UserType;
 import com.damoa.service.ReviewService;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
