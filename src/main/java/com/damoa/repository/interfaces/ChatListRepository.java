@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Optional;
 
 /*
  * MySQL 매퍼
@@ -17,8 +16,8 @@ public interface ChatListRepository {
     // 전체 채팅 목록 데이터 가져오기
     List<ChatList> findByChatList(int userId);
 
-    // 채팅 목록 pk 아이디로 가져오기
-    Optional<ChatList> findByChatListId(int id);
+    // senderId와 receiverId의 조합이 list에 있는지 중복 확인
+    boolean existsBySenderIdAndReceiverId(@Param("senderId") int senderId, @Param("receiverId") int receiverId);
 
     /*
      * function: chat_list_tb insert

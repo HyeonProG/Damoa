@@ -3,9 +3,7 @@ package com.damoa.service;
 import com.damoa.component.ChatListAdapter;
 import com.damoa.dto.chat.ChatListDTO;
 import com.damoa.repository.interfaces.ChatListRepository;
-import com.damoa.repository.interfaces.UserRepository;
 import com.damoa.repository.model.ChatList;
-import com.damoa.repository.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +18,15 @@ public class ChatListService {
     private final ChatListAdapter chatListAdapter;
 
     // senderId, receiverId 저장 기능
-    // TODO: senderId, receiverId가 이미 있을 경우 중복 저장 안되게 수정
     public void saveByChatList(int senderId, int receiverId) {
-        ChatList chatList = new ChatList();
+        boolean exists = chatListRepository.existsBySenderIdAndReceiverId(senderId, receiverId);
 
-        chatList.setSenderId(senderId);
-        chatList.setReceiverId(receiverId);
-        chatListRepository.saveByChatList(chatList);
+        if (!exists) {
+            ChatList chatList = new ChatList();
+            chatList.setSenderId(senderId);
+            chatList.setReceiverId(receiverId);
+            chatListRepository.saveByChatList(chatList);
+        }
     }
 
     /*

@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/match")
@@ -70,9 +71,14 @@ public class ChatController {
     * 주소설계: http://localhost:8080/match/chat-request
     * */
     @PostMapping("/chat-request")
-    @ResponseBody
-    public String saveChatRequest(@RequestParam int senderId,
-                                  @RequestParam int receiverId) {
+    @ResponseBody   // 서버 응답 요청
+    public String saveChatRequest(@RequestParam("senderId") int senderId,
+                                  @RequestParam("receiverId") int receiverId) {
+
+        log.info("senderId: {}, receiverId: {}", senderId, receiverId);
+        if (senderId <= 0 && receiverId <= 0) {
+            return "채팅 요청에 실패했습니다.";
+        }
 
         chatListService.saveByChatList(senderId, receiverId);
 

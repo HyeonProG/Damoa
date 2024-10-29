@@ -23,6 +23,5 @@ public class User {
     private Timestamp createdAt;
     private String userType; // 프리랜서인지 기업인지 나누는 변수
     private String socialType; // 소셜로그인, 로컬로 나누는 변수
-    private int point; // 프로젝트 등록할 때 필요한 포인트!
 
 }
