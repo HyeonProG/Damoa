@@ -41,4 +41,13 @@ public class SkillService {
             skillRepository.addProjectSkillData(skillList.get(i).getId(),userId);
         }
     }
+
+    /**
+     * 프로젝트 id로 skill list 찾기
+     * @param projectId
+     * @return
+     */
+    public List<String> findSkillsByProjectId(int projectId){
+        return skillRepository.findProjectSkillById(projectId);
+    }
 }

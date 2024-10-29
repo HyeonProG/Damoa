@@ -12,23 +12,34 @@
     }
     .project-container {
         display: flex;
-        flex-direction: column;
-        width: 80%; /* 중앙 정렬을 위해 너비 설정 */
+        width: 1000px; /* 중앙 정렬을 위해 너비 설정 */
         margin: 20px auto; /* 자동 여백으로 중앙 정렬 */
+        flex-wrap: wrap;
     }
     .project-list-item {
-        width: 80%;
-        padding: 15px;
-        margin: 10px 0;
+        width: 25%; /* 너비 설정 */
+        height: 250px; /* 균일한 높이 설정 */
+        padding: 10px;
+        margin: 20px -5px;
         background: white;
         border-radius: 10px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         transition: background 0.2s; /* 마우스 오버 시 애니메이션 */
         display: flex; /* Flexbox 사용 */
         flex-direction: column; /* 세로 방향으로 배치 */
+        justify-content: space-evenly; /* 내용 간 간격을 동일하게 조정 */
+        align-items: left;
+        box-sizing: border-box; /* 패딩을 포함한 크기 계산 */
+        transition: transform 0.2s ease, box-shadow 0.2s ease; /* 부드러운 전환 추가 */
     }
-    .project-list-item:hover {
-        background: #f8f9fa; /* 호버 시 배경색 변경 */
+
+    .project-list-item img {
+        max-width: 100%; /* 이미지 너비 설정 */
+        height: auto; /* 자동 높이 조절 */
+        margin-bottom: 10px; /* 이미지 아래 간격 */
+    }
+     .project-list-item:hover {
+         transform: translateY(-3px); /* 위로 살짝 이동 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 약한 그림자 효과 */
     }
     .project-info {
         margin-bottom: 10px; /* 정보 간 간격 설정 */
@@ -46,19 +57,21 @@
     }
 </style>
 
-<h3>프로젝트 목록 ({{totalProjectNum}})</h3>
+
+
+<h3><b>프로젝트 목록 ({{totalProjectNum}})</b></h3>
 <p>프로젝트를 찾고 매칭해보세요</p>
 
 <div class="search-div">
-    <div class="minor-class">
-        <select name="workingType" onchange="sendData()">
+    <div class="minor-class" style="margin-right: 20px;">
+        <select name="workingType" onchange="sendData()" class="form-select" style="border: 1px solid gray;">
             <option value="all" selected disabled hidden>근무 방식</option>
             <option value="0">전체</option>
             <option value="1">원격 근무</option>
             <option value="2">상주 근무</option>
             <option value="3">원격 상주 모두</option>
         </select>
-        <select name="workingAddress" onchange="sendData()">
+        <select name="workingAddress" onchange="sendData()" class="form-select">
             <option selected disabled hidden>직무</option>
             <option value="0">전체</option>
             <option value="1">풀스택</option>
@@ -69,12 +82,12 @@
             <option value="6">데이터</option>
             <option value="7">AI</option>
             <option value="8">임베디드</option>
-            <option value="8">미들웨어</option>
-            <option value="9">웹 퍼블리싱</option>
-            <option value="10">안드로이드</option>
-            <option value="11">IOS</option>
+            <option value="9">미들웨어</option>
+            <option value="10">웹 퍼블리싱</option>
+            <option value="11">안드로이드</option>
+            <option value="12">IOS</option>
         </select>
-        <select name="projectStatus" onchange="sendData()">
+        <select name="projectStatus" onchange="sendData()" class="form-select">
             <option selected disabled hidden>진행 상황</option>
             <option value="0">전체</option>
             <option value="1">기획단계</option>
@@ -83,17 +96,18 @@
         </select>
     </div>
     <div>
-        <button>조회순</button>
-        <button>최신순</button>
+        <button class="btn btn-primary">조회순</button>
+        <button class="btn btn-primary">최신순</button>
     </div>
 </div>
+
 <div class="project-container">
     {{#projectListForPaging}}
         <div class="project-list-item" onclick="location.href='/project/detail/{{id}}'">
-            <h4>{{projectName}}</h4>
-            <h5 class="project-job">{{job}}</h5>
-            <p>{{projectStart}}</p>
-            <button class="btn btn-primary">자세히 보기</button>
+            <img src="/images/logos/sample-img.png" style="height:400px; width: 220px; margin-bottom: 10px; cursor:pointer; border-radius: 10px;">
+            <h6 style="width: 95%;"><b>{{projectName}}</b></h6>
+            <h6 style="color: gray;">{{job}}</h6>
+            <p style="color: gray;">{{userName}}</p>
         </div>
     {{/projectListForPaging}}
 </div>
@@ -109,64 +123,60 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-    // sendData 함수를 여기서 정의
-    window.sendData = function() {
-        var workingType = $('select[name="workingType"]').val();
-        var workingAddress = $('select[name="workingAddress"]').val();
-        var projectStatus = $('select[name="projectStatus"]').val();
-        var projectStatus = $('select[name="projectStatus"]').val();
+        window.sendData = function() {
+            var workingType = $('select[name="workingType"]').val();
+            var workingAddress = $('select[name="workingAddress"]').val();
+            var projectStatus = $('select[name="projectStatus"]').val();
 
-        console.log(workingType);
-        console.log(workingAddress);
-        console.log(projectStatus);
-        console.log('허허허');
+            console.log(workingType);
+            console.log(workingAddress);
+            console.log(projectStatus);
+            console.log('허허허');
 
-        $.ajax({
-            url: '/project/send-fetched-data',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                'workType': workingType,
-                'address': workingAddress,
-                'progress': projectStatus,
-            }),
-            success: function(data) {
-                updateProjectList(data);
-            },
-        });
-    };
+            $.ajax({
+                url: '/project/send-fetched-data',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'workType': workingType,
+                    'address': workingAddress,
+                    'progress': projectStatus,
+                }),
+                success: function(data) {
+                    updateProjectList(data);
+                },
+            });
+        };
 
-    // select 요소의 change 이벤트에 sendData 함수 연결
-    $('.minor-class select').change(sendData);
-});
+        // select 요소의 change 이벤트에 sendData 함수 연결
+        $('.minor-class select').change(sendData);
+    });
 
     function updateProjectList(projects) {
-    var projectContainer = $('.project-container');
-    projectContainer.empty(); // 기존 내용 비우기
+        var projectContainer = $('.project-container');
+        projectContainer.empty(); // 기존 내용 비우기
 
-    if (projects.length === 0) {
-        projectContainer.append('<p>해당하는 프로젝트가 없습니다.</p>'); // 프로젝트가 없을 경우 메시지 추가
-        return;
+        if (projects.length === 0) {
+            projectContainer.append('<p>해당하는 프로젝트가 없습니다.</p>'); // 프로젝트가 없을 경우 메시지 추가
+            return;
+        }
+
+        $.each(projects, function(index, project) {
+            var projectItem = $(`
+                <div class="project-list-item" onclick="location.href='/project/detail/${project.id}'">
+                    <h4>${project.projectName}</h4>
+                    <h5 class="project-job">${project.job}</h5>
+                    <p>${project.projectStart}</p>
+                    <button class="btn btn-primary">자세히 보기</button>
+                </div>
+            `);
+            projectContainer.append(projectItem);
+        });
     }
-
-    $.each(projects, function(index, project) {
-        var projectItem = $(`
-            <div class="project-list-item" onclick="location.href='/project/detail/${project.id}'">
-                <h4>${project.projectName}</h4>
-                <h5 class="project-job">${project.job}</h5>
-                <p>${project.projectStart}</p>
-                <button class="btn btn-primary">자세히 보기</button>
-            </div>
-        `);
-        projectContainer.append(projectItem);
-    });
-}
-
 
     window.showJobContainer=function(){
         $('.job-kind-container').toggle();
     }
-
 </script>
 
 {{>layout/footer}}

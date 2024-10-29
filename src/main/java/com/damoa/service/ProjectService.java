@@ -172,7 +172,5 @@ public class ProjectService {
         return newProject;
     }
 
-    public int test(){
-        return projectRepository.test("select count(*) from project_tb");
-    }
+
 }

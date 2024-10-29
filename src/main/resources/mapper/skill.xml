@@ -15,4 +15,13 @@
         insert into project_skills_tb (user_id, skill_id) values (#{skill}, #{userId})
     </insert>
 
+
+    <select id="findProjectSkillById" resultType="string">
+        select s.name
+        from project_skills_tb as ps
+        join skill_tb as s
+        where ps.skill_id = s.id
+        and ps.project_id = #{project_id};
+    </select>
+
 </mapper>

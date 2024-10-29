@@ -1,6 +1,7 @@
 package com.damoa.controller;
 
 import com.damoa.dto.ProjectSaveDTO;
+import com.damoa.dto.user.ProjectListDTO;
 import com.damoa.dto.user.ProjectWaitDTO;
 import com.damoa.dto.user.SelectDTO;
 import com.damoa.handler.exception.DataDeliveryException;
@@ -10,6 +11,7 @@ import com.damoa.repository.model.Skill;
 import com.damoa.repository.model.User;
 import com.damoa.service.ProjectService;
 import com.damoa.service.SkillService;
+import com.damoa.service.UserService;
 import com.damoa.utils.Define;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Controller
 @RequestMapping("/project")
@@ -36,6 +39,8 @@ public class ProjectController {
     private  ProjectService projectService;
     @Autowired
     private SkillService skillService;
+    @Autowired
+    private UserService userService;
 
     // DI
     public ProjectController(HttpSession session, ProjectService projectService) {
@@ -106,12 +111,121 @@ public class ProjectController {
         // 페이징 처리 된 프로젝트들
         List<Project> projectListForPaging = projectService.getProjectForPaging(limit,offset);
 
+        List<ProjectListDTO> newList = new ArrayList<>();
+        for(int i=0; i<projectListForPaging.size(); i++){
+            ProjectListDTO dto = toProjectListDTO(projectListForPaging.get(i));
+            newList.add(dto);
+            System.out.println("언제 됨.........");
+        }
+        System.out.println(newList.get(3));
+
         model.addAttribute("totalPageNum",totalPageNum);
         model.addAttribute("totalProjectNum",totalProjectNum);
         model.addAttribute("currentPageNum",currentPageNum);
-        model.addAttribute("projectListForPaging",projectListForPaging);
+        model.addAttribute("projectListForPaging",newList);
 
         return "project/list";
+    }
+
+    public ProjectListDTO toProjectListDTO(Project project) {
+        ProjectListDTO newProDTO = new ProjectListDTO();
+        newProDTO.setId(project.getId()); // id
+        newProDTO.setUserName(userService.findUserById(project.getUserId()).getUsername()); // 유저 닉네임
+
+        // 직무
+        switch (project.getJob()) {
+            case "1":
+                newProDTO.setJob("풀스택");
+                break;
+            case "2":
+                newProDTO.setJob("프론트엔드");
+                break;
+            case "3":
+                newProDTO.setJob("백엔드");
+                break;
+            case "4":
+                newProDTO.setJob("서버");
+                break;
+            case "5":
+                newProDTO.setJob("데브옵스");
+                break;
+            case "6":
+                newProDTO.setJob("데이터");
+                break;
+            case "7":
+                newProDTO.setJob("AI");
+                break;
+            case "8":
+                newProDTO.setJob("임베디드");
+                break;
+            case "9":
+                newProDTO.setJob("미들웨어");
+                break;
+            case "10":
+                newProDTO.setJob("웹퍼블리싱");
+                break;
+            default:
+                newProDTO.setJob("알 수 없음");
+        }
+
+        newProDTO.setSkill(skillService.findSkillsByProjectId(project.getId())); // 스킬 목록 찾아오기
+        newProDTO.setProjectName(project.getProjectName()); // 프로젝트 명
+        newProDTO.setRequireYears("최소 " + project.getMinYears() + "년 ~ 최대 " + project.getMaxYears() + "년"); // 요구 연차
+        newProDTO.setProjectStart(formatDate(project.getProjectStart())); // 프로젝트 시작일
+
+        // 프로젝트 예상 기간 - 주/월
+        newProDTO.setPeriod(project.getExpectedPeriod().equals("months") ? project.getPeriod() + "개월 예상" : project.getPeriod() + "주 예상");
+
+        // 프로젝트 종류 - 기간제 / 프로젝트 단위
+        newProDTO.setProjectType(project.getSalaryType().equals("month") ? "기간제" : "프로젝트 단위");
+
+        // 근무 방식
+        switch (project.getWorkingStyle()) {
+            case "1":
+                newProDTO.setWorkingStyle("원격 근무");
+                break;
+            case "2":
+                newProDTO.setWorkingStyle("상주 근무");
+                break;
+            default:
+                newProDTO.setWorkingStyle("원격/상주 모두 가능");
+        }
+
+        newProDTO.setMeeting(project.getMeeting().equals("1") ? "오프라인 미팅" : "온라인 미팅");
+
+        switch (project.getProgress()) {
+            case "1":
+                newProDTO.setProgress("기획 단계");
+                break;
+            case "2":
+                newProDTO.setProgress("기획서가 작성되어 있음");
+                break;
+            default:
+                newProDTO.setProgress("모든 문서가 준비되어 있음");
+        }
+
+        newProDTO.setMainTasks(project.getMainTasks());
+        newProDTO.setDetailTask(project.getDetailTask());
+        newProDTO.setDelivered(project.getDelivered());
+        newProDTO.setCompany(project.getCompany());
+        newProDTO.setManagerName(project.getManagerName());
+        newProDTO.setContact(project.getContact());
+        newProDTO.setEmail(project.getEmail());
+        newProDTO.setFiles(project.getFiles());
+        newProDTO.setCreatedAt(formatTimestampToString(project.getCreatedAt()));
+
+        return newProDTO;
+    }
+
+    public String formatDate(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy년 MM월 dd일");
+        return formatter.format(date);
+    }
+
+    public String formatTimestampToString(Timestamp timestamp) {
+        LocalDate date = timestamp.toLocalDateTime().toLocalDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"); // "년월일" 형식
+        return date.format(formatter);
     }
 
     /**
@@ -123,7 +237,9 @@ public class ProjectController {
     @GetMapping("/detail/{projectId}")
     public String projectDetailPage(@PathVariable(name="projectId",required=false)int projectId, Model model){
         Project project = projectService.findProjectById(projectId);
-        model.addAttribute("project",project);
+        ProjectListDTO dto = toProjectListDTO(project);
+        System.out.println("~~~~~~~~~~"+dto.getSkill());
+        model.addAttribute("project",dto);
         return "project/detail";
     }
 //

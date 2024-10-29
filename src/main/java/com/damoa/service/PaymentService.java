@@ -6,6 +6,9 @@ import com.damoa.repository.interfaces.PaymentHistoryRepository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,11 +73,12 @@ public class PaymentService {
         return entity;
     }
 
-    public List<TossHistoryDTO> findAll() {
+    public Page<TossHistoryDTO> findAll(Pageable pageable) {
 
-        List<TossHistoryDTO> entity = paymentHistoryRepository.viewAll();
-
-        return entity;
+        int offset = pageable.getPageNumber() * pageable.getPageSize();
+        List<TossHistoryDTO> paymentList = paymentHistoryRepository.viewAll(offset, pageable.getPageSize());
+        int totalCount = paymentHistoryRepository.countAll();
+        return new PageImpl<>(paymentList, pageable, totalCount);
     }
 
     @Transactional
@@ -85,9 +89,11 @@ public class PaymentService {
         paymentHistoryRepository.updateUserPoint(amount, id);
     }
 
-    public List<TossHistoryDTO> findRequestedRefund() {
-        List<TossHistoryDTO> dto = paymentHistoryRepository.findHistoryByStatus();
-        return dto;
+    public Page<TossHistoryDTO> findRequestedRefund(Pageable pageable) {
+        int offset = pageable.getPageNumber() * pageable.getPageSize();
+        List<TossHistoryDTO> paymentList = paymentHistoryRepository.findHistoryByStatus(offset, pageable.getPageSize());
+        int totalCount = paymentHistoryRepository.countRequestedRefund();
+        return new PageImpl<>(paymentList, pageable, totalCount);
     }
 
     @Transactional
