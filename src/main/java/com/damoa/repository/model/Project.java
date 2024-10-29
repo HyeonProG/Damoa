@@ -1,18 +1,27 @@
 package com.damoa.repository.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.damoa.dto.user.ProjectListDTO;
+import com.damoa.service.SkillService;
+import com.damoa.service.UserService;
+import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Project {
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private SkillService skillService;
 
     private int id;
     private int userId;
@@ -43,5 +52,6 @@ public class Project {
     private Timestamp createdAt;
     private int majorStatus;
     private int minorStatus;
+
 
 }
