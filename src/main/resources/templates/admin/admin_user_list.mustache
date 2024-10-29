@@ -1,48 +1,121 @@
-{{>admin/admin_header}}
+{{> admin/admin_header}}
 
+<div class="main-board">
+    <!-- 제목 배너 -->
+    <div class="first-title-div">
+        <h3>User List</h3>
+    </div>
 
-<div class="container mt-5">
-    <h1>User List</h1>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>아이디</th>
-            <th>이메일</th>
-            <th>유저네임</th>
-            <th>폰번호</th>
-            <th>생성날짜</th>
-            <th>유저타입</th>
-            <th>소셜타입</th>
-
-        </tr>
-        </thead>
-        <tbody>
-        {{#userList}}
+    <!-- 유저 리스트 테이블 -->
+        <table class="table table-striped">
+            <thead>
             <tr>
-                <td>{{id}}</td>
-                <td>{{email}}</td>
-                <td>{{username}}</td>
-                <td>{{phoneNumber}}</td>
-                <td>{{createdAt}}</td>
-                <td>{{userType}}</td>
-                <td>{{socialType}}</td>
+                <th>아이디</th>
+                <th>이메일</th>
+                <th>유저네임</th>
+                <th>폰번호</th>
+                <th>생성날짜</th>
+                <th>유저타입</th>
+                <th>소셜타입</th>
             </tr>
-        {{/userList}}
-        {{^userList}}
-            <tr>
-                <td colspan="8" class="text-center">유저리스트가 없습니다.</td>
-            </tr>
-        {{/userList}}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {{#userList}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{email}}</td>
+                    <td>{{username}}</td>
+                    <td>{{phoneNumber}}</td>
+                    <td>{{createdAt}}</td>
+                    <td>{{userType}}</td>
+                    <td>{{socialType}}</td>
+                </tr>
+            {{/userList}}
+            {{^userList}}
+                <tr>
+                    <td colspan="7" class="text-center">유저리스트가 없습니다.</td>
+                </tr>
+            {{/userList}}
+            </tbody>
+        </table>
 
-    <button onclick="location.href='/admin/management/{{beforePageNum}}'">{{beforePageNum}}</button>
-    <button onclick="location.href='/admin/management/{{currentPageNum}}'">{{currentPageNum}}</button>
-    <button onclick="location.href='/admin/management/{{nextPageNum}}'">{{nextPageNum}}</button>
+        <!-- 페이지네이션 버튼 -->
+        <div class="d-flex justify-content-center mt-4">
+            <button onclick="location.href='/admin/management/{{beforePageNum}}'" class="btn btn-secondary mx-2">{{beforePageNum}}</button>
+            <button onclick="location.href='/admin/management/{{currentPageNum}}'" class="btn btn-primary mx-2">{{currentPageNum}}</button>
+            <button onclick="location.href='/admin/management/{{nextPageNum}}'" class="btn btn-secondary mx-2">{{nextPageNum}}</button>
+        </div>
+    </div>
+</div>
+
+<!-- CSS Styling -->
+<style type="text/css">
+    /* Main Layout */
+    body {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100vh;
+        background: #f0f2f5;
+        font-family: Arial, sans-serif;
+        display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        width: 17%;
+        background-color: #ffffff;
+        box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Main Board */
+    .main-board {
+        width: 83%;
+        padding: 30px;
+        background: white;
+        overflow-y: auto;
+    }
+
+    /* Title Banner */
+    .first-title-div {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start; /* 왼쪽 정렬 */
+        height: 50px;
+        padding-left: 20px; /* 왼쪽 여백 추가 */
+        background: #52b5f3;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        border-radius: 10px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
 
 
+    /* Table Container */
+    .container {
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
 
+    /* Table Style */
+    .table th, .table td {
+        vertical-align: middle;
+        text-align: center;
+    }
 
+    /* Pagination Buttons */
+    .pagination {
+        justify-content: center;
+    }
+</style>
 
-    </body>
+</body>
 </html>

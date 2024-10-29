@@ -1,76 +1,144 @@
-{{>admin/admin_header}}
+{{> admin/admin_header}}
 
+<div class="main-board">
+    <!-- 제목 배너 -->
+    <div class="first-title-div">
+        <h3>Payment Management</h3>
+    </div>
 
-<div class="container mt-5">
-    <h1>결제</h1>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th></th>
-            <th>Pay Key</th>
-            <th>결제한 유저 ID</th>
-            <th>주문번호</th>
-            <th>주문내역</th>
-            <th>금액</th>
-            <th>결제 방법</th>
-            <th>요청 시간</th>
-
-        </tr>
-        </thead>
-
-        <tbody>
-        <!-- 환불하기 버튼-->
-        {{#paymentList}}
+    <!-- 결제 내역 테이블 -->
+        <table class="table table-striped">
+            <thead>
             <tr>
-                <td>{{id}}</td>
-                <td>{{paymentKey}}</td>
-                <td>{{userId}}</td>
-                <td>{{orderId}}</td>
-                <td>{{orderName}}</td>
-                <td>{{amount}}</td>
-                <td>{{method}}</td>
-                <td>{{requestedAt}}</td>
+                <th>ID</th>
+                <th>Pay Key</th>
+                <th>결제한 유저 ID</th>
+                <th>주문번호</th>
+                <th>주문내역</th>
+                <th>금액</th>
+                <th>결제 방법</th>
+                <th>요청 시간</th>
+                <th>액션</th>
             </tr>
-        {{/paymentList}}
-        {{^paymentList}}
-            <tr>
-                <td colspan="8" class="text-center">결제내역이 없습니다</td>
-            </tr>
-        {{/paymentList}}
-        </tbody>
-    </table>
+            </thead>
 
+            <tbody>
+            {{#paymentList}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{paymentKey}}</td>
+                    <td>{{userId}}</td>
+                    <td>{{orderId}}</td>
+                    <td>{{orderName}}</td>
+                    <td>{{amount}}</td>
+                    <td>{{method}}</td>
+                    <td>{{requestedAt}}</td>
+                    <td>
+                        <button onclick="refund({{id}})" class="btn btn-primary">환불하기</button>
+                    </td>
+                </tr>
+            {{/paymentList}}
+            {{^paymentList}}
+                <tr>
+                    <td colspan="9" class="text-center">결제내역이 없습니다</td>
+                </tr>
+            {{/paymentList}}
+            </tbody>
+        </table>
+    </div>
 </div>
 
-
-</body>
-</html>
-
-<script>
-    function refund(id){
-
-        fetch('http://localhost:8080/toss/refund', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            "id": id,
-        })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('네트워크 오류');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log("응답:", data);
-    })
-
-    .catch(error => {
-        console.error("에러 발생:", error);
-    });
+<!-- CSS Styling -->
+<style type="text/css">
+    /* Main Layout */
+    body {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100vh;
+        background: #f0f2f5;
+        font-family: Arial, sans-serif;
+        display: flex;
     }
 
+    /* Sidebar */
+    .sidebar {
+        width: 17%;
+        background-color: #ffffff;
+        box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* Main Board */
+    .main-board {
+        width: 83%;
+        padding: 30px;
+        background: white;
+        overflow-y: auto;
+    }
+
+    /* Title Banner */
+    .first-title-div {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start; /* 왼쪽 정렬 */
+        height: 50px;
+        padding-left: 20px; /* 왼쪽 여백 */
+        background: #52b5f3;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        border-radius: 10px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    /* Table Container */
+    .container {
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+    /* Table Style */
+    .table th, .table td {
+        vertical-align: middle;
+        text-align: center;
+    }
+</style>
+
+<script>
+    function refund(id) {
+        fetch('http://localhost:8080/toss/refund', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "id": id,
+            })
+        })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('네트워크 오류');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("응답:", data);
+                    alert("환불 요청이 완료되었습니다.");
+                    // 필요한 경우 페이지 새로고침
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error("에러 발생:", error);
+                    alert("환불 요청 중 오류가 발생했습니다.");
+                });
+    }
 </script>
+</body>
+</html>
