@@ -94,6 +94,17 @@ public class ProjectController {
      */
     @GetMapping("/list/{currentPageNum}")
     public String projectListPage(@PathVariable(name="currentPageNum", required=false)int currentPageNum, Model model){
+        
+        // 유저 세션 추가
+        if(session.getAttribute("principal") != null){
+            User user = (User) session.getAttribute("principal");
+            model.addAttribute("isLogin",user);
+            if (user != null) {
+                model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+                model.addAttribute("isCompany", user.getUserType().equals("company"));
+            }
+        }
+
         // 모든 프로젝트 가져오기
         List<Project> projectList = projectService.getAllProject();
         int totalProjectNum = projectList.size();
@@ -115,9 +126,7 @@ public class ProjectController {
         for(int i=0; i<projectListForPaging.size(); i++){
             ProjectListDTO dto = toProjectListDTO(projectListForPaging.get(i));
             newList.add(dto);
-            System.out.println("언제 됨.........");
         }
-        System.out.println(newList.get(3));
 
         model.addAttribute("totalPageNum",totalPageNum);
         model.addAttribute("totalProjectNum",totalProjectNum);
