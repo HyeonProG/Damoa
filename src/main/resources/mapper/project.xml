@@ -62,12 +62,25 @@
     <select id="selectProjectForSelect" parameterType="com.damoa.dto.user.SelectDTO" resultType="com.damoa.repository.model.Project">
         SELECT * FROM project_tb
         <where>
-            <if test="selectDTO.workType != 0">AND working_style = #{selectDTO.workType}</if>
-            <if test="selectDTO.address != 0">AND address = #{selectDTO.address}</if>
-            <if test="selectDTO.progress != 0">AND progress = #{selectDTO.progress}</if>
+            <if test="selectDTO.workType != null and selectDTO.workType != '0'">
+                AND working_style = #{selectDTO.workType}
+            </if>
+            <if test="selectDTO.address != null and selectDTO.address != '0'">
+                AND address = #{selectDTO.address}
+            </if>
+            <if test="selectDTO.progress != null and selectDTO.progress != '0'">
+                AND progress = #{selectDTO.progress}
+            </if>
         </where>
         LIMIT #{limit} OFFSET #{offset}
     </select>
 
+    <select id="selectProjectIdByUserId">
+        select id
+        from project_tb
+        where user_id = #{user_id}
+        order by created_at desc
+        limit 1
+    </select>
 
 </mapper>

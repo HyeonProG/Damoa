@@ -68,8 +68,12 @@ public class ProjectController {
      */
     @PostMapping("/save")
     public String projectSaveProc(@ModelAttribute("reqDTO") ProjectSaveDTO reqDTO){
-        
+
+        System.out.println("~~~~~~~~~~~~~");
+        System.out.println(reqDTO);
+
         projectService.createProject(reqDTO);
+        int projectId = projectService.findProjectIdByUserId(1);
 
         List<String> strList=new ArrayList<>();
         List<Skill> skillList=new ArrayList<>();
@@ -81,7 +85,7 @@ public class ProjectController {
 
         int userId = 1;
         skillList = skillService.findSkillListByName(strList);
-        skillService.addProjectSkillData(skillList, userId);
+        skillService.addProjectSkillData(userId, projectId, skillList);
 
         return "project/save_complete";
     }
@@ -252,7 +256,6 @@ public class ProjectController {
 
         Project project = projectService.findProjectById(projectId);
         ProjectListDTO dto = toProjectListDTO(project);
-        System.out.println("~~~~~~~~~~"+dto.getSkill());
         model.addAttribute("project",dto);
 
         // Pair 2.

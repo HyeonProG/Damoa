@@ -18,7 +18,7 @@
     }
     .project-list-item {
         width: 25%; /* 너비 설정 */
-        height: 250px; /* 균일한 높이 설정 */
+        height: 350px; /* 균일한 높이 설정 */
         padding: 10px;
         margin: 20px -5px;
         background: white;
@@ -31,15 +31,9 @@
         box-sizing: border-box; /* 패딩을 포함한 크기 계산 */
         transition: transform 0.2s ease, box-shadow 0.2s ease; /* 부드러운 전환 추가 */
     }
-
-    .project-list-item img {
-        max-width: 100%; /* 이미지 너비 설정 */
-        height: auto; /* 자동 높이 조절 */
-        margin-bottom: 10px; /* 이미지 아래 간격 */
-    }
-     .project-list-item:hover {
-         transform: translateY(-3px); /* 위로 살짝 이동 */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 약한 그림자 효과 */
+    .project-list-item:hover {
+        transform: translateY(-3px); /* 위로 살짝 이동 */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 약한 그림자 효과 */
     }
     .project-info {
         margin-bottom: 10px; /* 정보 간 간격 설정 */
@@ -55,16 +49,34 @@
     .page-nation button {
         margin: 0 5px;
     }
+
+    /* 셀렉트 박스 스타일 */
+    .form-select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        transition: border 0.3s ease;
+        margin-right: 10px;
+        appearance: none; /* 기본 화살표 제거 */
+        background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" class="bi bi-chevron-down" viewBox="0 0 16 16"%3E%3Cpath fill-rule="evenodd" d="M1.5 5.5a.5.5 0 0 1 .707 0L8 10.293l5.793-4.793a.5.5 0 0 1 .707.707l-6 6a.5.5 0 0 1-.707 0l-6-6a.5.5 0 0 1 0-.707z"/%3E%3C/svg%3E'); /* 화살표 추가 */
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 16px; /* 화살표 크기 */
+    }
+
+    .form-select:focus {
+        border-color: #007bff; /* 포커스 시 테두리 색상 변경 */
+        outline: none; /* 포커스 아웃라인 제거 */
+    }
 </style>
 
-
-
-<h3><b>프로젝트 목록 ({{totalProjectNum}})</b></h3>
+<h3>프로젝트 목록 ({{totalProjectNum}})</h3>
 <p>프로젝트를 찾고 매칭해보세요</p>
 
 <div class="search-div">
     <div class="minor-class" style="margin-right: 20px;">
-        <select name="workingType" onchange="sendData()" class="form-select" style="border: 1px solid gray;">
+        <select name="workingType" onchange="sendData()" class="form-select">
             <option value="all" selected disabled hidden>근무 방식</option>
             <option value="0">전체</option>
             <option value="1">원격 근무</option>
@@ -95,19 +107,24 @@
             <option value="3">이미 프로젝트가 진행 중임</option>
         </select>
     </div>
-    <div>
-        <button class="btn btn-primary">조회순</button>
-        <button class="btn btn-primary">최신순</button>
-    </div>
 </div>
 
 <div class="project-container">
     {{#projectListForPaging}}
         <div class="project-list-item" onclick="location.href='/project/detail/{{id}}'">
-            <img src="/images/logos/sample-img.png" style="height:400px; width: 220px; margin-bottom: 10px; cursor:pointer; border-radius: 10px;">
-            <h6 style="width: 95%;"><b>{{projectName}}</b></h6>
+            <img src="/images/logos/sample-img.png" style="margin-bottom: 10px; cursor:pointer; border-radius: 10px;">
+            <h6 style="width: 95%; color: #495057;"><b>{{projectName}}</b></h6>
             <h6 style="color: gray;">{{job}}</h6>
             <p style="color: gray;">{{userName}}</p>
+
+                <div style="display: flex;">
+                    {{#skill}}
+                        <div style="width:90px; height: 30px; display: flex; justify-content:center; align-items: center; background: #f1f3f5; margin:5px; border-radius: 15px;">
+                            {{.}}
+                        </div>
+                    {{/skill}}<!-- Outputs the current skill -->
+                </div>
+
         </div>
     {{/projectListForPaging}}
 </div>
@@ -128,11 +145,6 @@
             var workingAddress = $('select[name="workingAddress"]').val();
             var projectStatus = $('select[name="projectStatus"]').val();
 
-            console.log(workingType);
-            console.log(workingAddress);
-            console.log(projectStatus);
-            console.log('허허허');
-
             $.ajax({
                 url: '/project/send-fetched-data',
                 method: 'POST',
@@ -148,7 +160,6 @@
             });
         };
 
-        // select 요소의 change 이벤트에 sendData 함수 연결
         $('.minor-class select').change(sendData);
     });
 
@@ -164,19 +175,20 @@
         $.each(projects, function(index, project) {
             var projectItem = $(`
                 <div class="project-list-item" onclick="location.href='/project/detail/${project.id}'">
-                    <h4>${project.projectName}</h4>
-                    <h5 class="project-job">${project.job}</h5>
-                    <p>${project.projectStart}</p>
-                    <button class="btn btn-primary">자세히 보기</button>
+                    <img src="/images/logos/sample-img.png" style="height:400px; width: 220px; margin-bottom: 10px; cursor:pointer; border-radius: 10px;">
+                     <h6 style="width: 95%; color: #495057;"><b>{{projectName}}</b></h6>
+                    <h6 style="color: gray;">{{job}}</h6>
+                    <p style="color: gray;">{{userName}}</p>
                 </div>
             `);
             projectContainer.append(projectItem);
         });
     }
 
-    window.showJobContainer=function(){
+    window.showJobContainer = function() {
         $('.job-kind-container').toggle();
     }
 </script>
+
 
 {{>layout/footer}}
