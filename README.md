@@ -2,8 +2,7 @@
 ### Springboot와 Mustache를 사용한 웹사이트 제작
 &nbsp; 
 &nbsp;
-
-![제목을-입력해주세요_-001 (1)](https://github.com/user-attachments/assets/ee3a2bd8-4c88-4234-a63d-7fd89b7b99b7)
+![제목을-입력해주세요_-001 (1)](https://github.com/user-attachments/assets/49932d05-6613-4d87-b322-278c1029f0f7)
 
 
 
