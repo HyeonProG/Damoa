@@ -75,9 +75,10 @@
 #### (3) 프로젝트 등록
 #### (4) 프리랜서 등록
 #### (5) 프로젝트 찾기 (목록)
+![Uploading Screenshot_1.jpg…]()
+
 #### (6) 프로젝트 찾기 (디테일)
 ![img1 daumcdn](https://github.com/user-attachments/assets/09fe2b11-6879-4db2-b25e-b4ebb3cb5a19)
-
 #### (7) 프리랜서 찾기 (목록)
 #### (8) 프리랜서 찾기 (디테일)
 #### (9) 1:1 채팅 기능
