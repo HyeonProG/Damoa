@@ -34,9 +34,10 @@
 |SW|OS| Windows10 |
 ||Browser| Chrome 121.0.6167.161 |
 ||Tool| IntelliJ |
-||BackEnd| Java 17 & MySQL 8.0.26 & h2 & redis & MyBatis|
+||BackEnd| Java 17 & MySQL 8.0.26 & h2 & redis & MyBatis |
+||Template Engine| Mustache |
 ||Version/Issue 관리| GitHub & GitBash |
-||Communication| Discord & Notion|
+||Communication| Discord & Notion |
 
 ## 4️⃣ 사용 라이브러리 및 외부 API
 ### (1) 사용 라이브러리
