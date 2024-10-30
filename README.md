@@ -33,7 +33,7 @@
 |------|---|---|
 |SW|OS| Windows10 |
 ||Browser| Chrome 121.0.6167.161 |
-||Tool| Spring Tool Suite |
+||Tool| IntelliJ |
 ||BackEnd| Java 17 & MySQL 8.0.26 & h2 & redis & MyBatis|
 ||Version/Issue 관리| GitHub & GitBash |
 ||Communication| Discord & Notion|
