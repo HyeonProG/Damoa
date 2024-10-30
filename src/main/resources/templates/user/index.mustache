@@ -2,6 +2,10 @@
 {{>layout/chatbot}}
 {{>layout/chat}}
 <style>
+    body{
+    padding:0;
+    margin: 0;
+    }
     .freelancer-box h5 b {
         display: inline-block;
         width: 100%; /* 또는 원하는 너비 */
@@ -9,6 +13,29 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+    .project-freelancer-container{
+        display: flex;
+    }
+    .slider {
+    width: 100%; /* 전체 너비 */
+}
+.project-box, .freelancer-box {
+    width: 200px; /* 각 슬라이드의 너비 */
+    margin: 0 10px; /* 좌우 간격 조정 */
+}.slick-next, .slick-prev {
+    background: none; /* 배경 제거 */
+    border: none; /* 외곽선 제거 */
+    outline: none; /* 포커스 시 외곽선 제거 */
+    cursor: pointer; /* 커서 스타일 변경 */
+}
+.slick-list{
+display: flex;
+}
+.slick-next img, .slick-prev img {
+    display: block; /* 이미지가 버튼의 전체 영역을 차지하도록 */
+}
+
+
 </style>
 <div class="main-board-box">
     <div class="ad-board">
@@ -25,56 +52,46 @@
             </div>
             <img src="images/icons/right.png" class="icons" id="nextAd" style="cursor: pointer;">
         </div>
-        <div class="ad-progress">
-            <h6 class="ad-progress-text">1/5</h6>
+        <div class="ad-progress" style="margin-top:20px;">
+            <h6 class="ad-progress-text" >1/5</h6>
         </div>
     </div>
-    <div class="freelancer-board main-inner-board">
-        <h3><b> 많이 찾는 프로젝트 공고들<img src="images/3d_icons/file.png" style="cursor:pointer;" class="icons" onclick="location.href='/project/list/1'"> ></b></h3>
-        <p>프로젝트를 시작해볼까요?</p>
-        <div class="project-container">
+    <div class="freelancer-board project-board main-inner-board">
+        <h3 style="height:42px; margin-left:10px;"><b> 많이 찾는 프로젝트 공고들<img src="images/3d_icons/file.png" style="cursor:pointer;" class="icons" onclick="location.href='/project/list/1'"> ></b></h3>
+        <p style="margin-left:10px;">프로젝트를 시작해볼까요?</p>
+        <div class="project-container slider">
             {{#projectList}}
                 <div class="project-box" onclick="location.href='/project/detail/{{id}}'">
-                    <img src="images/logos/sample-img.png" style="cursor:pointer;">
-                    <h6><b>{{projectName}}</b></h6>
-                    <p>{{job}}</p>
-                    <h6><b>{{worktime}}</b></h6>
-                    <p>{{period}}</p>
+                    <img src="images/logos/sample-img.png" style="border-radius:10px;  box-shadow: 2px 2px 5px #d0ccc9; width: 245px; cursor:pointer; margin-bottom: 20px;">
+                    <h6 style="color: #495057"><b>{{projectName}}</b></h6>
+                    <p>{{company}}</p>
                 </div>
             {{/projectList}}
         </div>
     </div>
-    <div class="main-inner-board">
-        <h3><b>다모아가 추천하는 기능 <img src="/images/3d_icons/tools.png" class="icons"> ></b></h3>
-        <p>다모아의 다양한 기능들을 사용해보세요</p>
-        <div class="reccomend-asset-container">
-            <div class="asset-box">
-                <h5><b>계좌 인증 및 등록하기 ></b></h5>
-                <p>계좌 등록으로 더욱 편하게 다모아를 이용해보세요</p>
-            </div>
-            <div class="asset-box" onclick="location.href='/sign/list'">
-                <h5><b>날인 등록하기 ></b></h5>
-                <p>직접 사인하지 않아도 돼요</p>
-            </div>
-        </div>
-    </div>
     <div class="project-board main-inner-board">
-        <h3 onclick="location.href='/freelancer/list'"><b> 현재 핫한 프리랜서 개발자들<img src="/images/3d_icons/paper.png" class="icons"> ></b></h3>
-        <p>함께 프로젝트를 시작해보세요</p>
-    <div class="freelancer-container">
-    {{#freelancerList}}
-        <div class="freelancer-box" onclick="location.href='/freelancer/detail/{{userId}}'">
-            <img src="/images/logos/freelancer-icon .png">
-        <h5><b>{{username}}</b></h5>
-            <p>{{jobPart}}</p>
-            <h5><b>{{skills}}</b></h5>
-            <p>{{workingStyle}}</p>
+        <h3 style="height:33px;"><b>현재 채용 중인 회사들<img src="images/3d_icons/companys.png" style="cursor:pointer;" class="icons" onclick="location.href='/project/list/1'"> ></b></h3>
+        <p style="margin-left:10px;">채용중인 회사들을 확인해보세요</p>
+        <div style="width: 100%; display: flex; justify-content: space-around; align-items: center;">
+            <img src="images/ads/work_ad3.png" class="ad-img" style="box-shadow: 2px 2px 5px #d0ccc9; width:31%;">
+            <img src="images/ads/work_ad2.png" class="ad-img" style="box-shadow: 2px 2px 5px #d0ccc9; width:31%;">
+            <img src="images/ads/work_ad1.png" class="ad-img" style="box-shadow: 2px 2px 5px #d0ccc9; width:31%;">
         </div>
-    {{/freelancerList}}
-</div>
+    </div>
+    <div class="project-board main-inner-board" >
+            <h3 onclick="location.href='/freelancer/list'" style="height:43px; margin-left:10px;"><b> 현재 핫한 프리랜서 개발자들<img src="/images/3d_icons/human.png" class="icons"> ></b></h3>
+            <p style="margin-left:10px;">함께 프로젝트를 시작해보세요</p>
+            <div class="freelancer-container slider">
+             {{#freelancerList}}
+                 <div class="freelancer-box" style="display: column; align-items: center; justify-content: center;" onclick="location.href='/freelancer/detail/{{userId}}'">
+                    <img src="/images/logos/freelancer-icon .png" style="width: 90%; margin-bottom: 20px;  box-shadow: 2px 2px 5px #d0ccc9;background: #f1f3f5; border-radius: 100px; padding: 0px;">
+                    <h5 style="color: #495057"><b>{{username}}</b></h5>
+                    <p>{{jobPart}}</p>
+                </div>
+            {{/freelancerList}}
+            </div>
     </div>
 </div>
-<img src="/images/ads/assets_ad.png">
 </div>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -85,7 +102,7 @@
     $('.ad-inner').slick({
         autoplay: true,
         autoplaySpeed: 900,
-        speed: 300, // 슬라이드 전환 속도 (밀리초 단위)
+        speed: 500, // 슬라이드 전환 속도 (밀리초 단위)
         fade: false, // 페이드 효과를 비활성화
         dots: false, // 점 버튼 제거
         arrows: false // 화살표를 직접 설정할 것이므로 기본 화살표 비활성화
@@ -115,6 +132,29 @@
             $('.ad-inner').removeClass('sliding');
         }, 300); // 슬라이드 전환 효과와 동일한 시간으로 설정
     });
+});
+
+
+    $(document).ready(function(){
+    // 프로젝트 슬라이더 초기화
+    $('.project-container.slider').slick({
+        slidesToShow: 4, // 한 번에 보여줄 슬라이드 수
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 1000,
+        dots: false,
+        arrows: false, // 화살표 활성화
+        });
+
+    // 프리랜서 슬라이더 초기화
+    $('.freelancer-container.slider').slick({
+        slidesToShow: 5, // 한 번에 보여줄 슬라이드 수
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 1000,
+        dots: false,
+        arrows: false, // 화살표 활성화
+         });
 });
 
 </script>

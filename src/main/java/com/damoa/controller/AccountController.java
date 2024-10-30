@@ -1,6 +1,7 @@
 package com.damoa.controller;
 
 import com.damoa.dto.BankAuthDTO;
+import com.damoa.dto.user.ProjectListDTO;
 import com.damoa.repository.model.Freelancer;
 import com.damoa.repository.model.Project;
 import com.damoa.repository.model.User;
@@ -23,10 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class AccountController {
@@ -36,6 +34,9 @@ public class AccountController {
 
     @Autowired
     private ProjectService projectService;
+
+    @Autowired
+    private ProjectController projectController;
 
     @Autowired
     private FreelancerService freelancerService;
@@ -49,9 +50,15 @@ public class AccountController {
     public String mainPage(Model model, HttpSession session){
         User user = (User) session.getAttribute("principal");
 
-        List<Project> projectList = projectService.getProjectForPaging(3,0);
-        List<Freelancer> freelancerList = freelancerService.findAllFreelancers(1, 3);
-        model.addAttribute("projectList",projectList);
+        List<Project> projectList = projectService.getProjectForPaging(10,0);
+
+        List<ProjectListDTO> newList = new ArrayList<>();
+        for(int i=0; i<projectList.size(); i++){
+            ProjectListDTO dto = projectController.toProjectListDTO(projectList.get(i));
+            newList.add(dto);
+        }
+        List<Freelancer> freelancerList = freelancerService.findAllFreelancers(1, 10);
+        model.addAttribute("projectList",newList);
         model.addAttribute("isLogin",user);
         if (user != null) {
             model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));

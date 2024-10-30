@@ -12,7 +12,7 @@
     </select>
 
     <insert id="addProjectSkillData" parameterType="com.damoa.repository.model.Skill">
-        insert into project_skills_tb (user_id, skill_id) values (#{skill}, #{userId})
+        insert into project_skills_tb (project_id, company_id, skill_id) values (#{projectId},#{userId},#{skill})
     </insert>
 
 
@@ -21,7 +21,8 @@
         from project_skills_tb as ps
         join skill_tb as s
         where ps.skill_id = s.id
-        and ps.project_id = #{project_id};
+        and ps.project_id = #{project_id}
+        limit 2
     </select>
 
 </mapper>

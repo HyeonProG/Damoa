@@ -1,5 +1,12 @@
 {{>layout/header}}
 <style type="text/css">
+    .project-detail{
+        margin-bottom: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
     .wait-form{
         display: none;
         background: white;
@@ -20,69 +27,83 @@
     .project-input-form{
         margin: 5px;
     }
+    .main-title-box{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* 왼쪽 정렬 */
+    }
+    .each-project{
+        width:80%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 </style>
     <div class="project-detail">
-        <img src="/images/logos/sample-img-bigger.png" style="cursor:pointer; width: 800px; height: 250px; border-radius: 15px;">
+        <div style="position: relative; width: 1100px;">
+            <img src="/images/logos/sample-img-bigger.png" style="cursor:pointer; width: 1050px; border-radius: 15px;">
+            <img src="/images/logos/annonymus_com.png" style="position: absolute; top: 100%; left: 14%; height: 150px; transform: translate(-50%, -50%);">
+        </div>
         {{#project}}
-            <div id="each-project" style="location.href='/project/detail/{{id}}'">
-                <p><b>{{company}}</b></p>
-                <h4><b>{{projectName}}</b></h4>
-                <div>
-                    {{#project.skill}}
-                        <div>{{skill}}</div>
-                    {{/project.skill}}
-                </div>
-                <hr>
-                <div class="detail-box">
-                    <p>프로젝트 시작일: {{projectStart}} 예상 기간: {{period}}</p>
-                    <p>지급 방식 : {{workingStyle}}</p>
-                    <p>근무 방식 : {{workingStyle}}</p>
-                    <p>미팅 방식 : {{meeting}}</p>
-                    <p>작성일 : {{createdAt}}</p>
-                </div>
-                <hr>
-                <div>
-                    <div>
-                        <h6>주요 업무</h6>
-                        <p>{{mainTasks}}</p>
+            <div id="each-project" style="margin-top:60px; display: flex; width: 95%;">
+                    <div class="explanation" style="margin-left:70px;">
+                    <div class="main-title-box" style="height: 40px; margin-top: 40px; margin-bottom:70px;">
+                        <h3 style="margin-bottom: 10px; text-align: left;"><b>{{projectName}}</b></h3>
+                        <p style="margin-bottom: 30px;">{{company}}</p>
                     </div>
-                    <div>
-                        <h6>세부 사항</h6>
-                        <p>{{detailTask}}</p>
+
+                    <div   style="margin-top:40px; display: flex; width: 90%; display: flex;">
+                        {{#skill}}
+                            <div style="padding: 10px; border-radius: 10px; display: flex; margin: 0px 5px; background: #f1f3f5;">
+                                #{{.}} <!-- Outputs the current skill -->
+                            </div>
+                        {{/skill}}
                     </div>
-                    <div>
-                        <h6>전달 사항</h6>
-                        <p>{{delivered}}</p>
+                    <hr  style="margin-bottom: 15px;">
+                    <div class="main-title-box" style="margin-top:40px; width: 90%; margin-bottom: 50px;">
+                        <h4 style="margin-bottom: 20px;"><b>기본 정보</b></h4>
+                        <p style="margin:5px 0px;"><b>프로젝트 시작일 : </b> {{projectStart}} 예상 기간: {{period}}</p>
+                        <p style="margin:5px 0px;"><b>지급 방식 : </b> {{workingStyle}}</p>
+                        <p style="margin:5px 0px;"><b>근무 방식 : </b> {{workingStyle}}</p>
+                        <p style="margin:5px 0px;"><b>미팅 방식 : </b> {{meeting}}</p>
+                        <p style="margin:5px 0px;"><b>작성일 : </b> {{createdAt}}</p>
                     </div>
-                    <div>
-                        <h6>담당자 정보</h6>
-                        <p>담당자 : {{managerName}}</p>
-                        <p>연락처 : {{contact}}</p>
-                        <p>이메일 : {{email}}</p>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <h6>태그</h6>
-                        <div>
-                            {{#project.skill}}
-                                <div>{{skill}}</div>
-                            {{/project.skill}}
+                    <hr>
+                    <div class="main-title-box" style="margin-top:40px; width: 90%; margin-bottom: 50px;">
+                        <h5 style="margin-bottom: 20px; margin-left:0px;"><b>세부 사항</b></h5>
+                        <div style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 20px;">
+                            <h6>주요 업무</h6>
+                            <p>{{mainTasks}}</p>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 20px;">
+                            <h6>세부 사항</h6>
+                            <p>{{detailTask}}</p>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 20px;">
+                            <h6>전달 사항</h6>
+                            <p>{{delivered}}</p>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 20px;">
+                            <h6>담당자 정보</h6>
+                            <p>담당자 : {{managerName}}</p>
+                            <p>연락처 : {{contact}}</p>
+                            <p>이메일 : {{email}}</p>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 20px;">
+                            <h6>작성일</h6>
+                            <p>{{createdAt}}</p>
                         </div>
                     </div>
-                    <div>
-                        <h6>작성일</h6>
-                        <p>{{createdAt}}</p>
-                    </div>
+                </div>
+                <div style="width:400px; margin-top: 40px;">
+                    <button class="btn btn-primary" style="width: 250px; margin: 5px;" onclick="makeWaitForm()">1:1 채팅하기</button>
+                    <button class="btn btn-secondary" style="width: 250px; margin: 5px;" onclick="location.href='/project/list/1'">목록으로 돌아가기</button>
                 </div>
             </div>
         {{/project}}
 
 
-        <div>
-            <button class="btn btn-primary" onclick="makeWaitForm()">1:1 채팅하기</button>
-            <button class="btn btn-secondary" onclick="location.href='/project/list/1'">목록으로 돌아가기</button>
-        </div>
+
 
     </div>
 

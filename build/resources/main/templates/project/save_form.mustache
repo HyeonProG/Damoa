@@ -99,46 +99,59 @@
 
             <h4>근무 방식</h4>
             <div class="form-group">
-                <input type="radio" name="workingStyle" value="원격 근무" required> 원격 근무
-                <input type="radio" name="workingStyle" value="원격 상주 모두" required> 원격,상주 모두 가능
-                <input type="radio" name="workingStyle" value="상주 근무" required> 상주 근무
+                <input type="radio" name="workingStyle" value="1" required> 원격 근무
+                <input type="radio" name="workingStyle" value="2" required> 원격,상주 모두 가능
+                <input type="radio" name="workingStyle" value="3" required> 상주 근무
             </div>
 
             <h4>추가 정보</h4>
             <div class="form-group">
                 <select name="meeting" class="form-control" required>
-                    <option value="오프라인(협의 불가능)">오프라인(협의불가능)</option>
-                    <option value="오프라인(협의 가능)">오프라인(협의가능)</option>
-                    <option value="온라인">온라인</option>
+                    <option value="1">오프라인(협의불가능)</option>
+                    <option value="2">오프라인(협의가능)</option>
+                    <option value="3">온라인</option>
                 </select>
             </div>
             <div class="form-group">
-                <input type="text" class="form-control" id="address" name="address" placeholder="근무지 주소 (예: 회사 주소 등)"
-                       required>
-                <input type="time" class="form-control" id="worktime" name="worktime" placeholder="근무 시간 (예: 9시~6시 등)"
-                       required>
+                <h4>근무 지역</h4>
+                <div class="address">
+                    <input type="radio" name="address" value="1" required> 서울
+                    <input type="radio" name="address" value="2" required> 경기
+                    <input type="radio" name="address" value="3" required> 인천
+                    <input type="radio" name="address" value="4" required> 수원
+                    <input type="radio" name="address" value="5" required> 부산
+                    <input type="radio" name="address" value="6" required> 강원
+                    <input type="radio" name="address" value="7" required> 대전
+                </div>
+                <h4>근무 시간</h4>
+                <div class="address">
+                    <input type="radio" name="worktime" value="오전 9시 - 오후 6시" required> 오전 9시 - 오후 6시
+                    <input type="radio" name="worktime" value="오전 10시 - 오후 7시" required> 오전 10시 - 오후 7시
+                    <input type="radio" name="worktime" value="자율 근무제" required> 자율 근무제
+                    <input type="radio" name="worktime" value="조율 후 결정" required> 조율 후 결정
+                </div>
             </div>
 
             <h4>근무 시간 조율</h4>
             <div class="form-group">
-                <input type="radio" name="workAdjust" value="원격 상주 모두" required> 원격,상주 모두 가능
-                <input type="radio" name="workAdjust" value="상주 근무" required> 상주 근무
-                <input type="radio" name="workAdjust" value="원격 근무" required> 원격 근무
+                <input type="radio" name="workAdjust" value="1" required> 원격,상주 모두 가능
+                <input type="radio" name="workAdjust" value="2" required> 상주 근무
+                <input type="radio" name="workAdjust" value="3" required> 원격 근무
             </div>
 
             <h4>월차 제공</h4>
             <div class="form-group">
-                <input type="radio" name="vacation" value="월차 제공" required> 제공
-                <input type="radio" name="vacation" value="미제공" required> 미제공
-                <input type="radio" name="vacation" value="협의 가능" required> 협의 가능
+                <input type="radio" name="vacation" value="possible" required> 제공
+                <input type="radio" name="vacation" value="impossible" required> 미제공
+                <input type="radio" name="vacation" value="negotiation" required> 협의 가능
             </div>
         </div>
         <div class="project-box third-box" id="box3">
             <h4>현재 프로젝트 진행 상황</h4>
             <div class="form-group">
-                <input type="radio" name="progress" value="기획단계" required> 기획 단계
-                <input type="radio" name="progress" value="기획서가 준비되어 있음" required> 기획서가 준비되어 있음
-                <input type="radio" name="progress" value="이미 프로젝트가 진행 중임" required> 이미 프로젝트가 진행 중임
+                <input type="radio" name="progress" value="1" required> 기획 단계
+                <input type="radio" name="progress" value="2" required> 기획서가 준비되어 있음
+                <input type="radio" name="progress" value="3" required> 이미 프로젝트가 진행 중임
             </div>
             <h4>주요 담당 업무</h4>
             <div class="form-group">

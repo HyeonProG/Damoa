@@ -35,10 +35,10 @@ public class SkillService {
      * skill List를 통해 prokect_skill_tb를 생성
      * @param skillList
      */
-    public void addProjectSkillData(List<Skill> skillList, int userId) {
+    public void addProjectSkillData(int companyId, int projectId, List<Skill> skillList) {
         int size = skillList.size();
         for(int i=0; i<size; i++){
-            skillRepository.addProjectSkillData(skillList.get(i).getId(),userId);
+            skillRepository.addProjectSkillData(projectId,companyId,skillList.get(i).getId());
         }
     }
 
