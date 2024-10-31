@@ -17,13 +17,13 @@
         margin-bottom: 0.5rem;
     }
 
-    .full-width-img {
-        width: 110%;
-        height: 280px;
-        object-fit: cover;
-        border-radius: 15px;
-        margin-left: -5%;
-        margin-bottom: 60px;
+    .first-banner {
+        width: 100%; /* 원하는 너비로 조정 */
+        height: 270px; /* 원하는 높이로 조정 */
+        object-fit: cover; /* 이미지 비율 유지 */
+        border-radius: 10px; /* 둥근 모서리 추가 */
+        margin-top: 30px;
+        margin-bottom: 60px; /* 이미지 하단 여백 */
     }
 
     .scroll-container {
@@ -36,8 +36,8 @@
 
     .scroll-content {
         display: flex;
-        transition: transform 40s linear; /* 애니메이션 속도 및 선형 */
-        animation: scroll 40s linear infinite; /* 카드 애니메이션 추가 */
+        transition: transform 50s linear; /* 애니메이션 속도 및 선형 */
+        animation: scroll 50s linear infinite; /* 카드 애니메이션 추가 */
     }
 
     @keyframes scroll {
@@ -74,65 +74,65 @@
     .btn-review:hover {
         background-color: #0056b3;
     }
+    .second-banner {
+        width: 100%; /* 너비를 줄여서 크기 비율 축소 */
+        height: 180px;
+        border-radius: 10px; /* 둥근 모서리 추가 */
+        object-fit: cover; /* 이미지 비율 유지 */
+        margin-bottom: 60px; /* 이미지 하단 여백 */
+    }
+    .third-banner {
+        width: 100%; /* 원하는 너비로 조정 */
+        height: 150px; /* 원하는 높이로 조정 */
+        object-fit: cover; /* 이미지 비율 유지 */
+        border-radius: 10px; /* 둥근 모서리 추가 */
+        margin-top: 30px;
+        margin-bottom: 60px; /* 이미지 하단 여백 */
+    }
 </style>
 
 <div class="container mt-4">
-    <img src="/images/banner/review-banner.png" class="full-width-img">
+    <img src="/images/banner/review-banner.png" class="first-banner">
 
     <!-- 기업 리뷰 섹션 -->
     <section class="mt-4">
-        <p class="h5 review-title">기업 리뷰</p>
+        <img src="/images/banner/company-review-banner.png" class="second-banner">
         <div class="scroll-container">
             <div class="scroll-content" id="company-scroll-content">
-                {{#companyReview}}
+                {{#companyReviews}}
                     <div class="card">
                         <div class="card-body">
-                            <p>기업 이름</p>
-                            <p class="text-muted">평균 평점: {{overallScore}}점</p>
+                            <h5 class="card-title">{{freelancerName}}</h5>
+                            <h6>프리랜서에 대한 리뷰</h6>
+                            <hr>
+                            <p class="text-muted">종합 평점: {{overallScore}}점</p>
                             <p class="card-text">{{responseData}}</p>
                         </div>
                         <button class="btn btn-review btn-block" onclick="location.href='/reviews/list/company'">리뷰 더보기</button>
                     </div>
-                {{/companyReview}}
-                {{#companyReview}} <!-- 카드 복제 -->
-                    <div class="card">
-                        <div class="card-body">
-                            <p>기업 이름</p>
-                            <p class="text-muted">평균 평점: {{overallScore}}점</p>
-                            <p class="card-text">{{responseData}}</p>
-                        </div>
-                        <button class="btn btn-review btn-block" onclick="location.href='/reviews/list/company'">리뷰 더보기</button>
-                    </div>
-                {{/companyReview}}
+                {{/companyReviews}}
             </div>
         </div>
     </section>
 
+    <img src="/images/banner/freelancer-review-banner.png" class="third-banner">
+
     <!-- 프리랜서 리뷰 섹션 -->
     <section class="mt-4">
-        <p class="h5 review-title">프리랜서 리뷰</p>
         <div class="scroll-container">
             <div class="scroll-content" id="freelancer-scroll-content">
-                {{#freelancerReview}}
+                {{#freelancerReviews}}
                     <div class="card">
                         <div class="card-body">
-                            <p>프리랜서 이름</p>
-                            <p class="text-muted">평균 평점: {{overallScore}}점</p>
+                            <h5 class="card-title">{{companyName}}</h5>
+                            <h6>기업에 대한 리뷰</h6>
+                            <hr>
+                            <p class="text-muted">종합 평점: {{overallScore}}점</p>
                             <p class="card-text">{{responseData}}</p>
                         </div>
                         <button class="btn btn-review btn-block" onclick="location.href='/reviews/list/freelancer'">리뷰 더보기</button>
                     </div>
-                {{/freelancerReview}}
-                {{#freelancerReview}} <!-- 카드 복제 -->
-                    <div class="card">
-                        <div class="card-body">
-                            <p>프리랜서 이름</p>
-                            <p class="text-muted">평균 평점: {{overallScore}}점</p>
-                            <p class="card-text">{{responseData}}</p>
-                        </div>
-                        <button class="btn btn-review btn-block" onclick="location.href='/reviews/list/freelancer'">리뷰 더보기</button>
-                    </div>
-                {{/freelancerReview}}
+                {{/freelancerReviews}}
             </div>
         </div>
     </section>

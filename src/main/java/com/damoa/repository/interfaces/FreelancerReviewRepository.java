@@ -2,6 +2,7 @@ package com.damoa.repository.interfaces;
 
 import com.damoa.dto.admin.FreelancerReviewDTO;
 import com.damoa.dto.DailyFreelancerReviewDTO;
+import com.damoa.dto.review.FreelancerMainDTO;
 import com.damoa.repository.model.FreelancerReview;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,10 +17,10 @@ import java.util.Optional;
 public interface FreelancerReviewRepository {
 
     // 프리랜서 리뷰 데이터 호출
-    List<FreelancerReview> findAllByFreelancerReviews();
+    List<FreelancerMainDTO> findAllByFreelancerReviews();
 
     // 프리랜서 리뷰 id pk 호출
-    Optional<FreelancerReview> findByFreelancerReviewId(int id);
+    Optional<FreelancerMainDTO> findByFreelancerReviewId(int id);
 
     // GCP 프리랜서 리뷰 데이터 실행 후 MySQL로 데이터 insert
     void insertFreelancerReview(FreelancerReview freelancerReview);

@@ -201,16 +201,6 @@ public class UserService {
         return userRepository.findUserById(userId);
     }
 
-    // 프리랜서 목록 조회
-    public List<User> getAllFreelancers() {
-        return userRepository.findAllFreelancers();
-    }
-
-    // 기업 목록 조회
-    public List<User> getAllCompanies() {
-        return userRepository.findAllCompanies();
-    }
-
     public List<TossHistoryDTO> findPayHistoryById(int userId) {
         List<TossHistoryDTO> dto = userRepository.findPaymentDetailByUserId(userId);
         return dto;

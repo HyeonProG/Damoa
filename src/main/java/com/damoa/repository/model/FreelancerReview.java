@@ -12,8 +12,8 @@ import java.sql.Timestamp;
 public class FreelancerReview {
 
     private Integer id;
+    private int writerId;
     private int companyId;
-    private int freelancerId;
 
     // 모든 평점은 별점 1~5점
     private int communicationScore;     // 커뮤니케이션 정도 모든 평점은 별점 1~5점

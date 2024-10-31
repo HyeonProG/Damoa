@@ -76,30 +76,29 @@ public class GoogleSheetsService {
     public void saveReview(List<Object> row, UserType reviewType) {
         // 유효성 검사
         // 1. row 6과 row 8에 있는 userName 값 확인
-        String companyName = row.get(6) != null ? row.get(6).toString().trim() : "";
-        String freelancerName = row.get(8) != null ? row.get(8).toString().trim() : "";
+        String writerName = row.get(6) != null ? row.get(6).toString().trim() : "";
+        String collaboraiterName = row.get(7) != null ? row.get(7).toString().trim() : "";
 
         // 2. 빈 문자열인 경우 종료
-        if (companyName.isEmpty() || freelancerName.isEmpty()) {
+        if (writerName.isEmpty() || collaboraiterName.isEmpty()) {
             return;
         }
 
         // 3. 데이터베이스에서 조회
-        Optional<User> companyUser = userRepository.findByUserName(companyName);
-        Optional<User> freelancerUser = userRepository.findByUserName(freelancerName);
+        Optional<User> writerUser = userRepository.findByUserName(writerName);
+        Optional<User> collaboraiterUser = userRepository.findByUserName(collaboraiterName);
 
         // 4. DB에 존재하면 ReviewUserDTO로 변환
-        ReviewUserDTO companyUserDTO = companyUser.map(user -> new ReviewUserDTO(user.getId(), user.getUsername())).orElse(null);
-        ReviewUserDTO freelancerUserDTO = freelancerUser.map(user -> new ReviewUserDTO(user.getId(), user.getUsername())).orElse(null);
+        ReviewUserDTO writerUserDTO = writerUser.map(user -> new ReviewUserDTO(user.getId(), user.getUsername())).orElse(null);
+        ReviewUserDTO collaboraiterDTO = collaboraiterUser.map(user -> new ReviewUserDTO(user.getId(), user.getUsername())).orElse(null);
 
         // 5. companyDTO 또는 freelancerDTO null이면 종료
-        if (companyUserDTO == null || freelancerUserDTO == null) {
-            log.warn("유효한 companyId 또는 freelancerId가 없어 리뷰를 저장하지 않습니다: companyName={}, freelancerName={}", companyName, freelancerName);
+        if (writerUserDTO == null || collaboraiterDTO == null) {
             return;
         }
 
-        int companyId = companyUserDTO.getId();
-        int freelancerId = freelancerUserDTO.getId();
+        int writerId = writerUserDTO.getId();
+        int collaboraiterId = collaboraiterDTO.getId();
         try {
             int score1 = parseScore(row.get(1));
             int score2 = parseScore(row.get(2));
@@ -111,13 +110,13 @@ public class GoogleSheetsService {
             // REVIEW_TYPE에 따라 각각 저장
             if (reviewType.name().equalsIgnoreCase(UserType.COMPANY.name())) {
                 CompanyReview companyReview = new CompanyReview(
-                        null, companyId, freelancerId, score1, score2, score3, score4, overallScore, reviewDate,
+                        null, writerId, collaboraiterId, score1, score2, score3, score4, overallScore, reviewDate,
                         row.get(5) != null ? row.get(5).toString() : null
                 );
                 companyReviewRepo.insertCompanyReview(companyReview);
             } else if (reviewType.name().equalsIgnoreCase(UserType.FREELANCER.name())) {
                 FreelancerReview freelancerReview = new FreelancerReview(
-                        null, companyId, freelancerId, score1, score2, score3, score4, overallScore, reviewDate,
+                        null, writerId, collaboraiterId, score1, score2, score3, score4, overallScore, reviewDate,
                         row.get(5) != null ? row.get(5).toString() : null
                 );
                 freelancerReviewRepo.insertFreelancerReview(freelancerReview);
