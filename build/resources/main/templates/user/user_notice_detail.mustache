@@ -1,52 +1,47 @@
 {{>layout/header}}
-<style type="text/css">
-    .notice-title{
-        width: 90%;
-        height: 20vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-    .notice-list-container{
-        width: 80%;
-        height: 60vh;
-        border: 1px solid gray;
-        border-radius: 10px;
-        background: white;
-        box-shadow: 2px 2px 5px #dee2e6;
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+<style type="text/css">
+    .notice-title {
+        text-align: center;
+        margin: 20px 0;
     }
-    .notice-box{
-        width: 90%;
+    .notice-list-container {
+        width: 80%;
+        max-height: 60vh;
+        border-radius: 10px;
+        background: white;
+        box-shadow: 2px 2px 5px #dee2e6;
+        margin: auto; /* Center the container */
+        padding: 20px; /* Added padding for better spacing */
+    }
+    .notice-box {
         border: 1px solid gray;
         border-radius: 10px;
         background: white;
         box-shadow: 2px 2px 5px #dee2e6;
-        margin: 10px;
-        padding: 10px;
+        margin: 10px 0; /* Margin between notice boxes */
+        padding: 15px; /* Added padding for better spacing */
+        transition: transform 0.2s; /* Smooth hover effect */
+    }
+    .notice-box:hover {
+        transform: scale(1.02); /* Scale effect on hover */
     }
 </style>
 
 <div class="notice-title">
-    <h3>공지사항 더보기</h3>
+    <h3>공지사항 </h3>
 </div>
 
 <div class="notice-list-container">
     {{#notice}}
-    <div class="notice-box">
-            <h5>{{id}}</h5>
+        <div class="notice-box">
             <h5>{{title}}</h5>
-            <p>{{createdAt}}</p>
-            <h5>{{content}}</h5>
-        <button onclick="location.href='/notice/1'">목록</button>
-    </div>
+            <p class="text-muted">{{createdAt}}</p>
+            <p>{{content}}</p>
+            <button class="btn btn-primary" onclick="location.href='/notice/1'">목록</button>
+        </div>
     {{/notice}}
-
 </div>
 
 {{>layout/footer}}

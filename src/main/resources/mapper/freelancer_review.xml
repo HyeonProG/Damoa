@@ -54,4 +54,13 @@
         GROUP BY DATE_FORMAT(review_date, '%m-%d')
     </select>
 
+    <select id="freelancerReviewDetail" resultType="com.damoa.dto.admin.FreelancerReviewDetailDTO">
+        select * from freelancers_review where id = #{id}
+    </select>
+
+    <delete id="delete">
+        delete from freelancers_review where id = #{id}
+    </delete>
+
+
 </mapper>

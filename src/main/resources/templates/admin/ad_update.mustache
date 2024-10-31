@@ -1,0 +1,15 @@
+{{> admin/admin_header}}
+<div class="card">
+    {{#ad}}
+    <div class="card-body">
+        <form action="/admin/ad/update/{{id}}" method="post">
+        <input type="text" value="{{title}}" name="title" class="form-control">
+        <p class="card-text"><strong>파일 이름:</strong> {{originFileName}}</p>
+        <p class="card-text"><strong>시작 시간:</strong> {{startTime}}</p>
+        <p><img src="/images/ad/{{originFileName}}" class="ad-img" style="box-shadow: 2px 2px 5px #d0ccc9">
+        </p>
+            <button type="submit" class="btn btn-danger" onclick="return confirm('정말 수정하시겠습니까?');">수정</button>
+        </form>
+    </div>
+    {{/ad}}
+</div>

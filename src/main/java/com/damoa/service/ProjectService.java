@@ -125,46 +125,6 @@ public class ProjectService {
             List<Project> newProject = projectRepository.getProjectForPaging(limit,offset);
             System.out.println(selectStr);
             return newProject;
-
-            // 진행상태 x, 근무방식 x 2222222222
-        } else if ((reqDTO.getProgress()==null || reqDTO.getProgress().equals("전체")) && (reqDTO.getWorkType()==null|| reqDTO.getWorkType().equals("전체"))) {
-            System.out.println("2222222222");
-            selectStr = "WHERE address = "+reqDTO.getAddress();
-            System.out.println(selectStr);
-
-            // 근무방식 x, 주소 x 333333333333
-        } else if ((reqDTO.getWorkType()==null|| reqDTO.getWorkType().equals("전체")) && (reqDTO.getAddress()==null|| reqDTO.getAddress().equals("전국"))) {
-            System.out.println("333333333333");
-            selectStr = "WHERE progress = "+reqDTO.getProgress();
-            System.out.println(selectStr);
-
-            // 진행상태 x, 주소 x
-        } else if ((reqDTO.getProgress()==null || reqDTO.getProgress().equals("전체")) && (reqDTO.getAddress()==null|| reqDTO.getAddress().equals("전국"))) {
-            System.out.println("44444444444444");
-            selectStr = "WHERE working_style = "+reqDTO.getWorkType();
-            System.out.println(selectStr);
-
-            // 진행상태 x
-        } else if (reqDTO.getProgress()==null || reqDTO.getProgress().equals("전체")) {
-            System.out.println("55555555555555");
-            selectStr = "WHERE working_style = "+reqDTO.getWorkType()+" and address = "+reqDTO.getAddress();
-            System.out.println(selectStr);
-
-            // 주소 x
-        } else if (reqDTO.getAddress()==null|| reqDTO.getAddress().equals("전국")) {
-            System.out.println("6666666666666");
-            selectStr = "WHERE working_style = "+ reqDTO.getWorkType()+" and progress = "+reqDTO.getProgress();
-            System.out.println(selectStr);
-
-            // 근무방식 x
-        } else if (reqDTO.getWorkType()==null|| reqDTO.getWorkType().equals("전체")){
-            System.out.println("777777777777777");
-            selectStr = "WHERE progress = "+ reqDTO.getWorkType()+" and address = "+reqDTO.getAddress();
-            System.out.println(selectStr);
-        } else {
-            System.out.println("8888888888888");
-            selectStr = "WHERE progress = "+ reqDTO.getWorkType()+" and address = "+reqDTO.getAddress()+" and working_style = "+reqDTO.getWorkType();
-            System.out.println(selectStr);
         }
 
         List<Project> newProject = projectRepository.selectProjectForSelect(reqDTO, limit, offset);
@@ -173,4 +133,7 @@ public class ProjectService {
     }
 
 
+    public int findProjectIdByUserId(int userId) {
+        return projectRepository.selectProjectIdByUserId(userId);
+    }
 }

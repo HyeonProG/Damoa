@@ -22,7 +22,7 @@
                     <td>{{overallScore}}</td>
                     <td>{{responseData}}</td>
                     <td>
-                        <a href="/admin/review/{{id}}" class="btn btn-primary">리뷰 상세 보기</a>
+                        <a href="/admin/list/freelancer/detail/{{id}}" class="btn btn-primary">리뷰 상세 보기</a>
                     </td>
                 </tr>
             {{/list}}
@@ -40,8 +40,8 @@
     </div>
 
     <div class="text-center mt-4">
-        <button class="btn btn-secondary" onclick="location.href='/admin/list/company/{{beforePageNum}}'">{{beforePageNum}}</button>
-        <button class="btn btn-secondary" onclick="location.href='/admin/list/company/{{currentPageNum}}'">{{currentPageNum}}</button>
-        <button class="btn btn-secondary" onclick="location.href='/admin/list/company/{{nextPageNum}}'">{{nextPageNum}}</button>
+        <button class="btn btn-secondary" onclick="location.href='/admin/list/freelancer/{{beforePageNum}}'">{{beforePageNum}}</button>
+        <button class="btn btn-secondary" onclick="location.href='/admin/list/freelancer/{{currentPageNum}}'">{{currentPageNum}}</button>
+        <button class="btn btn-secondary" onclick="location.href='/admin/list/freelancer/{{nextPageNum}}'">{{nextPageNum}}</button>
     </div>
 </div>

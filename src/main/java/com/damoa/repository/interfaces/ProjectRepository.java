@@ -75,4 +75,6 @@ public interface ProjectRepository {
 
     // 검색 조건에 따라 검색
     List<Project> selectProjectForSelect(@Param("selectDTO")SelectDTO selectDTO, @Param("limit")int limit, @Param("offset")int offset);
+
+    int selectProjectIdByUserId(int userId);
 }

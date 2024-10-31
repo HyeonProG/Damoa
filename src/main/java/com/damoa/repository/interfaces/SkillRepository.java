@@ -18,7 +18,7 @@ public interface SkillRepository {
     public List<Skill> selectAllSkill();
 
     // Project_skill_tb에 데이터 추가
-    public void addProjectSkillData(@Param("skill")int skill, @Param("userId")int userId);
+    public void addProjectSkillData(@Param("projectId")int projectId, @Param("userId")int userId, @Param("skill")int skill);
 
     // 프로젝트 id로 스킬내역 찾기
     public List<String> findProjectSkillById(Integer projectId);

@@ -36,20 +36,22 @@ public class SignCotroller {
 
     /**
      * 전자 서명 등록 페이지
+     *
      * @return
      */
     @GetMapping("")
-    public String signRegisterPage(){
+    public String signRegisterPage() {
         return "sign/make_sign";
     }
 
     /**
      * 전자 서명 등록 요청
+     *
      * @param request
      * @return
      */
     @PostMapping("")
-    public String saveRegisterProc(@RequestBody Map<String, String> request){
+    public String saveRegisterProc(@RequestBody Map<String, String> request) {
         String base64Image = request.get("image"); // 이미지 바이너리 데이터 받기
         String name = request.get("name"); // 사인 이름 받기
 
@@ -67,20 +69,20 @@ public class SignCotroller {
         byte[] imageBytes = Base64.getDecoder().decode(imageData);
         // 파일 저장 경로
         String filePath = uploadSigndir; // 저장할 경로
-        int userId=1; // 세션값 불러올 예정
-        
+        int userId = 1; // 세션값 불러올 예정
+
         // 사인 파일명
-        String uploadFileName=userId+"_"+ UUID.randomUUID()+".png";
+        String uploadFileName = userId + "_" + UUID.randomUUID() + ".png";
 
         AddSignDTO newSign = AddSignDTO.builder()
-                            .name(name)
-                            .fileData(imageBytes)
-                            .userId(userId)
-                            .uploadFileName(uploadFileName)
-                            .build();
-        
+                .name(name)
+                .fileData(imageBytes)
+                .userId(userId)
+                .uploadFileName(uploadFileName)
+                .build();
+
         // 이미지 파일로 저장
-        try (FileOutputStream fos = new FileOutputStream(filePath+ File.separator+uploadFileName)) {
+        try (FileOutputStream fos = new FileOutputStream(filePath + File.separator + uploadFileName)) {
             fos.write(imageBytes);
             signService.addNewSign(newSign);
         } catch (IOException e) {
@@ -91,17 +93,17 @@ public class SignCotroller {
     }
 
     @GetMapping("/list")
-    private String signListPage(Model model){
-        int userId=1; // 세션값으로 수정 예정
+    private String signListPage(Model model) {
+        int userId = 1; // 세션값으로 수정 예정
         List<Sign> signList = signService.findSignById(userId);
         signList = setSignPath(signList);
-        model.addAttribute("signList",signList);
+        model.addAttribute("signList", signList);
         return "sign/sign_list";
     }
 
     // 사인 경로 설정
-    public List<Sign> setSignPath(List<Sign> list){
-        for(int a=0; a<list.size(); a++){
+    public List<Sign> setSignPath(List<Sign> list) {
+        for (int a = 0; a < list.size(); a++) {
             list.get(a).setFileName(list.get(a).setUpSignImage());
         }
         return list;

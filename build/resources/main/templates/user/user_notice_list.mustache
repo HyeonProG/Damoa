@@ -8,22 +8,20 @@
     }
     .notice-list-container {
         width: 80%;
-        height: 60vh;
+        max-height: 60vh;
         border-radius: 10px;
         box-shadow: 2px 2px 5px #dee2e6;
-        padding: 20px; /* 여백 추가 */
-    }
-    .notice-table {
-        width: 100%;
+        padding: 20px;
+        margin: auto; /* Center the container */
     }
     .notice-box {
         border: 1px solid #dee2e6;
         border-radius: 10px;
         background: #f8f9fa;
-        transition: background 0.3s; /* 호버 효과를 위한 애니메이션 */
+        transition: background 0.3s;
     }
     .notice-box:hover {
-        background: #e9ecef; /* 호버 시 배경 색상 변경 */
+        background: #e9ecef;
     }
     .pagination {
         justify-content: center;
@@ -55,10 +53,10 @@
     </table>
 </div>
 
-<div class="pagination">
-    <button class="btn btn-secondary" onclick="location.href='/notice/list/{{lastPage}}'">이전 페이지</button>
-    <button class="btn btn-primary" onclick="location.href='/notice/list/{{currentPageNum}}'">{{currentPageNum}}</button>
-    <button class="btn btn-secondary" onclick="location.href='/notice/list/{{nextPage}}'">다음 페이지</button>
+<div class="d-flex justify-content-center pagination">
+    <button class="btn btn-secondary mx-2" onclick="location.href='/notice/list/{{lastPage}}'">이전 페이지</button>
+    <button class="btn btn-primary mx-2" onclick="location.href='/notice/list/{{currentPageNum}}'">{{currentPageNum}}</button>
+    <button class="btn btn-secondary mx-2" onclick="location.href='/notice/list/{{nextPage}}'">다음 페이지</button>
 </div>
 
 {{>layout/footer}}

@@ -32,4 +32,9 @@ public interface FreelancerReviewRepository {
     // 일별 프리랜서 리뷰 등록 수 데이터
     List<DailyFreelancerReviewDTO> getDailyFreelancerReviewData(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
+    FreelancerReviewDetailDTO freelancerReviewDetail(int id);
+
+    int delete(int id);
+
+
 }
