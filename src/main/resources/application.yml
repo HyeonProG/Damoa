@@ -68,5 +68,5 @@ logging:
 
 # 초기 파라메터 설정
 file:
-  upload-dir: C:\\work_damoa/
+  upload-dir-ad: C:\spring_jpa_work_class\spring_damoa\src\main\resources\static\images\ad/
   upload-dir-sign: C:\Users\KDP\IdeaProjects\Damoa\src\main\resources\static\images\signs/

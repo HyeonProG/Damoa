@@ -69,4 +69,6 @@
     <select id="findAllCompanies" resultType="com.damoa.repository.model.User">
         SELECT * FROM user_tb WHERE user_type = 'company'
     </select>
+
+
 </mapper>

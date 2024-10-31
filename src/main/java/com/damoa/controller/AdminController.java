@@ -1,12 +1,10 @@
 package com.damoa.controller;
 
 import com.damoa.dto.TossHistoryDTO;
-import com.damoa.dto.admin.CompanyReviewDTO;
-import com.damoa.dto.admin.CompanyReviewDetailDTO;
-import com.damoa.dto.admin.FreelancerReviewDTO;
-import com.damoa.dto.admin.FreelancerReviewDetailDTO;
+import com.damoa.dto.admin.*;
 import com.damoa.dto.user.MonthlyRegisterDTO;
 import com.damoa.dto.user.MonthlyVisitorDTO;
+import com.damoa.repository.model.Ad;
 import com.damoa.repository.model.Admin;
 import com.damoa.repository.model.User;
 import com.damoa.service.*;
@@ -18,22 +16,31 @@ import com.damoa.dto.DailyFreelancerReviewDTO;
 import com.damoa.dto.MonthlyFreelancerDTO;
 import com.damoa.dto.MonthlyProjectDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 public class AdminController {
+
+    @Value("${file.upload-dir-ad}")
+    private String uploadAddir;
 
     @Autowired
     private final AdminService adminService;
@@ -333,6 +340,78 @@ public class AdminController {
         FreelancerReviewDetailDTO detailDTO = reviewService.getFreelancerDetails(id);
         model.addAttribute("detailDTO", detailDTO);
         return "admin/freelancer_list_detail";
+    }
+
+    @GetMapping("/ad/save")
+    public String savePage() {
+
+        return "admin/ad_save_form";
+    }
+
+    @PostMapping("/ad/save")
+    public String saveProc(@RequestParam("title") String title,
+                           @RequestParam("originFileName") MultipartFile originFileName,
+                           @RequestParam("startTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startTime,
+                           @RequestParam("endTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endTime) {
+
+        AdDTO dto = new AdDTO();
+        String[] uploadedFileInfo = adminService.uploadFile(originFileName);
+        dto.setOriginFileName(uploadedFileInfo[1]);
+        dto.setTitle(title);
+        dto.setStartTime(startTime);
+        dto.setEndTime(endTime);
+        adminService.createAd(dto);
+
+        return "redirect:/admin/ad/list";
+    }
+
+    @GetMapping("/ad/list")
+    public String adList(Model model,@PageableDefault(size = 2) Pageable pageable) {
+
+        Page<Ad> adPage = adminService.getAdList(pageable);
+        List<Ad> list = adPage.getContent();
+
+        int currentPage = adPage.getNumber();
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", adPage.getTotalPages()); // 전체 페이지 수 추가
+        model.addAttribute("nextPage", currentPage + 1 < adPage.getTotalPages() ? currentPage + 1 : null);
+        model.addAttribute("prevPage", currentPage > 0 ? currentPage - 1 : null); // 이전 페이지 번호
+        model.addAttribute("pagination", adPage);
+        model.addAttribute("list", list);
+
+        return "admin/ad_list";
+    }
+
+    @GetMapping("/ad/detail/{id}")
+    public String adDetail(@PathVariable(name = "id") Integer id, Model model) {
+        Ad ad = adminService.getAdDetail(id);
+        model.addAttribute("ad",ad);
+        model.addAttribute("title", ad.getTitle());
+        model.addAttribute("originFileName", ad.getOriginFileName());
+        model.addAttribute("startTime", ad.getStartTime());
+        model.addAttribute("endTime",ad.getEndTime());
+        return "admin/ad_detail";
+    }
+
+    @PostMapping("/ad/delete/{id}")
+    public String deleteAd(@PathVariable(name = "id") Integer id) {
+        adminService.deleteAd(id);
+        return "redirect:/admin/ad/list";
+    }
+
+    @GetMapping("/ad/update/{id}")
+    public String updateAdPage(@PathVariable(name = "id") int id, Model model) {
+        Ad ad = adminService.getAdDetail(id);
+        model.addAttribute("ad", ad);
+        return "admin/ad_update";
+
+
+    }
+
+    @PostMapping("/ad/update/{id}")
+    public String updateAd(@PathVariable(name = "id") Integer id, @RequestParam String title) {
+        adminService.updateAdById(id, title);
+        return "redirect:/admin/ad/list";
     }
 
 

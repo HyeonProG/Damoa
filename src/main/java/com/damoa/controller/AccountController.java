@@ -6,6 +6,7 @@ import com.damoa.service.AccountService;
 import com.damoa.service.ProjectService;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
