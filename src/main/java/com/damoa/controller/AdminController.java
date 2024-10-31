@@ -4,6 +4,7 @@ import com.damoa.dto.TossHistoryDTO;
 import com.damoa.dto.admin.*;
 import com.damoa.dto.user.MonthlyRegisterDTO;
 import com.damoa.dto.user.MonthlyVisitorDTO;
+import com.damoa.handler.exception.DataDeliveryException;
 import com.damoa.repository.model.Ad;
 import com.damoa.repository.model.Admin;
 import com.damoa.repository.model.Notice;
@@ -33,7 +34,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -439,5 +444,63 @@ public class AdminController {
         System.out.println(notice);
         return "/admin/notice_detail";
     }
+    @GetMapping("/ad/save")
+    public String savePage() {
+        return "admin/ad_save_form";
+    }
+    @PostMapping("/ad/save")
+    public String saveProc(@RequestParam("title") String title,
+                           @RequestParam("originFileName") MultipartFile originFileName,
+                           @RequestParam("startTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startTime,
+                           @RequestParam("endTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endTime) {
+        AdDTO dto = new AdDTO();
+        String[] uploadedFileInfo = adminService.uploadFile(originFileName);
+        dto.setOriginFileName(uploadedFileInfo[1]);
+        dto.setTitle(title);
+        dto.setStartTime(startTime);
+        dto.setEndTime(endTime);
+        adminService.createAd(dto);
+        return "redirect:/admin/ad/list";
+    }
+    @GetMapping("/ad/list")
+    public String adList(Model model,@PageableDefault(size = 2) Pageable pageable) {
+        Page<Ad> adPage = adminService.getAdList(pageable);
+        List<Ad> list = adPage.getContent();
+        int currentPage = adPage.getNumber();
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", adPage.getTotalPages()); // 전체 페이지 수 추가
+        model.addAttribute("nextPage", currentPage + 1 < adPage.getTotalPages() ? currentPage + 1 : null);
+        model.addAttribute("prevPage", currentPage > 0 ? currentPage - 1 : null); // 이전 페이지 번호
+        model.addAttribute("pagination", adPage);
+        model.addAttribute("list", list);
+        return "admin/ad_list";
+    }
+    @GetMapping("/ad/detail/{id}")
+    public String adDetail(@PathVariable(name = "id") Integer id, Model model) {
+        Ad ad = adminService.getAdDetail(id);
+        model.addAttribute("ad",ad);
+        model.addAttribute("title", ad.getTitle());
+        model.addAttribute("originFileName", ad.getOriginFileName());
+        model.addAttribute("startTime", ad.getStartTime());
+        model.addAttribute("endTime",ad.getEndTime());
+        return "admin/ad_detail";
+    }
+    @PostMapping("/ad/delete/{id}")
+    public String deleteAd(@PathVariable(name = "id") Integer id) {
+        adminService.deleteAd(id);
+        return "redirect:/admin/ad/list";
+    }
+    @GetMapping("/ad/update/{id}")
+    public String updateAdPage(@PathVariable(name = "id") int id, Model model) {
+        Ad ad = adminService.getAdDetail(id);
+        model.addAttribute("ad", ad);
+        return "admin/ad_update";
+    }
+    @PostMapping("/ad/update/{id}")
+    public String updateAd(@PathVariable(name = "id") Integer id, @RequestParam String title) {
+        adminService.updateAdById(id, title);
+        return "redirect:/admin/ad/list";
+    }
+
 
 }

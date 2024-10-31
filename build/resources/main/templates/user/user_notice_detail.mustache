@@ -9,28 +9,26 @@
     .notice-list-container {
         width: 80%;
         max-height: 60vh;
-        border-radius: 10px;
         background: white;
         box-shadow: 2px 2px 5px #dee2e6;
-        margin: auto; /* Center the container */
-        padding: 20px; /* Added padding for better spacing */
+        margin: auto;
+        padding: 20px;
     }
     .notice-box {
-        border: 1px solid gray;
+        border: 1px solid #dee2e6;
         border-radius: 10px;
         background: white;
-        box-shadow: 2px 2px 5px #dee2e6;
-        margin: 10px 0; /* Margin between notice boxes */
-        padding: 15px; /* Added padding for better spacing */
-        transition: transform 0.2s; /* Smooth hover effect */
+        margin: 10px 0;
+        padding: 15px;
+        transition: transform 0.2s;
     }
     .notice-box:hover {
-        transform: scale(1.02); /* Scale effect on hover */
+        transform: scale(1.02);
     }
 </style>
 
 <div class="notice-title">
-    <h3>공지사항 </h3>
+    <h3>공지사항</h3>
 </div>
 
 <div class="notice-list-container">
@@ -39,7 +37,9 @@
             <h5>{{title}}</h5>
             <p class="text-muted">{{createdAt}}</p>
             <p>{{content}}</p>
-            <button class="btn btn-primary" onclick="location.href='/notice/1'">목록</button>
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-primary" onclick="location.href='/notice/1'">목록</button>
+            </div>
         </div>
     {{/notice}}
 </div>
