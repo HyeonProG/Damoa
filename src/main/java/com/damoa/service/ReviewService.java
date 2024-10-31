@@ -5,6 +5,7 @@ import com.damoa.dto.admin.CompanyReviewDetailDTO;
 import com.damoa.dto.admin.FreelancerReviewDTO;
 import com.damoa.dto.DailyCompanyReviewDTO;
 import com.damoa.dto.DailyFreelancerReviewDTO;
+import com.damoa.dto.admin.FreelancerReviewDetailDTO;
 import com.damoa.repository.interfaces.CompanyReviewRepository;
 import com.damoa.repository.interfaces.FreelancerReviewRepository;
 import com.damoa.repository.model.CompanyReview;
@@ -93,8 +94,8 @@ public class ReviewService {
         return freelancerReviewRepo.countFreelancerReview();
     }
 
-    public List<CompanyReviewDetailDTO> getCompanyDetails(){
-        List<CompanyReviewDetailDTO> companyReviewDetailDTO = companyReviewRepo.companyReviewDetail();
+    public CompanyReviewDetailDTO getCompanyDetails(int id){
+       CompanyReviewDetailDTO companyReviewDetailDTO = companyReviewRepo.companyReviewDetail(id);
         return companyReviewDetailDTO;
 
     }
@@ -116,6 +117,18 @@ public class ReviewService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         return freelancerReviewRepo.getDailyFreelancerReviewData(startDate.format(formatter), endDate.format(formatter));
+    }
+
+    public int deleteCompanyReview(int id){
+        return companyReviewRepo.delete(id);
+    }
+
+    public int deleteFreelancerReview(int id){
+        return freelancerReviewRepo.delete(id);
+    }
+
+    public FreelancerReviewDetailDTO getFreelancerDetails(int id){
+        return freelancerReviewRepo.freelancerReviewDetail(id);
     }
 
 }

@@ -22,5 +22,30 @@
         select * from user_tb where id = #{id}
     </select>
 
+    <insert id="insertAd">
+        insert into ad_tb(title, origin_file_name, start_time, end_time) values
+        (#{title},#{originFileName},#{startTime},#{endTime})
+    </insert>
+
+    <select id="getAdList" resultType="com.damoa.repository.model.Ad">
+        select * from ad_tb order by id desc limit #{pageSize} offset #{offset}
+    </select>
+
+    <select id="findById" resultType="com.damoa.repository.model.Ad">
+        select * from ad_tb where id = #{id}
+    </select>
+
+    <delete id="deleteAdById">
+        delete from ad_tb where id = #{id}
+    </delete>
+
+    <update id="updateAdById">
+        update ad_tb set title = #{title} where id= #{id}
+    </update>
+
+    <select id="countAd" >
+        select count(*) from ad_tb
+    </select>
+
 
 </mapper>

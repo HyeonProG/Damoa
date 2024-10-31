@@ -2,10 +2,12 @@ package com.damoa.service;
 
 import com.damoa.dto.BankAuthDTO;
 import com.damoa.repository.interfaces.AccountRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AccountService {
 
     @Autowired
