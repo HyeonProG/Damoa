@@ -270,16 +270,28 @@
         <!-- 헤더 -->
         <div class="header">
             <div class="upper-div" style=" width: 2000px; height: 50px; display: flex; justify-content: space-evenly;">
-                <img class="title-img" style="width: 120px;" src="/images/logos/damoa_title_image.png" onclick="location.href='/main'">
+                <<<<<<< HEAD
+                <img class="title-img" style="width: 120px;" src="/images/logos/damoa_title_image.png"
+                     onclick="location.href='/main'">
+                =======
+                <img class="title-img" style="width: 120px;" src="/images/logos/damoa_title_image.png"
+                     onclick="location.href='/main'">
+                >>>>>>> dev_byj
                 <!-- 로그인, 회원가입 -->
                 <div style="display: flex;;">
                     {{#isLogin}} <!-- 로그인된 상태일 때 -->
-                        <button class="login-btn" style="width: 120px; height: 40px; margin: 5px;"><p><a href="/user/mypage" style="color: gray;" class="link">마이페이지</a></p></button>
-                        <button class="login-btn" style="width: 100px; height: 40px; margin: 5px;"><p><a href="/user/logout" style="color: gray;" class="link">로그아웃</a></p></button>
+                        <button class="login-btn" style="width: 120px; height: 40px; margin: 5px;"><p><a
+                                href="/user/mypage" style="color: gray;" class="link">마이페이지</a></p></button>
+                        <button class="login-btn" style="width: 100px; height: 40px; margin: 5px;"><p><a
+                                href="/user/logout" style="color: gray;" class="link">로그아웃</a></p></button>
                     {{/isLogin}}
                     {{^isLogin}} <!-- 로그인되지 않은 상태일 때 -->
-                        <button class="login-btn" style="width: 100px; height: 40px; margin: 5px;"><p><a href="/user/sign-in" style="color: gray;" class="link"> 로그인 </a></p></button>
-                        <button class="login-btn" style="width: 120px; height: 40px; margin: 5px;"> <p><a href="" style="color: gray;" class="link"> 회원가입 </a></p></button>
+                        <button class="login-btn" style="width: 100px; height: 40px; margin: 5px;"><p><a
+                                href="/user/sign-in" style="color: gray;" class="link"> 로그인 </a></p></button>
+                        <button class="login-btn" style="width: 120px; height: 40px; margin: 5px;"><p><a href=""
+                                                                                                         style="color: gray;"
+                                                                                                         class="link">
+                            회원가입 </a></p></button>
                     {{/isLogin}}
                 </div>
             </div>
@@ -331,3 +343,4 @@
         </div>
 
         <div class="main-board">
+

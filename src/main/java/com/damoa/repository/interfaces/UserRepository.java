@@ -46,6 +46,7 @@ public interface UserRepository {
     PrincipalDTO findUserById(int id);
 
     List<AdDTO> findAd();
+
     // 프리랜서 목록 조회 (프리랜서 사용자)
     List<User> findAllFreelancers();
 
@@ -64,6 +65,7 @@ public interface UserRepository {
     List<AlertDTO> findRefundRequest();
 
     int countRequestRefund();
+
     // 프로젝트 등록 시 포인트 차감
     public int updateUserPoints(int id);
 }

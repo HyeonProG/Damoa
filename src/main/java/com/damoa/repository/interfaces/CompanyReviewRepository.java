@@ -36,7 +36,7 @@ public interface CompanyReviewRepository {
 
     int delete(int id);
 
-    List<CompanyReviewDetailDTO> companyReviewDetail();
+    CompanyReviewDetailDTO companyReviewDetail(int id);
 
     // 일별 기업 리뷰 등록 수 데이터 가져오기
     List<DailyCompanyReviewDTO> getDailyCompanyReviewData(@Param("startDate") String startDate, @Param("endDate") String endDate);
