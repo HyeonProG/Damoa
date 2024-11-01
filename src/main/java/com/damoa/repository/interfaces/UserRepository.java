@@ -62,4 +62,6 @@ public interface UserRepository {
     List<AlertDTO> findRefundRequest();
 
     int countRequestRefund();
+    // 프로젝트 등록 시 포인트 차감
+    public int updateUserPoints(int id);
 }

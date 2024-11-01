@@ -73,9 +73,11 @@ public class ProjectController {
         System.out.println("~~~~~~~~~~~~~");
         System.out.println(reqDTO);
 
+        
         projectService.createProject(reqDTO);
         int projectId = projectService.findProjectIdByUserId(1);
-
+        
+        userService.updateUserPoints(reqDTO.getUserId());
         List<String> strList=new ArrayList<>();
         List<Skill> skillList=new ArrayList<>();
         for(int a=0; a<reqDTO.getTotalSkills().size(); a++){
