@@ -2,6 +2,7 @@ package com.damoa.repository.interfaces;
 
 import com.damoa.dto.TossHistoryDTO;
 import com.damoa.dto.review.ReviewUserDTO;
+import com.damoa.dto.user.AlertDTO;
 import com.damoa.dto.user.MonthlyRegisterDTO;
 import com.damoa.dto.user.PrincipalDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -36,9 +37,29 @@ public interface UserRepository {
 
     List<MonthlyRegisterDTO> getMonthlyRegisterData();  // 월별 회원가입 수 데이터
 
-    List<TossHistoryDTO> findPaymentDetailByUserId(int userId);
+    List<TossHistoryDTO> findPaymentDetailByUserId(@Param("offset") int offset, @Param("pageSize") int pageSize, @Param("userId") int userId);
 
     void updateStatus(int id);
+
     // 사용자 ID로 사용자 정보 조회
     PrincipalDTO findUserById(int id);
+
+    // 프리랜서 목록 조회 (프리랜서 사용자)
+    List<User> findAllFreelancers();
+
+    // 기업 목록 조회 (기업 사용자)
+    List<User> findAllCompanies();
+
+    // 유저가 가지고 있는 포인트 확인
+    int checkPoint(int id);
+
+    // 내 결제 카운트
+    int countMyPayment(int id);
+
+    // alert_tb에 인서트
+    void insertByPaymentIdAndUserId(@Param("paymentId") int paymentId, @Param("userId") int userId);
+
+    List<AlertDTO> findRefundRequest();
+
+    int countRequestRefund();
 }

@@ -2,6 +2,7 @@ package com.damoa.repository.interfaces;
 
 import com.damoa.dto.admin.AdDTO;
 import com.damoa.repository.model.Ad;
+import com.damoa.dto.admin.NoticeDTO;
 import com.damoa.repository.model.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -34,4 +35,24 @@ public interface AdminRepository {
     public List<Ad> getAdList(int pageSize, int offset);
 
     public int countAd();
+    // 어드민 유저 카운트
+    int countUser();
+
+    // 어드민 공지 수정
+    int updateNotice(@Param("id") int id, @Param("title") String title, @Param("content") String content);
+
+    // 어드민 공지 삭제
+    int deleteNoticeById(int id);
+
+    // 어드민 공지 추가
+    int insertNotice(@Param("title") String title, @Param("content") String content);
+
+    // 어드민 공지 조회
+    NoticeDTO findNoticeById(int id);
+
+    // 어드민 공지 카운트
+    int countNotice();
+
+    // 어드민 공지 리스트 뽑기
+    List<NoticeDTO> viewAllNotice(@Param("offset") int offset, @Param("pageSize") int pageSize);
 }

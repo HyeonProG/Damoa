@@ -17,4 +17,12 @@ public class GlobalExceptionHandler {
         modelAndView.setStatus(HttpStatus.NOT_FOUND);
         return modelAndView;
     }
+
+//    @ExceptionHandler(Exception.class)
+//    public ModelAndView handleServerError(Exception e) {
+//        ModelAndView modelAndView = new ModelAndView("500"); // 500.html 뷰 이름
+//        modelAndView.addObject("errorMessage", e.getMessage());
+//        modelAndView.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+//        return modelAndView;
+//    }
 }

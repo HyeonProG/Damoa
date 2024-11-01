@@ -8,11 +8,15 @@ import com.damoa.dto.DailyFreelancerReviewDTO;
 import com.damoa.dto.admin.FreelancerReviewDetailDTO;
 import com.damoa.dto.review.CompanyMainDTO;
 import com.damoa.dto.review.FreelancerMainDTO;
+import com.damoa.dto.admin.NoticeDTO;
 import com.damoa.repository.interfaces.CompanyReviewRepository;
 import com.damoa.repository.interfaces.FreelancerReviewRepository;
 import com.damoa.repository.interfaces.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -69,23 +73,26 @@ public class ReviewService {
         log.info("companyReview: {}", companyReview);
     }
 
-    public List<CompanyReviewDTO> getComapanyReviews(int limit, int offset){
-        List<CompanyReviewDTO> companyReviews = companyReviewRepo.findCompanyReview(limit,offset);
-        return  companyReviews;
+    public Page<CompanyReviewDTO> getComapanyReviews(Pageable pageable) {
 
+        int offset = pageable.getPageNumber() * pageable.getPageSize();
+        List<CompanyReviewDTO> companyList = companyReviewRepo.findCompanyReview(pageable.getPageSize(), offset);
+        int totalCount = companyReviewRepo.countComReview();
+        return new PageImpl<>(companyList, pageable, totalCount);
     }
 
-    public int countReview(){
+    public int countReview() {
         return companyReviewRepo.countCompanyReview();
     }
 
-    public List<FreelancerReviewDTO> findFreelancerReview(int limit, int offset){
-        List<FreelancerReviewDTO> freelancerReviews = freelancerReviewRepo.findFreelancerReview(limit, offset);
-        return freelancerReviews;
-
+    public Page<FreelancerReviewDTO> findFreelancerReview(Pageable pageable) {
+        int offset = pageable.getPageNumber() * pageable.getPageSize();
+        List<FreelancerReviewDTO> freelancerReviews = freelancerReviewRepo.findFreelancerReview(pageable.getPageSize(), offset);
+        int totalCount = freelancerReviewRepo.countFreelancerReview();
+        return new PageImpl<>(freelancerReviews, pageable, totalCount);
     }
 
-    public int countFreelancerReview(){
+    public int countFreelancerReview() {
         return freelancerReviewRepo.countFreelancerReview();
     }
 
