@@ -464,6 +464,10 @@ public class FreelancerController {
 
         // 모델에 프리랜서 정보 추가
         model.addAttribute("freelancer", freelancer);
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+        }
         model.addAttribute("isLogin", user);
 
         return "freelancer/detail";
