@@ -1,6 +1,7 @@
 package com.damoa.service;
 
 import com.damoa.dto.TossHistoryDTO;
+import com.damoa.dto.admin.AdDTO;
 import com.damoa.dto.admin.FreelancerReviewDTO;
 import com.damoa.dto.user.AlertDTO;
 import com.damoa.dto.user.PrincipalDTO;

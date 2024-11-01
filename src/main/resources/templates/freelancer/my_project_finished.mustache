@@ -166,7 +166,7 @@
                         <h6>{{projectName}}</h6>
                         <div class="actions">
                             <button class="btn btn-detail" onclick="location.href='/project/detail/{{id}}'">자세한 정보 보러가기</button>
-                            <button class="btn btn-primary" type="button" onclick="confirmReview()">리뷰 남기기</button>
+                            <button class="btn btn-primary" type="button" onclick="confirmReview(event)">리뷰 남기기</button>
                         </div>
                     </div>
                 {{/projectList1}}
@@ -190,10 +190,12 @@
 </div>
 
 <script>
-    function confirmReview() {
+    function confirmReview(event) {
         const userConfirmed = confirm("리뷰를 작성하시겠습니까?");
         if (userConfirmed) {
             location.href = 'https://forms.gle/UnXAgmt1txfja3LFA';
+        } else {
+            event.stopPropagation();
         }
     }
 </script>
