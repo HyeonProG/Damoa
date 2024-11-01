@@ -25,7 +25,6 @@ public class FaqSaveDTO {
         return Faq.builder()
                 .type(this.type)
                 .title(this.title)
-                .title(this.title)
                 .content(this.content)
                 .build();
     }

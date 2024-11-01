@@ -9,7 +9,7 @@
 
 function fetchMessage() {
     // 입력된 메시지를 가져오는 방법 (예: input 필드에서)
-    const message = document.getElementById('message').value;
+    const message = document.getElementById('bot--message').value;
 
     fetch('http://localhost:8080/chat/fetchMessage', {
         method: 'POST',
@@ -38,7 +38,7 @@ function fetchMessage() {
         resultDiv.innerHTML += `<p class="left-message">${data.description}</p><br>`;
 
         // 입력 필드 초기화
-        document.getElementById('message').value = '';
+        document.getElementById('bot--message').value = '';
 
         // 스크롤을 맨 아래로 이동
         resultDiv.scrollTop = resultDiv.scrollHeight;
@@ -51,7 +51,7 @@ function fetchMessage() {
 
 // 입력 필드의 값을 가져오는 함수
 function getMessage() {
-    const message = document.getElementById('message').value; // 입력 필드의 값 가져오기
+    const message = document.getElementById('bot--message').value; // 입력 필드의 값 가져오기
     console.log('입력한 메시지:', message);
     return message; // 값을 반환
 }

@@ -35,5 +35,6 @@ public class Freelancer {
     private String detail; // 상세 소개
     private String link; // 링크
     private Timestamp createdAt;
+    private String keyword;
 
 }

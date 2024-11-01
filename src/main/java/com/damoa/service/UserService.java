@@ -1,27 +1,37 @@
 package com.damoa.service;
 
+import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
-import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.damoa.dto.TossHistoryDTO;
+import com.damoa.dto.admin.AdDTO;
+import com.damoa.dto.admin.FreelancerReviewDTO;
+import com.damoa.dto.user.AlertDTO;
 import com.damoa.dto.user.PrincipalDTO;
 import com.damoa.dto.user.UserSignInDTO;
 import com.damoa.dto.user.UserSignUpDTO;
 import com.damoa.handler.exception.DataDeliveryException;
 import com.damoa.repository.interfaces.FreelancerRepository;
 import com.damoa.repository.interfaces.UserRepository;
-import com.damoa.repository.model.Freelancer;
 import com.damoa.repository.model.User;
-
 import lombok.RequiredArgsConstructor;
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
+import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +57,7 @@ public class UserService {
 
     /**
      * 회원가입 서비스 기능 트랜잭션 처리
-     * 
+     *
      * @param dto
      */
     @Transactional
@@ -62,17 +72,6 @@ public class UserService {
             // 사용자 정보 저장
             result = userRepository.insertUser(dto.toUser());
 
-            // 회원가입한 사용자가 프리랜서일 경우, freelancer_tb에 자동 등록
-            if ("freelancer".equals(dto.getUserType())) {
-                // userRepository에서 방금 삽입된 유저의 id 가져오기
-                int userId = userRepository.findByEmail(dto.getEmail()).getId();
-
-                // 기본 프리랜서 정보를 추가 (기본값 설정)
-                Freelancer freelancer = new Freelancer();
-                freelancer.setUserId(userId);
-                // 나머지 값은 필요에 따라 기본값으로 설정하거나 초기 값으로 설정 가능
-                freelancerRepository.insertFreelancer(freelancer);
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -81,7 +80,7 @@ public class UserService {
 
     /**
      * 이메일 중복 체크
-     * 
+     *
      * @param email
      * @return
      */
@@ -97,7 +96,7 @@ public class UserService {
 
     /**
      * 전화번호 인증 api
-     * 
+     *
      * @param phoneNumber
      * @param cerNum
      */
@@ -124,7 +123,7 @@ public class UserService {
 
     /**
      * 휴대폰 번호 체크
-     * 
+     *
      * @param phoneNumber
      * @return
      */
@@ -138,7 +137,7 @@ public class UserService {
 
     /**
      * 이메일로 유저 찾기
-     * 
+     *
      * @param email
      * @return
      */
@@ -160,7 +159,7 @@ public class UserService {
 
     /**
      * 입력한 이메일, 비밀번호가 DB와 동일한지 확인
-     * 
+     *
      * @param userSignInDTO
      * @return
      */
@@ -196,5 +195,103 @@ public class UserService {
         }
     }
 
+    // 전화번호 포맷팅
+    public String formatPhoneNumber(String phoneNumber) {
+        if (phoneNumber != null && phoneNumber.length() == 11) {
+            return phoneNumber.replaceFirst("(\\d{3})(\\d{4})(\\d+)", "$1-$2-$3");
+        } else if (phoneNumber != null && phoneNumber.length() == 10) {
+            return phoneNumber.replaceFirst("(\\d{2})(\\d{4})(\\d+)", "$1-$2-$3");
+        }
+        return phoneNumber;
+    }
+
+    // 포인트 포맷팅
+    private String formatPoint(int point) {
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.KOREA);
+        return numberFormat.format(point);
+    }
+
+    // 사용자 ID로 사용자 정보 조회
+    public PrincipalDTO findUserById(int userId) {
+        PrincipalDTO user = userRepository.findUserById(userId);
+
+        if (user != null) {
+            // 휴대전화번호에 하이픈 추가
+            if (user.getPhoneNumber() != null) {
+                user.setPhoneNumber(formatPhoneNumber(user.getPhoneNumber()));
+            }
+
+            // 포인트를 쉼표가 포함된 형식으로 포맷팅하여 formattedPoint 필드에 설정
+            NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.KOREA);
+            user.setFormattedPoint(numberFormat.format(user.getPoint()));
+        }
+        return user;
+    }
+
+    // 프리랜서 목록 조회
+    public List<User> getAllFreelancers() {
+        return userRepository.findAllFreelancers();
+    }
+
+    // 기업 목록 조회
+    public List<User> getAllCompanies() {
+        return userRepository.findAllCompanies();
+    }
+
+    public Page<TossHistoryDTO> findPayHistoryById(int userId, Pageable pageable) {
+        int offset = pageable.getPageNumber() * pageable.getPageSize();
+        List<TossHistoryDTO> list = userRepository.findPaymentDetailByUserId(offset, pageable.getPageSize(), userId);
+        int totalCount = userRepository.countMyPayment(userId);
+        return new PageImpl<>(list, pageable, totalCount);
+    }
+
+    @Transactional
+    public void updateTossHistoryStat(int historyId) {
+        userRepository.updateStatus(historyId);
+    }
+
+    public List<AdDTO> findAd(){
+        List<AdDTO> dto = userRepository.findAd();
+        return dto;
+    }
+    /*
+        유저 포인트 확인
+     */
+    public int checkPoint(int id) {
+        int point = userRepository.checkPoint(id);
+        return point;
+    }
+
+    /*
+        alert_tb에 인설트
+     */
+    @Transactional
+    public void insertAlert(int paymentId, int userId) {
+        userRepository.insertByPaymentIdAndUserId(paymentId, userId);
+    }
+
+    /**
+     * 방금 환불 요청한 유저 어드민 알림창에 띄워주기 위해서 AlertDTO찾는 메서드
+     *
+     * @return
+     */
+    public List<AlertDTO> findAlertList() {
+        List<AlertDTO> list = userRepository.findRefundRequest();
+
+        return list;
+    }
+
+    public int countAlert() {
+        int count = userRepository.countRequestRefund();
+        return count;
+    }
+    @Transactional
+    public int updateUserPoints(int id) {
+        if (userRepository.findById(id).getPoint() < 10000) {
+            throw new DataDeliveryException("포인트가 부족합니다.", HttpStatus.FORBIDDEN);
+        } else {
+            return userRepository.updateUserPoints(id);
+        }
+    }
 
 }

@@ -1,19 +1,26 @@
 package com.damoa.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
+import com.damoa.dto.TossHistoryDTO;
+import com.damoa.dto.user.*;
+import com.damoa.handler.exception.DataDeliveryException;
 import com.damoa.repository.model.Faq;
+import com.damoa.repository.model.User;
 import com.damoa.service.FaqService;
+import com.damoa.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.*;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,31 +28,22 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.damoa.dto.user.AddSocialUserInfoDTO;
-import com.damoa.dto.user.GoogleResponseDTO;
-import com.damoa.dto.user.GoogleTokenDTO;
-import com.damoa.dto.user.KakaoResponseDTO;
-import com.damoa.dto.user.KakaoTokenDTO;
-import com.damoa.dto.user.PrincipalDTO;
-import com.damoa.dto.user.UserSignInDTO;
-import com.damoa.dto.user.UserSignUpDTO;
-import com.damoa.handler.exception.DataDeliveryException;
-import com.damoa.repository.model.User;
-import com.damoa.service.UserService;
-import java.io.PrintWriter;
 import java.io.IOException;
-
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
+import java.io.PrintWriter;
+import java.text.NumberFormat;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController extends TextWebSocketHandler {
 
     @Autowired
     private final UserService userService;
@@ -77,13 +75,35 @@ public class UserController {
     private String accessToken = "";
     private String httpHeader = "Bearer" + accessToken;
 
+
+    // 알림을 위한 로거 설정
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class);
+    // 어드민 세션 설정
+    private List<WebSocketSession> adminSessions = new ArrayList<>();
+
+    // 알람을 위한 내장 메세지
+    @Autowired
+    private final SimpMessagingTemplate simpMessagingTemplate;
+
+
+    @Override
+    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+        // 웹소켓 연결이 성공적으로 이루어졌음을 로그로 기록
+        logger.info("Socket 연결됨: ");
+
+        // 현재 연결된 웹소켓 세션을 adminSessions 리스트에 추가
+        // 이 리스트는 어드민 사용자들의 세션을 관리하는 데 사용
+        adminSessions.add(session);
+    }
+
     /**
      * 회원가입 페이지
-     * 
+     *
      * @param model
      * @return
      */
     @GetMapping("/sign-up")
+
     private String signUpPage(Model model) {
         // 카카오 로그인 URL 설정
         String kakaoLoginUrl = kakaoLoginUrl();
@@ -116,7 +136,7 @@ public class UserController {
 
     /**
      * 이메일 중복 체크
-     * 
+     *
      * @param email
      * @return
      */
@@ -140,7 +160,7 @@ public class UserController {
     /**
      * 휴대폰 인증 기능
      * coolsms
-     * 
+     *
      * @param phoneNumber
      * @return
      */
@@ -161,7 +181,7 @@ public class UserController {
 
     /**
      * 휴대폰 번호 중복 체크
-     * 
+     *
      * @param phoneNumber
      * @return
      */
@@ -176,7 +196,7 @@ public class UserController {
 
     /**
      * 회원가입 로직
-     * 
+     *
      * @param dto
      * @return
      */
@@ -200,7 +220,7 @@ public class UserController {
 
     /**
      * 카카오 로그인 API
-     * 
+     *
      * @param code
      * @param response
      * @return
@@ -208,7 +228,7 @@ public class UserController {
      */
     @GetMapping("/kakao")
     public String KakaoLoginPage(@RequestParam(name = "code", required = false) String code,
-            HttpServletResponse response, HttpSession session) throws IOException {
+                                 HttpServletResponse response, HttpSession session) throws IOException {
         // Access Token 발급 요청
         RestTemplate rt1 = new RestTemplate();
         HttpHeaders header1 = new HttpHeaders();
@@ -250,7 +270,7 @@ public class UserController {
 
     /**
      * 카카오 소셜 로그인 추가 정보 요구 페이지
-     * 
+     *
      * @param addKakaoUserInfoDTO
      * @param session
      * @return
@@ -278,7 +298,7 @@ public class UserController {
 
     /**
      * 구글 소셜 로그인 API
-     * 
+     *
      * @param code
      * @param response
      * @return
@@ -330,7 +350,7 @@ public class UserController {
 
     /**
      * 구글 소셜 로그인 추가 정보 요구 페이지
-     * 
+     *
      * @param addGoogleUserInfoDTO
      * @param session
      * @return
@@ -358,7 +378,7 @@ public class UserController {
 
     /**
      * 로그인 페이지
-     * 
+     *
      * @return
      */
     @GetMapping("/sign-in")
@@ -409,6 +429,7 @@ public class UserController {
 
     /**
      * 로그아웃
+     *
      * @param session
      * @return
      */
@@ -417,21 +438,35 @@ public class UserController {
         session.invalidate();
         return "redirect:/main";
     }
+
     @GetMapping("/faq")
-    public String qna(Model model){
+    public String qna(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("principal");
         List<Faq> faqList = faqService.getAllQna();
-        model.addAttribute("faqList",faqList);
+        model.addAttribute("faqList", faqList);
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+        }
+        model.addAttribute("isLogin", user);
         return "user/faq_list";
     }
 
     @GetMapping("/faq-detail/{id}")
-    public String qnaDetail(@PathVariable int id, Model model){
+    public String qnaDetail(@PathVariable(name = "id") int id, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("principal");
         Faq faq = faqService.getFaqById(id);
-        model.addAttribute("faq",faq);
+        model.addAttribute("faq", faq);
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+        }
+        model.addAttribute("isLogin", user);
         return "user/faq_detail";
     }
 
 
+    // 마이페이지
     @GetMapping("/mypage")
     public String myPage(HttpSession session, Model model) {
         User user = (User) session.getAttribute("principal");
@@ -439,19 +474,18 @@ public class UserController {
             return "redirect:/user/sign-in";
         }
 
-        PrincipalDTO principalDTO = PrincipalDTO.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .username(user.getUsername())
-                .userType(user.getUserType())
-                .socialType(user.getSocialType())
-                .phoneNumber(user.getPhoneNumber())
-                .build();
+        PrincipalDTO principalDTO = userService.findUserById(user.getId());
 
-        boolean isFreelancer = user.getUserType().equals("freelancer");
-        boolean isCompany = user.getUserType().equals("company");
 
         model.addAttribute("user", principalDTO);
+
+        boolean isFreelancer = "freelancer".equals(user.getUserType());
+        boolean isCompany = "company".equals(user.getUserType());
+        model.addAttribute("isLogin", user);
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+        }
         model.addAttribute("freelancer", isFreelancer);
         model.addAttribute("company", isCompany);
 
@@ -485,5 +519,109 @@ public class UserController {
         return "redirect:/user/mypage";
     }
 
+    /**
+     * 유저 마이페이지 결제내역
+     *
+     * @param principal
+     * @param pageable
+     * @param model
+     * @return
+     */
+    @GetMapping("/income")
+    public String payDetailPage(@SessionAttribute(name = "principal") User principal, @PageableDefault(size = 5) Pageable pageable, Model model) {
 
+        Page<TossHistoryDTO> paymentPage = userService.findPayHistoryById(principal.getId(), pageable);
+        List<TossHistoryDTO> paymentList = paymentPage.getContent();
+        boolean isFreelancer = principal.getUserType().equals("freelancer");
+        boolean isCompany = principal.getUserType().equals("company");
+
+        // 날짜 포맷팅을 위한 DateTimeFormatter 설정
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+
+        // 숫자 포맷팅을 위한 NumberFormat 설정
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+
+        // 각 결제 내역의 requestedAt과 amount를 포맷팅하여 새로운 리스트 생성
+        List<TossHistoryDTO> formattedPaymentList = paymentPage.stream()
+                .map(payment -> {
+                    // String 타입의 requestedAt 필드 포맷팅
+                    String originalDateStr = payment.getRequestedAt();
+                    String formattedDate = OffsetDateTime.parse(originalDateStr, inputFormatter)
+                            .format(outputFormatter);
+                    payment.setRequestedAt(formattedDate);
+
+                    // amount를 쉼표가 포함된 형식으로 포맷팅
+                    String formattedAmount = numberFormat.format(Double.parseDouble(payment.getAmount()));
+                    payment.setAmount(formattedAmount);
+
+                    return payment;
+                })
+                .collect(Collectors.toList());
+        int currentPage = paymentPage.getNumber();
+        model.addAttribute("paymentList", formattedPaymentList);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", paymentPage.getTotalPages()); // 전체 페이지 수 추가
+        model.addAttribute("nextPage", currentPage + 1 < paymentPage.getTotalPages() ? currentPage + 1 : null);
+        model.addAttribute("prevPage", currentPage > 0 ? currentPage - 1 : null); // 이전 페이지 번호
+        model.addAttribute("pagination", paymentPage);
+        model.addAttribute("isFreelancer", isFreelancer);
+        model.addAttribute("isCompany", isCompany);
+        model.addAttribute("isLogin", principal);
+        return "user/paymentsDetail";
+    }
+
+    @ResponseBody
+    @GetMapping("/fetchRefundStatus")
+    public ResponseEntity<Map<String, String>> updateRefundReqStatus(@RequestParam("id") int paymentId, @RequestParam("userId") int userId) {
+        userService.updateTossHistoryStat(paymentId);
+        userService.insertAlert(paymentId, userId);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "업데이트 완료");
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * 프로젝트 등록 헤더 클릭시 현재 보유중인 포인트 포멧해서 띄워주기
+     *
+     * @param principal
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/balance")
+    public String checkFormattedPoint(@SessionAttribute(name = "principal") User principal) {
+        int id = principal.getId();
+        int point = userService.checkPoint(id);
+
+        // 숫자 포맷 설정 (Locale.US를 사용하여 3자리마다 쉼표를 추가)
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+        String formattedPoint = numberFormat.format(point);
+
+        return formattedPoint;
+    }
+
+    /**
+     * 프로젝트 등록 제출했을 시 10만 포인트 이하면 제출창 띄워주기
+     *
+     * @param principal
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/point")
+    public int checkPoint(@SessionAttribute(name = "principal") User principal) {
+        int id = principal.getId();
+        int point = userService.checkPoint(id);
+
+        return point;
+    }
+
+    @ResponseBody
+    @MessageMapping("/requestRefund")
+    public void handleRefundRequest(TossHistoryDTO dto) {
+        int requestData = userService.countAlert();
+
+        // 어드민에게 환불 요청 알림
+        simpMessagingTemplate.convertAndSend("/topic/refundAlerts", requestData);
+    }
 }

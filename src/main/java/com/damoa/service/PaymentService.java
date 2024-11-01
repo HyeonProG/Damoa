@@ -6,6 +6,9 @@ import com.damoa.repository.interfaces.PaymentHistoryRepository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,12 +44,8 @@ public class PaymentService {
     }
 
 
-    public List<TossHistoryDTO> test(){
-        return paymentHistoryRepository.viewAll();
-    }
-
     @Transactional
-    public void insertTossHistory(TossApproveResponse response, int principalId){
+    public void insertTossHistory(TossApproveResponse response, int principalId) {
         int result = 0;
         TossHistoryDTO dto = TossHistoryDTO.builder()
                 .paymentKey(response.getPaymentKey())
@@ -61,9 +60,57 @@ public class PaymentService {
         result = paymentHistoryRepository.insertTossHistory(dto);
 
 
-        if(result != 1){
+        if (result != 1) {
             System.out.println("결제 실패 했어요..");
         }
 
+    }
+
+    public TossHistoryDTO findPaymentHistory(int id) {
+
+        TossHistoryDTO entity = paymentHistoryRepository.findById(id);
+
+        return entity;
+    }
+
+    public Page<TossHistoryDTO> findAll(Pageable pageable) {
+
+        int offset = pageable.getPageNumber() * pageable.getPageSize();
+
+        List<TossHistoryDTO> paymentList = paymentHistoryRepository.viewAll(offset, pageable.getPageSize());
+        int totalCount = paymentHistoryRepository.countAll();
+        return new PageImpl<>(paymentList, pageable, totalCount);
+    }
+
+    @Transactional
+    public void updatePoint(String amountStr, Integer id) {
+
+        int currentPoint = paymentHistoryRepository.findPointById(id);
+        int amount = currentPoint + Integer.parseInt(amountStr);
+        paymentHistoryRepository.updateUserPoint(amount, id);
+    }
+
+    public Page<TossHistoryDTO> findRequestedRefund(Pageable pageable) {
+        int offset = pageable.getPageNumber() * pageable.getPageSize();
+        List<TossHistoryDTO> paymentList = paymentHistoryRepository.findHistoryByStatus(offset, pageable.getPageSize());
+        int totalCount = paymentHistoryRepository.countRequestedRefund();
+        return new PageImpl<>(paymentList, pageable, totalCount);
+    }
+
+    @Transactional
+    public void insertCancelHistory(TossHistoryDTO historyDTO) {
+        paymentHistoryRepository.insertCancelHistory(historyDTO);
+    }
+
+    @Transactional
+    public void updateRefundPoint(String amountStr, int id, int userId) {
+        int currentPoint = paymentHistoryRepository.findPointById(userId);
+        if (currentPoint >= Integer.parseInt(amountStr)) {
+            int amount = currentPoint - Integer.parseInt(amountStr);
+            paymentHistoryRepository.updateUserPoint(amount, userId);
+            paymentHistoryRepository.updateHistoryStatus(id);
+        } else {
+            System.out.println("금액이 작아서 작동이 안돼");
+        }
     }
 }

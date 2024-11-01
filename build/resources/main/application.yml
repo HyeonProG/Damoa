@@ -10,13 +10,17 @@ server:
 
 spring:
   profiles:
-    active: default
+    active: default, secure, mongo
     include: secure
   devtools:
     livereload:
       enabled: true # 라이브 리로드 활성화
     restart:
       enabled: true # 개발 도구 재시작 활성화
+  servlet:
+    multipart:
+      max-file-size: 20MB #파일 최대 크기 20MB
+      max-request-size: 20MB #멀티파트 전체 요청 크기 20MB제한
 
   mustache:
     servlet:
@@ -32,9 +36,9 @@ spring:
   sql:
     init:
       schema-locations:
-      - classpath:db/table.sql
+        - classpath:db/table.sql
       data-locations:
-      - classpath:db/data.sql
+        - classpath:db/data.sql
   h2:
     console:
       enabled: true # H2 데이터베이스 콘솔을 활성화 한다.
@@ -59,3 +63,8 @@ mybatis:
 logging:
   level:
     org.apache.ibatis: DEBUG # myBatis 로깅 레벨을 DEBUG로 설정하여 실행되는 SQL쿼리와 내부 로깅 정보를 콘솔에 출력
+
+# 초기 파라메터 설정
+file:
+  upload-dir-ad: C:\spring_jpa_work_class\Damoa\src\main\resources\static\images\ad/
+  upload-dir-sign: C:\Users\KDP\IdeaProjects\Damoa\src\main\resources\static\images\signs/

@@ -3,6 +3,7 @@ package com.damoa.repository.interfaces;
 
 import java.util.List;
 
+import com.damoa.dto.MonthlyFreelancerDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,18 +11,33 @@ import com.damoa.dto.freelancer.FreelancerBasicInfoDTO;
 import com.damoa.repository.model.Career;
 import com.damoa.repository.model.Freelancer;
 import com.damoa.repository.model.Skill;
-import com.damoa.repository.model.User;
 
 @Mapper
 public interface FreelancerRepository {
 
     public int insertFreelancer(Freelancer freelancer); // 프리랜서 등록
 
-    public List<Freelancer> findAllFreelancers(@Param("offset") int offset, @Param("size") int size); // 전체 프리랜서 조회
+    // 전체 프리랜서 조회
+    public List<Freelancer> findAllFreelancers(@Param("offset") int offset, @Param("size") int size);
+    
+    List<Freelancer> findAllFreelancersBySearch(
+        @Param("offset") int offset,
+        @Param("size") int size,
+        @Param("skill") String skill,
+        @Param("workingStyle") String workingStyle,
+        @Param("jobPart") String jobPart);
 
     public int countAllFreelancers(); // 전체 프리랜서 수 조회
 
+    public int countAllFreelancersBySearch(
+    @Param("skill") String skill,
+    @Param("workingStyle") String workingStyle,
+    @Param("jobPart") String jobPart);
+
     public Freelancer findUserIdJoinFreelancerTb(int id); // 유저 id로 프리랜서 조회
+
+    // 프리랜서 기본정보 추가
+    public int insertFreelancerBasicInfo(FreelancerBasicInfoDTO dto);
 
     public int updateFreelancerBasicInfo(FreelancerBasicInfoDTO dto);
 
@@ -54,4 +70,9 @@ public interface FreelancerRepository {
     // 프리랜서 디테일 조회
     public Freelancer findFreelancerDetailById(int userId);
 
+    // 프리랜서 평균 희망 연봉 카운트
+    public int countAverageFreelancerExpectedSalary();
+
+    // 월별 프리랜서 등록 수
+    List<MonthlyFreelancerDTO> getMonthlyFreelancerData();
 }

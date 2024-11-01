@@ -1,6 +1,9 @@
 {{>admin/admin_header}}
 
-<div class="container mt-5">
+<div class="main-board">
+    <div class="first-title-div">
+        <h3 class="sub-title" >FAQ</h3>
+    </div>&nbsp;
     {{#faq}}
         <h4>{{title}}</h4>
         <p><strong>등록일:</strong> {{createdAt}}</p>
@@ -9,7 +12,7 @@
         <button onclick="location.href='/faq/list'" class="btn btn-primary">목록으로 돌아가기</button>
         <button onclick="location.href='/faq/update/{{id}}'" class="btn btn-primary">수정</button>
         <form action="/faq/delete/{{id}}" method="post" style="display:inline;">
-            <input type="hidden" name="id" value="{{id}}"> <!-- ID를 숨긴 필드로 전송 -->
+            <input type="hidden" name="id" value="{{id}}">
             <button type="submit" class="btn btn-danger">삭제</button>
         </form>    {{/faq}}
 </div>

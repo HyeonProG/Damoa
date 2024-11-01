@@ -1,145 +1,52 @@
 {{> layout/header}}
 
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-    }
-
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-
-    h1 {
-        text-align: center;
-        color: #333;
-        margin-bottom: 30px;
-    }
-
-    h2 {
-        text-align: center;
-        color: #555;
-        margin-top: 30px;
-    }
-
-    .card {
-        margin-bottom: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        background-color: #fff;
-    }
-
-    ul {
-        list-style: none;
-        padding: 0;
-        margin: 20px 0;
-    }
-
-    li {
-        background-color: #f9f9f9;
-        padding: 10px 20px;
-        margin: 5px 0;
-        display: flex;
-        justify-content: space-between;
-        border-radius: 5px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    }
-
-    form {
-        display: inline;
-    }
-
-    button {
-        background-color: #ff4d4d;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    button:hover {
-        background-color: #ff3333;
-    }
-
-    select {
-        padding: 10px;
-        margin: 10px 0;
-        border-radius: 5px;
-        border: 1px solid #ddd;
-        width: 100%;
-    }
-
-    .form-container {
-        margin-top: 20px;
-    }
-
-    .back-link {
-        display: block;
-        text-align: center;
-        margin-top: 20px;
-        font-size: 14px;
-    }
-
-    .back-link a {
-        color: #007bff;
-        text-decoration: none;
-    }
-
-    .back-link a:hover {
-        text-decoration: underline;
-    }
-</style>
-
 <div class="container">
-    <h1>프리랜서 경력 관리</h1>
+    <!-- 사이드바 -->
+    {{> layout/mypage}}
 
-    <div class="card">
-        <div class="card-header">
-            <h5>등록된 경력</h5>
-        </div>
-        <div class="card-body">
-            <ul>
-                {{#freelancerCareers}}
-                <li>{{career}} 
-                    <!-- 경력 삭제 버튼 -->
-                    <form action="/freelancer/delete-career" method="post" style="display: inline;">
-                        <input type="hidden" name="careerId" value="{{id}}">
-                        <button type="submit">삭제</button>
-                    </form>
-                </li>
-                {{/freelancerCareers}}
-                {{^freelancerCareers}}
-                <li>등록된 경력이 없습니다.</li>
-                {{/freelancerCareers}}
-            </ul>
-        </div>
-    </div>
+    <!-- 메인 콘텐츠 -->
+    <div class="main-content">
+        <h1 class="text-center mb-4 font-weight-bold">프리랜서 경력 관리</h1>
 
-    <div class="card">
-        <div class="card-header">
-            <h5>경력 추가</h5>
+        <div class="main-board">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title font-weight-bold">등록된 경력</h5>
+                    {{#freelancerCareers}}
+                    <ul>
+                        <li>{{career}} 
+                        <!-- 경력 삭제 버튼 -->
+                            <form action="/freelancer/delete-career" method="post">
+                                <input type="hidden" name="careerId" value="{{id}}">
+                                <button type="submit">삭제</button>
+                            </form>
+                        </li>
+                    </ul>
+                    {{/freelancerCareers}}
+                    {{^freelancerCareers}}
+                    <p class="text-muted">등록된 경력이 없습니다.</p>
+                    {{/freelancerCareers}}
+                </div>
+            </div>
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                <h5 class="card-title font-weight-bold">경력 추가</h5>
+                <div class="form-container">
+                <!-- 경력 추가 폼 -->
+                    <form action="/freelancer/insert-career" method="post">
+                        <label for="career">추가할 경력:</label>
+                            <select name="careerId" id="career">
+                            <option value="">경력 선택</option>
+                            {{#careers}}
+                            <option value="{{id}}">{{career}}</option>
+                            {{/careers}}
+                            </select>
+                            <button type="submit">추가</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card-body form-container">
-            <!-- 경력 추가 폼 -->
-            <form action="/freelancer/insert-career" method="post">
-                <label for="career">추가할 경력:</label>
-                <select name="careerId" id="career" required>
-                    <option value="">경력 선택</option>
-                    {{#careers}}
-                    <option value="{{id}}">{{career}}</option>
-                    {{/careers}}
-                </select>
-                <button type="submit">추가</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="text-center mt-3">
-        <a href="/freelancer/dashboard" class="btn btn-secondary">뒤로 가기</a>
     </div>
 </div>
 

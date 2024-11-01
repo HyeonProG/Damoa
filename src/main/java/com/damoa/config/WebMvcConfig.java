@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -19,10 +20,22 @@ public class WebMvcConfig implements WebMvcConfigurer {
         return new BCryptPasswordEncoder();
     }
 
-    public void addResourceHadlers(ResourceHandlerRegistry registry){
-        registry.addResourceHandler(" /images/uploads/**")
-                .addResourceLocations("C:\\work_damoa\\sign/")
-                .setCacheControl(CacheControl.noCache());
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("GET") // 허용할 HTTP 메서드
+                .allowedHeaders("*") // 모든 헤더 허용
+                .allowCredentials(false);
     }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/images/ad/**")
+                .addResourceLocations("classpath:/static/images/ad/");
+    }
+
+
+
 
 }
