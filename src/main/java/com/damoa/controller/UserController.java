@@ -440,16 +440,28 @@ public class UserController extends TextWebSocketHandler {
     }
 
     @GetMapping("/faq")
-    public String qna(Model model) {
+    public String qna(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("principal");
         List<Faq> faqList = faqService.getAllQna();
         model.addAttribute("faqList", faqList);
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+        }
+        model.addAttribute("isLogin", user);
         return "user/faq_list";
     }
 
     @GetMapping("/faq-detail/{id}")
-    public String qnaDetail(@PathVariable(name = "id") int id, Model model) {
+    public String qnaDetail(@PathVariable(name = "id") int id, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("principal");
         Faq faq = faqService.getFaqById(id);
         model.addAttribute("faq", faq);
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+        }
+        model.addAttribute("isLogin", user);
         return "user/faq_detail";
     }
 

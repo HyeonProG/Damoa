@@ -477,6 +477,11 @@ public class ProjectController {
         }
 
         model.addAttribute("projectList",projectList);
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+        }
+        model.addAttribute("isLogin", user);
         return "freelancer/my_project_on_progress";
     }
 
@@ -511,6 +516,11 @@ public class ProjectController {
 
         model.addAttribute("projectList1",projectList1);
         model.addAttribute("projectList2",projectList2);
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+        }
+        model.addAttribute("isLogin", user);
         return "freelancer/my_project_finished";
     }
 
