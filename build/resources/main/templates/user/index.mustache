@@ -40,19 +40,20 @@
 </style>
 <div class="main-board-box">
     <div class="ad-board">
-        <div class="ad-bar">
+        <div class="ad-bar" style="padding: 10px 0;"> <!-- 위아래 패딩 추가 -->
             <img src="images/icons/left.png" class="icons" id="prevAd" style="cursor: pointer;">
             <div class="ad-outer">
                 <div class="ad-inner">
-                    <img src="images/ads/ad1.png" class="ad-img" style="box-shadow: 2px 2px 5px #d0ccc9">
-                    <img src="images/ads/ad2.png" class="ad-img" style="box-shadow: 2px 2px 5px #d0ccc9">
-                    <img src="images/ads/ad3.png" class="ad-img" style="box-shadow: 2px 2px 5px #d0ccc9">
-                    <img src="images/ads/ad4.png" class="ad-img" style="box-shadow: 2px 2px 5px #d0ccc9">
-                    <img src="images/ads/ad5.png" class="ad-img" style="box-shadow: 2px 2px 5px #d0ccc9">
+                    <img src="images/ads/ad1.png" class="ad-img">
+                    <img src="images/ads/ad2.png" class="ad-img">
+                    <img src="images/ads/ad3.png" class="ad-img">
+                    <img src="images/ads/ad4.png" class="ad-img">
+                    <img src="images/ads/ad5.png" class="ad-img">
                 </div>
             </div>
             <img src="images/icons/right.png" class="icons" id="nextAd" style="cursor: pointer;">
         </div>
+
         <div class="ad-progress" style="margin-top:20px;">
             <h6 class="ad-progress-text" >1/5</h6>
         </div>
@@ -146,7 +147,7 @@
     document.getElementById('closeChatSidebar').addEventListener('click', function () {
         const chatSidebar = document.getElementById('chatbot');
         const chatLayout = document.getElementById('chat');
-        
+
         chatLayout.style.display = 'block'; // 챗 레이아웃 보이기
     });
 

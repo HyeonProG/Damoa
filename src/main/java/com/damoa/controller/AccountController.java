@@ -49,7 +49,7 @@ public class AccountController {
      */
     @GetMapping("/main")
     public String mainPage(Model model, HttpSession session){
-        User user = (User) session.getAttribute("principal");
+
 
         List<Project> projectList = projectService.getProjectForPaging(10,0);
 
@@ -60,8 +60,9 @@ public class AccountController {
         }
         List<Freelancer> freelancerList = freelancerService.findAllFreelancers(1, 10);
         model.addAttribute("projectList",newList);
-        model.addAttribute("isLogin",user);
-        if (user != null) {
+        if (session.getAttribute("principal") != null) {
+            User user = (User) session.getAttribute("principal");
+            model.addAttribute("isLogin",user);
             model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
             model.addAttribute("isCompany", user.getUserType().equals("company"));
         }
