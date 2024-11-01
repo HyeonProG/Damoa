@@ -171,9 +171,10 @@
             <p><strong>사용자 유형:</strong> {{user.userType}}</p>
             <p><strong>소셜 로그인 유형:</strong> {{user.socialType}}</p>
             {{#company}}
-            <p><strong>보유 포인트:</strong> {{user.point}}</p>
+                <p><strong>보유 포인트:</strong> {{user.formattedPoint}}</p>
 
-            <!-- 충전 버튼 -->
+
+                <!-- 충전 버튼 -->
             <a class="purchase--btn">충전하기</a>
             {{/company}}
             <button id="editButton" class="btn btn-secondary">정보 수정</button>
@@ -197,14 +198,23 @@
                 <button type="submit" class="btn btn-primary">로그아웃</button>
             </form>
 
-            <form action="/user/delete-account" method="POST">
-                <button type="submit" class="btn btn-danger">회원탈퇴</button>
+            <form id="deleteForm" action="/user/delete-account" method="POST">
+                <button type="button" class="btn btn-danger" id="deleteAccountButton">회원탈퇴</button>
             </form>
+
         </div>
     </div>
 </div>
 
 <script>
+
+    document.getElementById("deleteAccountButton").addEventListener("click", function () {
+        if (confirm("정말로 탈퇴하시겠습니까?")) {
+            document.getElementById("deleteForm").submit();
+        }
+    });
+
+
     document.getElementById("editButton").addEventListener("click", function() {
         document.querySelector(".user-info").style.display = "none";
         document.querySelector(".edit-info").style.display = "block";

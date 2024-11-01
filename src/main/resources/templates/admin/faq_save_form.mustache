@@ -1,9 +1,12 @@
 {{>admin/admin_header}}
-<div class="container mt-5">
+<div class="main-board">
+    <div class="first-title-div">
+        <h3 class="sub-title" >FAQ</h3>
+    </div>&nbsp;
     <h2>FAQ 등록</h2>
     <form action="/faq/save" method="post">
         <div class="form-group">
-            <input type="hidden" name="type" id="type" value="1"> <!-- 기본값을 설정 -->
+            <input type="hidden" name="type" id="type" value="1">
         </div>
         <div class="form-group">
             <label for="title">제목</label>

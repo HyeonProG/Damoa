@@ -4,11 +4,132 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Damoa</title>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!--favicon-->
 
     <!-- css -->
     <style type="text/css">
+
+        /* Sidebar */
+        .sidebar {
+            width: 270px;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            height: 1000px;
+        }
+
+        .sidebar h3 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .sidebar a {
+            align-items: center;
+            text-align: center;
+            font-size: 17px;
+            color: #333;
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #e3f2fd;
+            color: #007bff;
+        }
+
+        /* 사이드바 헤더 */
+        header .sidebar h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .sidebar a i.fas {
+            margin-right: 10px;
+            font-size: 20px;
+            color: #5ebbf4;
+        }
+
+
+        /* 아이콘 크기 조절 */
+        .icon-products {
+        }
+
+        .sidebar a.active {
+            background-color: #f0f5ff;
+        }
+
+
+
+
+
+        /* Main Board */
+        .main-board {
+            width: 83%;
+            padding: 30px;
+            background: white;
+            overflow-y: auto;
+        }
+
+        /* Title Banner */
+        .sub-title {
+            background: #4ca9f4;
+            color: #ffffff;
+            font-weight: bold;
+            margin: 1em 0em;
+            padding: 15px 10px;
+            border-radius: 25px 25px 25px 0px;
+        }
+
+
+        /* Table Container */
+        .container {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        /* Table Style */
+
+        .table th {
+            background-color: #f6fafd;
+        }
+
+        .table td {
+            vertical-align: middle;
+            text-align: center;
+            background-color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .table th, .table td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        table thead {
+            background-color: rgba(164, 231, 255, 0.29);
+        }
+
+
+
+        /* Pagination Buttons */
+        .pagination {
+            justify-content: center;
+        }
+
         body{
             padding: 0;
             margin: 0;
@@ -22,20 +143,33 @@
             padding-top: 30px;
             padding: 10px;
             box-shadow: 2px 2px 5px #dee2e6;
-        background: white;
+            background: white;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
         }
+
+        header h5 {
+            font-size: 22px;
+            font-weight: bolder;
+
+        }
+
+        header a {
+            color: #287dff;
+        }
+
         a{
             text-decoration: none;
         }
         hr{
-            background: #d0ccc9;
-            height:1px;
+            border-top: 1px solid #e0e0e0;
+            margin: 15px 0;
+            color: white;
         }
+
         button{
             margin: 10px;
             padding: 7px;
@@ -84,21 +218,7 @@
             align-items: center;
             text-align: center;
         }
-        .second-row-box{
-            border: 1px solid #dee2e6;
-            margin: 10px;
-            border-radius: 5px;
-            background: white;
-            width: 45%;
-            height: 30vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
     </style>
-
 
     <!-- font-awesome CSS -->
     <link rel="stylesheet"
@@ -128,25 +248,45 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
+
+<body>
     <div class="main">
         <header>
-            <h3>Damoa</h3>
-            <h5>Dashboards</h5>
+        <div class="sidebar">
+            <img src="/images/logos/damoa_title2.png">
             <hr>
-            <h5><a href="/admin/main">대시보드</a></h5>
+            <a href="/admin/main"><i class="fas fa-home"></i> 대시보드</a>
             <hr>
-            <h5><a href="/admin/management/1">회원 관리</a></h5>
+            <a href="/admin/management/1"><i class="fas fa-user"></i> 회원 관리</a>
             <hr>
-            <h5><a href="/admin/management">결제 관리</a></h5>
+            <a href="/admin/management"><i class="fas fa-credit-card"></i> 결제 관리</a>
             <hr>
-            <h5><a href="/admin/refund">환불 관리</a></h5>
+            <a href="/admin/refund"><i class="fas fa-undo"></i> 환불 관리</a>
             <hr>
-            <h5><a href="">광고 관리</a></h5>
+            <a href=""><i class="fas fa-ad"></i> 광고 관리</a>
             <hr>
-            <h5><a href="/faq/list">고객 지원</a></h5>
+            <a href="/admin/notice/1"><i class="fas fa-bullhorn"></i> 공지 관리</a>
             <hr>
-            <h5><a href="/admin/list/company/1">기업 리뷰</a></h5>
+            <a href="/faq/list"><i class="fas fa-headset"></i> 고객 지원</a>
             <hr>
-            <h5><a href="/admin/list/freelancer/1">프리랜서 리뷰</a></h5>
+            <a href="/admin/list/company/1"><i class="fas fa-building"></i> 기업 리뷰</a>
             <hr>
+            <a href="/admin/list/freelancer/1"><i class="fas fa-user-tie"></i> 프리랜서 리뷰</a>
+            <hr></div>
         </header>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const currentPath = window.location.pathname;
+
+                const menuItems = document.querySelectorAll(".sidebar a");
+
+                menuItems.forEach(item => {
+                    item.classList.remove("active");
+
+                    if (item.getAttribute("href") === currentPath) {
+                        item.classList.add("active");
+                    }
+                });
+            });
+        </script>

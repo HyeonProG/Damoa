@@ -1,7 +1,9 @@
 package com.damoa.service;
 
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import com.damoa.dto.TossHistoryDTO;
 import org.json.simple.JSONObject;
@@ -187,6 +189,7 @@ public class UserService {
         }
     }
 
+    // 전화번호 포맷팅
     public String formatPhoneNumber(String phoneNumber) {
         if (phoneNumber != null && phoneNumber.length() == 11) {
             return phoneNumber.replaceFirst("(\\d{3})(\\d{4})(\\d+)", "$1-$2-$3");
@@ -196,9 +199,27 @@ public class UserService {
         return phoneNumber;
     }
 
+    // 포인트 포맷팅
+    private String formatPoint(int point) {
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.KOREA);
+        return numberFormat.format(point);
+    }
+
     // 사용자 ID로 사용자 정보 조회
     public PrincipalDTO findUserById(int userId) {
-        return userRepository.findUserById(userId);
+        PrincipalDTO user = userRepository.findUserById(userId);
+
+        if (user != null) {
+            // 휴대전화번호에 하이픈 추가
+            if (user.getPhoneNumber() != null) {
+                user.setPhoneNumber(formatPhoneNumber(user.getPhoneNumber()));
+            }
+
+            // 포인트를 쉼표가 포함된 형식으로 포맷팅하여 formattedPoint 필드에 설정
+            NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.KOREA);
+            user.setFormattedPoint(numberFormat.format(user.getPoint()));
+        }
+        return user;
     }
 
     // 프리랜서 목록 조회
