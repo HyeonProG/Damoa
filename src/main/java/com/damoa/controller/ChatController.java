@@ -1,7 +1,6 @@
 package com.damoa.controller;
 
 import com.damoa.dto.chat.ChatListDTO;
-import com.damoa.repository.model.ChatList;
 import com.damoa.repository.model.ChatMessage;
 import com.damoa.repository.model.User;
 import com.damoa.service.ChatListService;
@@ -12,15 +11,12 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/match")
@@ -96,5 +92,29 @@ public class ChatController {
         List<ChatListDTO> chatList = chatListService.findByChatList(user.getId());
 
         return chatList;
+    }
+
+    /*
+    * 채팅 목록 삭제 기능
+    * @param roomId
+    * */
+    @DeleteMapping("/delete-chat-room")
+    @ResponseBody
+    public void deleteChatList(@RequestParam("roomId") int roomId) {
+        chatListService.deleteByChatList(roomId);
+    }
+
+    /*
+    * 채팅 메시지 내역 조회 기능
+    * @param roomId
+    * */
+    @GetMapping("/chat/messages")
+    @ResponseBody
+    public List<ChatMessage> messageList(@RequestParam("roomId") String roomId) {
+        List<ChatMessage> messageList = chatMessageService.findByMessageList(roomId);
+
+        log.info("roomId: {}", roomId);
+        log.info("messageList: {}", messageList);
+        return messageList;
     }
 }

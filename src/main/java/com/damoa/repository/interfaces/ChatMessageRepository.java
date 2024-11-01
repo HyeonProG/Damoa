@@ -11,4 +11,6 @@ import java.util.List;
  * */
 public interface ChatMessageRepository extends MongoRepository<ChatMessage, String> {
 
+    // roomId별 채팅 기록 불러오는 메서드
+    List<ChatMessage> findByRoomId(String roomId);
 }

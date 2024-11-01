@@ -46,4 +46,9 @@ public class ChatListService {
                 .map(chatList -> chatListAdapter.adaptToDTO(chatList, sessionId))
                 .collect(Collectors.toList());
     }
+
+    // 채팅 목록 삭제 기능
+    public void deleteByChatList(int roomId) {
+        chatListRepository.deleteByChatList(roomId);
+    }
 }
