@@ -33,7 +33,7 @@ public class ReviewController {
      * 주소설계 : http://localhost:8080/reviews/list/{type}
      * */
     @GetMapping("/list/{type}") // URL의 {type} 부분을 변수로 처리
-    public String reviewList(@PathVariable String type, Model model) {
+    public String reviewList(@PathVariable(name ="type") String type, Model model) {
 
         // 타입에 따라 리뷰 목록을 구분하여 추가
         if (UserType.FREELANCER.name().equalsIgnoreCase(type)) {    // 대소문자 구분 하지 않음
@@ -54,8 +54,8 @@ public class ReviewController {
      * @pram id
      * */
     @GetMapping("/{type}/detail/{id}")
-    public String reviewDetail(@PathVariable String type,
-                               @PathVariable int id, Model model) {
+    public String reviewDetail(@PathVariable(name ="type") String type,
+                               @PathVariable(name = "id") int id, Model model) {
         if (UserType.FREELANCER.name().equalsIgnoreCase(type)) {
             reviewService.getByFreelancerId(id, model);
         } else if (UserType.COMPANY.name().equalsIgnoreCase(type)) {
