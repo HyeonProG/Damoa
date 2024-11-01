@@ -1,6 +1,7 @@
 package com.damoa.repository.interfaces;
 
 import com.damoa.dto.TossHistoryDTO;
+import com.damoa.dto.admin.AdDTO;
 import com.damoa.dto.review.ReviewUserDTO;
 import com.damoa.dto.user.MonthlyRegisterDTO;
 import com.damoa.dto.user.PrincipalDTO;
@@ -41,4 +42,6 @@ public interface UserRepository {
     void updateStatus(int id);
     // 사용자 ID로 사용자 정보 조회
     PrincipalDTO findUserById(int id);
+
+    List<AdDTO> findAd();
 }

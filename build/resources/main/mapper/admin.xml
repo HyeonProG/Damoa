@@ -47,5 +47,12 @@
         select count(*) from ad_tb
     </select>
 
+    <select id="activeAd" resultType="com.damoa.dto.admin.AdDTO">
+    select * from ad_tb where status = 1
+    </select>
+
+
+
+
 
 </mapper>

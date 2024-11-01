@@ -29,14 +29,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowCredentials(false);
     }
 
-    public void addResourceHadlers(ResourceHandlerRegistry registry){
-        registry.addResourceHandler(" /images/uploads/**")
-                .addResourceLocations("C:\\work_damoa\\sign/")
-                .setCacheControl(CacheControl.noCache());
-
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/ad/**")
-                .addResourceLocations("file:\\C:\\spring_jpa_work_class\\spring_damoa\\src\\main\\resources\\static\\images\\ad/");
+                .addResourceLocations("file:\\C:\\spring_jpa_work_class\\Damoa\\src\\main\\resources\\static\\images\\ad/");
     }
+
+
 
 
 }

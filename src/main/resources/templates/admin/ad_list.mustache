@@ -23,6 +23,7 @@
         {{/list}}
         </tbody>
     </table>
+
     <a href="/admin/ad/save" class="btn btn-primary">새 광고 등록</a>
     <!-- 페이지네이션 -->
     <nav aria-label="Page navigation">
@@ -64,10 +65,10 @@
     </nav>
 
 
-    {{^adList}}
+    {{^list}}
         <tr>
             <td colspan="8" class="text-center">광고가 없습니다</td>
         </tr>
-    {{/adList}}
+    {{/list}}
 </div>
 

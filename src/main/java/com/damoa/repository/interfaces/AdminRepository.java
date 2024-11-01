@@ -34,4 +34,7 @@ public interface AdminRepository {
     public List<Ad> getAdList(int pageSize, int offset);
 
     public int countAd();
+
+    public List<AdDTO> activeAd();
+
 }

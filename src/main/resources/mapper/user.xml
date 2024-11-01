@@ -68,4 +68,10 @@
     <select id="findByUserName">
         select * from user_tb where username = #{userName}
     </select>
+
+    <select id="findAd" resultType="com.damoa.dto.admin.AdDTO">
+        SELECT *
+        FROM ad_tb
+        WHERE CURDATE() BETWEEN start_time AND end_time and end_time > curdate()
+    </select>
 </mapper>

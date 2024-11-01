@@ -19,12 +19,14 @@ public class AdDTO {
     private String originFileName;
     private Date startTime;
     private Date endTime;
+    private int status;
 
     public Ad toAd() {
         return Ad.builder()
                 .title(this.title)
                 .startTime(this.startTime)
                 .endTime(this.endTime)
+                .status(this.status)
                 .build();
 
 

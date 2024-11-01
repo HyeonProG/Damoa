@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.damoa.dto.TossHistoryDTO;
+import com.damoa.dto.admin.AdDTO;
+import com.damoa.repository.model.Ad;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -209,5 +211,10 @@ public class UserService {
     @Transactional
     public void updateTossHistoryStat(int historyId) {
         userRepository.updateStatus(historyId);
+    }
+
+    public List<AdDTO> findAd(){
+        List<AdDTO> dto = userRepository.findAd();
+        return dto;
     }
 }

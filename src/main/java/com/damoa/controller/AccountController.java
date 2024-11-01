@@ -1,6 +1,7 @@
 package com.damoa.controller;
 
 import com.damoa.dto.BankAuthDTO;
+import com.damoa.dto.admin.AdDTO;
 import com.damoa.dto.user.ProjectListDTO;
 import com.damoa.repository.model.Freelancer;
 import com.damoa.repository.model.Project;
@@ -9,6 +10,7 @@ import com.damoa.repository.model.Skill;
 import com.damoa.service.AccountService;
 import com.damoa.service.FreelancerService;
 import com.damoa.service.ProjectService;
+import com.damoa.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import lombok.Builder;
 import lombok.Data;
@@ -42,6 +44,9 @@ public class AccountController {
     @Autowired
     private FreelancerService freelancerService;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * 메인 페이지 이동
      * @param model
@@ -66,6 +71,10 @@ public class AccountController {
             model.addAttribute("isCompany", user.getUserType().equals("company"));
         }
         model.addAttribute("freelancerList", freelancerList);
+
+        List<AdDTO> ad = userService.findAd();
+        model.addAttribute("ad",ad);
+
         return "user/index";
     }
 
