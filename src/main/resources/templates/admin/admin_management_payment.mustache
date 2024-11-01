@@ -10,8 +10,9 @@
 
 {{>admin/admin_header}}
 
-<div class="container mt-5">
-    <h1>결제</h1>
+<div class="main-board">
+    <h3 class="sub-title" >Payment Management</h3>
+
     <table class="table table-striped">
         <thead>
         <tr>
@@ -92,6 +93,7 @@
 
 </div>
 
+
 <script>
     function refund(id) {
         fetch('http://localhost:8080/toss/refund', {
@@ -101,19 +103,19 @@
             },
             body: JSON.stringify({ "id": id })
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('네트워크 오류');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("응답:", data);
-            location.reload(); // 성공 시 페이지 새로고침
-        })
-        .catch(error => {
-            console.error("에러 발생:", error);
-        });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('네트워크 오류');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("응답:", data);
+                    location.reload(); // 성공 시 페이지 새로고침
+                })
+                .catch(error => {
+                    console.error("에러 발생:", error);
+                });
     }
 </script>
 

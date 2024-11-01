@@ -1,8 +1,8 @@
 {{>admin/admin_header}}
 
 
-<div class="container mt-5">
-    <h1>환불</h1>
+<div class="main-board">
+    <h3 class="sub-title" >Refund Management</h3>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -87,7 +87,7 @@
 
 <script>
     window.onload = function() {
-        const refundBtns = document.querySelectorAll('#refund--Btn'); // 모든 refund--Btn 요소를 선택
+        const refundBtns = document.querySelectorAll('#refund--Btn');
 
         refundBtns.forEach(refundBtn => {
             const status = refundBtn.getAttribute('data-status');

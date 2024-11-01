@@ -1,40 +1,41 @@
-{{>admin/admin_header}}
+{{> admin/admin_header}}
 
+<div class="main-board">
+    <!-- 제목 배너 -->
+    <h3 class="sub-title" >User List</h3>
 
-<div class="container mt-5">
-    <h1>User List</h1>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>아이디</th>
-            <th>이메일</th>
-            <th>유저네임</th>
-            <th>폰번호</th>
-            <th>생성날짜</th>
-            <th>유저타입</th>
-            <th>소셜타입</th>
-
-        </tr>
-        </thead>
-        <tbody>
-        {{#userList}}
+    <!-- 유저 리스트 테이블 -->
+        <table class="table table-striped">
+            <thead>
             <tr>
-                <td>{{id}}</td>
-                <td>{{email}}</td>
-                <td>{{username}}</td>
-                <td>{{phoneNumber}}</td>
-                <td>{{createdAt}}</td>
-                <td>{{userType}}</td>
-                <td>{{socialType}}</td>
+                <th>아이디</th>
+                <th>이메일</th>
+                <th>유저네임</th>
+                <th>폰번호</th>
+                <th>생성날짜</th>
+                <th>유저타입</th>
+                <th>소셜타입</th>
             </tr>
-        {{/userList}}
-        {{^userList}}
-            <tr>
-                <td colspan="8" class="text-center">유저리스트가 없습니다.</td>
-            </tr>
-        {{/userList}}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {{#userList}}
+                <tr>
+                    <td>{{id}}</td>
+                    <td>{{email}}</td>
+                    <td>{{username}}</td>
+                    <td>{{phoneNumber}}</td>
+                    <td>{{createdAt}}</td>
+                    <td>{{userType}}</td>
+                    <td>{{socialType}}</td>
+                </tr>
+            {{/userList}}
+            {{^userList}}
+                <tr>
+                    <td colspan="7" class="text-center">유저리스트가 없습니다.</td>
+                </tr>
+            {{/userList}}
+            </tbody>
+        </table>
 
     <!-- 페이지네이션 -->
     <nav aria-label="Page navigation">
