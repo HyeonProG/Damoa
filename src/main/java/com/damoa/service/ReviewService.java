@@ -96,13 +96,6 @@ public class ReviewService {
         return freelancerReviewRepo.countFreelancerReview();
     }
 
-    public CompanyReviewDetailDTO getCompanyDetails(int id){
-       CompanyReviewDetailDTO companyReviewDetailDTO = companyReviewRepo.companyReviewDetail(id);
-        return companyReviewDetailDTO;
-
-    }
-
-
     // 일별 기업 리뷰 등록 수 데이터
     public List<DailyCompanyReviewDTO> getDailyCompanyReviewData() {
         LocalDate endDate = LocalDate.now();

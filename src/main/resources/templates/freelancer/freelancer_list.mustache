@@ -122,23 +122,41 @@
     #filter-button:hover {
         background-color: #008bbf;
     }
+
+    .filter-dropdown {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        transition: border 0.3s ease;
+        margin-right: 10px;
+        appearance: none; /* 기본 화살표 제거 */
+        background-image: url('data:image/svg+xml;charset=utf8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="gray" class="bi bi-chevron-down" viewBox="0 0 16 16"%3E%3Cpath fill-rule="evenodd" d="M1.5 5.5a.5.5 0 0 1 .707 0L8 10.293l5.793-4.793a.5.5 0 0 1 .707.707l-6 6a.5.5 0 0 1-.707 0l-6-6a.5.5 0 0 1 0-.707z"/%3E%3C/svg%3E'); /* 화살표 추가 */
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        background-size: 16px; /* 화살표 크기 */
+    }
+    #working-style-select {
+        padding-right: 35px;
+    }
 </style>
 
 <div class="main-container">
     <div class="content">
         <h1>프리랜서 목록</h1>
+        <p>프리랜서를 찾고 매칭해보세요</p>
 
         <!-- 필터링 섹션 -->
         <div class="filter-section">
             <select id="job-select" class="filter-dropdown">
-                <option value="">직무 선택</option>
+                <option value="">직무</option>
                 {{#careers}}
                     <option value="{{career}}">{{career}}</option>
                 {{/careers}}
             </select>
 
             <select id="working-style-select" class="filter-dropdown">
-                <option value="">근무 방식 선택</option>
+                <option value="">근무 방식</option>
                 <option value="재택">재택</option>
                 <option value="출퇴근">출퇴근</option>
                 <option value="파트타임">파트타임</option>
@@ -146,7 +164,7 @@
             </select>
 
             <select id="skill-select" class="filter-dropdown">
-                <option value="">기술 스택 선택</option>
+                <option value="">기술 스택</option>
                 {{#skills}}
                     <option value="{{name}}">{{name}}</option>
                 {{/skills}}
@@ -278,12 +296,11 @@ function loadFreelancers(page) {
                 card.className = 'freelancer-card';
                 card.innerHTML = `
                     <h2>${freelancer.username}</h2>
-                    <div class="card freelancer-info-card">
+                        <img src="/images/logos/freelancer_list.png" style="margin-bottom: 10px; cursor:pointer; border-radius: 10px;">
                         <p><span class="card-label">직무:</span> ${freelancer.jobPart}</p>
                         <p><span class="card-label">근무 방식:</span> ${freelancer.workingStyle}</p>
                         <p><span class="card-label">기술 스택:</span> ${freelancer.skills}</p>
                         <p><span class="card-label">상세 내용:</span> ${freelancer.detail}</p>
-                    </div>
                 `;
 
                 // 프리랜서 상세 보기 페이지로 이동하는 클릭 이벤트 추가
