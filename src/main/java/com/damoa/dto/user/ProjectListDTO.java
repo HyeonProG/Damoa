@@ -37,5 +37,6 @@ public class ProjectListDTO {
     private String email;
     private byte[] files; // Blob 타입을 byte 배열로
     private String createdAt;
+    private Boolean isOwner;
 
 }

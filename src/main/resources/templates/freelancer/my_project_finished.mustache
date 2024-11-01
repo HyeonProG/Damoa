@@ -3,6 +3,7 @@
 <style>
     body {
         font-family: Arial, sans-serif;
+        background-color: #ffffff;
         margin: 0;
         padding: 0;
     }
@@ -38,6 +39,7 @@
         color: #333;
         text-decoration: none;
         border-radius: 5px;
+        background-color: #f9f9f9;
         font-size: 16px;
     }
 
@@ -156,42 +158,34 @@
 </style>
 <div class="container">
     <!-- 사이드바 - 프리랜서 전용 메뉴 -->
-    <!-- 메인 컨텐츠 -->
     {{> layout/mypage}}
+    <!-- 메인 컨텐츠 -->
     <div class="content">
         <h1>프로젝트 목록</h1>
 
         <div>
-            <h4>진행 중인 프로젝트</h4>
-            {{#projectListForPaging}}
-                <div  onclick="location.href='/project/detail/{{id}}'">
-                    <h6>{{projectName}}</h6>
-                    <button onclick-="location.href='/project/detail/{{id}}'">자세히 보러가기</button>
+            <h4>참여한 프로젝트</h4>
+            {{#projectList1}}
+                <div onclick="project/my-project/detail/{{id}}">
+                    <div onclick="project/my-project/detail/{{id}}">
+                        <h6>{{projectName}}</h6>
+                        <button onclick="location.href='/project/detail/{{id}}'">자세한 정보 보러가기</button>
+                    </div>
                 </div>
-            {{/projectListForPaging}}
+            {{/projectList1}}
+
+            <h4>마감된 프로젝트</h4>
+            {{#projectList2}}
+                <div onclick="project/my-project/detail/{{id}}">
+                    <h6>{{projectName}}</h6>
+                    <button onclick="location.href='/project/detail/{{id}}'">자세한 정보 보러가기</button>
+                </div>
+            {{/projectList2}}
         </div>
     </div>
 </div>
 
 <script>
-    document.getElementById("editButton").addEventListener("click", function() {
-        document.querySelector(".user-info").style.display = "none";
-        document.querySelector(".edit-info").style.display = "block";
-    });
-
-    document.getElementById("cancelButton").addEventListener("click", function() {
-        document.querySelector(".edit-info").style.display = "none";
-        document.querySelector(".user-info").style.display = "block";
-    });
-
-    document.querySelectorAll('.purchase--btn').forEach(function(btn) {
-    btn.addEventListener('click', function(event) {
-        event.preventDefault();
-        if (confirm("포인트를 충전하시겠습니까?")) {
-            newWindow = window.open('/toss/store', '_blank', 'width=650,height=650');
-        }
-    });
-});
 
 </script>
 

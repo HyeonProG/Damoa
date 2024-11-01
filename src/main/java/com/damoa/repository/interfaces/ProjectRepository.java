@@ -66,6 +66,9 @@ public interface ProjectRepository {
 
     // 마이페이지용 프로젝트 검색
     List<Project> getProjectForPagingForMyPage(@Param("userId")int userId, @Param("limit")int limit, @Param("offset")int offset);
+    
+    // 완료된 프로젝트 검색
+    List<Project> getProjectForPagingForMyPage2(@Param("userId")int userId, @Param("limit")int limit, @Param("offset")int offset);
 
     // 광고받은 프로젝트들 검색
     List<Project> getProjectForAd(@Param("limit")int limit, @Param("offset")int offset);
@@ -77,4 +80,6 @@ public interface ProjectRepository {
     List<Project> selectProjectForSelect(@Param("selectDTO")SelectDTO selectDTO, @Param("limit")int limit, @Param("offset")int offset);
 
     int selectProjectIdByUserId(int userId);
+
+    void updateStatusById(int id);
 }

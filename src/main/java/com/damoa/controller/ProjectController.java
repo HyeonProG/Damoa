@@ -1,21 +1,18 @@
 package com.damoa.controller;
 
 import com.damoa.dto.ProjectSaveDTO;
+import com.damoa.dto.freelancer.FreelancerBasicInfoDTO;
 import com.damoa.dto.user.ProjectListDTO;
 import com.damoa.dto.user.ProjectWaitDTO;
 import com.damoa.dto.user.SelectDTO;
 import com.damoa.handler.exception.DataDeliveryException;
-import com.damoa.repository.model.Project;
-import com.damoa.repository.model.ProjectWait;
-import com.damoa.repository.model.Skill;
-import com.damoa.repository.model.User;
-import com.damoa.service.ProjectService;
-import com.damoa.service.SkillService;
-import com.damoa.service.UserService;
+import com.damoa.repository.model.*;
+import com.damoa.service.*;
 import com.damoa.utils.Define;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +38,10 @@ public class ProjectController {
     private SkillService skillService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ProjectWaitService projectWaitService;
+    @Autowired
+    private FreelancerService freelancerService;
 
     // DI
     public ProjectController(HttpSession session, ProjectService projectService) {
@@ -98,15 +99,12 @@ public class ProjectController {
      */
     @GetMapping("/list/{currentPageNum}")
     public String projectListPage(@PathVariable(name="currentPageNum", required=false)int currentPageNum, Model model){
-        
-        // 유저 세션 추가
-        if(session.getAttribute("principal") != null){
-            User user = (User) session.getAttribute("principal");
-            model.addAttribute("isLogin",user);
-            if (user != null) {
-                model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
-                model.addAttribute("isCompany", user.getUserType().equals("company"));
-            }
+
+        User user = (User) session.getAttribute("principal");
+        model.addAttribute("isLogin",user);
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
         }
 
         // 모든 프로젝트 가져오기
@@ -253,14 +251,31 @@ public class ProjectController {
                                     HttpSession session) {
         // Pair 1. 1:1 채팅 신청을 위한 data
         User user = (User) session.getAttribute("principal");
+        model.addAttribute("session",user);
 
+        // Project -> ProjectDTO
         Project project = projectService.findProjectById(projectId);
         ProjectListDTO dto = toProjectListDTO(project);
-        model.addAttribute("project",dto);
+        // 헤더 값 추가
+        if (user != null) {
+            model.addAttribute("isLogin",user);
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+            if(user.getId() == project.getUserId()){
+                List<ProjectWaitDTO> waitList = projectWaitService.getAllWaitByProjectAndWriterId(project.getId(),user.getId());
+                model.addAttribute("waitList",waitList);
+            }
+        }
 
+        // 만약 작성자라면 대기 정보 받아오기
+
+
+        model.addAttribute("project",dto);
+        model.addAttribute("projectInfo",project);
+        System.out.println("~~~~~~~~");
+        System.out.println(project);
         // Pair 2.
         model.addAttribute("comapnyId", project.getUserId());
-        model.addAttribute("session",user);
         return "project/detail";
     }
 //
@@ -325,33 +340,50 @@ public class ProjectController {
      * @param model
      * @return
      */
-    @GetMapping("/my-project/{currentPageNum}")
-    private String myProjectPage(@PathVariable(name="currentPageNum",required=false)int currentPageNum, Model model){
+    @GetMapping("/my-project")
+    private String myProjectPage(@PathVariable(name="currentPageNum",required=false)Integer currentPageNum, Model model){
         int limit=10;
+        if(currentPageNum==null || currentPageNum==0){
+            currentPageNum=1;
+        }
         int offset=limit*(currentPageNum-1);
-        List<Project> projectListForPaging = projectService.getProjectForPagingForMyPage(1,limit,offset);
+
+        User user = (User) session.getAttribute("principal");
+        model.addAttribute("session",user);
+
+        List<Project> projectListForPaging = projectService.getProjectForPagingForMyPage(user.getId(),limit,offset);
 
         model.addAttribute("projectListForPaging",projectListForPaging);
         return "user/my_project";
     }
 
     /**
-     * 프로젝트 상세 페이지 보여주기
-     * @param id
+     * 나의 프로젝트 (완료)
+     * @param currentPageNum
      * @param model
      * @return
      */
-    @GetMapping("/my-project/detail/{id}")
-    private String myProjectDetailPage(@PathVariable(name="id", required = false)int id, Model model){
-        Project project = projectService.findProjectById(id);
-        model.addAttribute("project",project);
+    @GetMapping("/my-project/finished")
+    private String myFinishedProjectPage(@PathVariable(name="currentPageNum",required=false)Integer currentPageNum, Model model){
+        int limit=10;
+        if(currentPageNum==null || currentPageNum==0){
+            currentPageNum=1;
+        }
+        int offset=limit*(currentPageNum-1);
 
-        return "user/my_project_detail";
+        User user = (User) session.getAttribute("principal");
+        model.addAttribute("session",user);
+
+        List<Project> projectListForPaging2 = projectService.getProjectForPagingForMyPage2(user.getId(),limit,offset);
+
+        model.addAttribute("projectListForPaging2",projectListForPaging2);
+        return "user/my_project_finished";
     }
+
 
     @ResponseBody
     @PostMapping("/send-fetched-data")
-    private List<Project> sendFetchedData(@RequestBody SelectDTO select){
+    private List<Project> sendFetchedDataProc(@RequestBody SelectDTO select){
 
         // 페이징을 위한 전체 리스트 뽑아오기
         List<Project> projectList = projectService.getAllProject();
@@ -371,5 +403,113 @@ public class ProjectController {
         return projectListForSelect;
     }
 
+    /**
+     * 새로운 대기 내역 추가
+     * @param request
+     * @return
+     */
+    @PostMapping("/make-new-wait")
+    public ResponseEntity<Map<String, Integer>> makeNewWaitProc(@RequestBody Map<String, String> request) {
+        int userId = Integer.parseInt(request.get("userId"));
+        int projectId = Integer.parseInt(request.get("projectId"));
+        int result = 0;
+
+
+        int isRegistered = projectWaitService.isRegistered(userId,projectId);
+        if(isRegistered == 0){
+            // 신청 내역이 없는 경우에는 신청하기
+            projectWaitService.addNewWait(userId,projectId);
+        }  else {
+            // 신청 내역이 있는 경우에는 return
+            result = 1;
+        }
+        return ResponseEntity.ok(Collections.singletonMap("result", result)); // 성공
+    }
+
+    /**
+     * 공고 마감하기
+     * @param dto
+     * @return
+     */
+    @PostMapping("/finish-project")
+    public String finishProjectProc(@ModelAttribute ProjectWaitDTO dto){
+
+        System.out.println("~~~~~~~");
+        System.out.println(dto);
+
+        // 1. 프로젝트 정보, 프로젝트 대기 정보 가져오기
+        Project project = projectService.findProjectById(dto.getProjectId());
+        ProjectWaitDTO waitInfo = projectWaitService.getProjectWaitByFreelancerIdAndProjectId(dto.getFreelancerId(),project.getId());
+
+        // 2. 프로젝트, 프로젝트 대기 - status 변경
+        projectService.changeStatusById(dto.getProjectId());
+        projectWaitService.changeStatusById(waitInfo.getProjectId(), waitInfo.getFreelancerId(),2);
+
+        // 3. 선택되지 않은 프로젝트 대기-status 변경
+        projectWaitService.setProjectWaitStatus(3, waitInfo.getFreelancerId(), project.getId());
+
+        return "redirect:/project/detail/"+project.getId();
+
+    }
+
+    /**
+     * 신청 중인 프로젝트 페이지 - 프리랜서
+     * @param model
+     * @return
+     */
+    @GetMapping("/freelancer/my-project")
+    private String freelancerProgressProjectPage(Model model){
+        User user = (User) session.getAttribute("principal");
+        model.addAttribute("session",user);
+
+        // 유저 정보를 기반으로 프리랜서 정보 가져오기
+        FreelancerBasicInfoDTO userFreeInfo = freelancerService.findFreelancerBasicInfo(user.getId());
+        // 프리랜서 id로 대기 중(마감x) 정보 가져오기
+        List<Integer> waitList = projectWaitService.getAllProjectByFreelacnerId(userFreeInfo.getUserId(),1);
+
+        // 대기 중인 정보들을 기반으로 프로젝트 정보들 불러오기
+        List<Project> projectList = new ArrayList<>();
+        for(int i=0; i<waitList.size(); i++){
+            Project newPro = projectService.findProjectById(waitList.get(i));
+            projectList.add(newPro);
+        }
+
+        model.addAttribute("projectList",projectList);
+        return "freelancer/my_project_on_progress";
+    }
+
+    /**
+     * 신청 중인 프로젝트 페이지 - 프리랜서
+     * @param model
+     * @return
+     */
+    @GetMapping("/freelancer/my-project/finished")
+    private String freelancerFinishedProjectPage(Model model){
+        User user = (User) session.getAttribute("principal");
+        model.addAttribute("session",user);
+
+        // 유저 정보를 기반으로 프리랜서 정보 가져오기
+        FreelancerBasicInfoDTO userFreeInfo = freelancerService.findFreelancerBasicInfo(user.getId());
+        // 프리랜서 id로 대기 중(마감x) 정보 가져오기
+        List<Integer> waitList1 = projectWaitService.getAllProjectByFreelacnerId(userFreeInfo.getUserId(),2);
+        List<Integer> waitList2 = projectWaitService.getAllProjectByFreelacnerId(userFreeInfo.getUserId(),3);
+
+        // 대기 중인 정보들을 기반으로 프로젝트 정보들 불러오기
+        List<Project> projectList1 = new ArrayList<>();
+        List<Project> projectList2 = new ArrayList<>();
+        for(int i=0; i<waitList1.size(); i++){
+            Project newPro = projectService.findProjectById(waitList1.get(i));
+            projectList1.add(newPro);
+        }
+
+        for(int i=0; i<waitList2.size(); i++){
+            Project newPro = projectService.findProjectById(waitList2.get(i));
+            projectList2.add(newPro);
+        }
+
+        model.addAttribute("projectList1",projectList1);
+        model.addAttribute("projectList2",projectList2);
+        return "freelancer/my_project_finished";
+    }
 
 }

@@ -59,6 +59,12 @@
         LIMIT #{limit} OFFSET #{offset}
     </select>
 
+    <select id="getProjectForPagingForMyPage2" parameterType="com.damoa.repository.model.Project">
+        SELECT * FROM project_tb
+        WHERE status = 2 and user_id =#{userId}
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
     <select id="selectProjectForSelect" parameterType="com.damoa.dto.user.SelectDTO" resultType="com.damoa.repository.model.Project">
         SELECT * FROM project_tb
         <where>
@@ -82,5 +88,11 @@
         order by created_at desc
         limit 1
     </select>
+
+    <update id="updateStatusById">
+        update project_tb
+        set status = 2
+        where id = #{id}
+    </update>
 
 </mapper>
