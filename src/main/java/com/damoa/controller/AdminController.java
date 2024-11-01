@@ -1,6 +1,7 @@
 package com.damoa.controller;
 
 import com.damoa.dto.TossHistoryDTO;
+import com.damoa.dto.admin.AdDTO;
 import com.damoa.dto.admin.AdminSignInDTO;
 import com.damoa.dto.admin.CompanyReviewDTO;
 import com.damoa.dto.admin.FreelancerReviewDTO;
@@ -32,6 +33,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;

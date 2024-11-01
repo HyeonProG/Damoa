@@ -32,7 +32,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/images/ad/**")
-                .addResourceLocations("file:\\C:\\spring_jpa_work_class\\Damoa\\src\\main\\resources\\static\\images\\ad/");
+                .addResourceLocations("classpath:/static/images/ad/");
     }
 
 
