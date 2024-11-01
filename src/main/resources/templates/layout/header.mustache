@@ -104,6 +104,9 @@
             margin-left:5px;
             margin-right:15px;
         }
+        .link{
+            margin: 10px;
+        }
         .nav-line{
             box-shadow: 2px 2px 5px #d0ccc9;
         }
@@ -270,13 +273,8 @@
         <!-- 헤더 -->
         <div class="header">
             <div class="upper-div" style=" width: 2000px; height: 50px; display: flex; justify-content: space-evenly;">
-                <<<<<<< HEAD
                 <img class="title-img" style="width: 120px;" src="/images/logos/damoa_title_image.png"
                      onclick="location.href='/main'">
-                =======
-                <img class="title-img" style="width: 120px;" src="/images/logos/damoa_title_image.png"
-                     onclick="location.href='/main'">
-                >>>>>>> dev_byj
                 <!-- 로그인, 회원가입 -->
                 <div style="display: flex;;">
                     {{#isLogin}} <!-- 로그인된 상태일 때 -->
@@ -286,21 +284,12 @@
                                 href="/user/logout" style="color: gray;" class="link">로그아웃</a></p></button>
                     {{/isLogin}}
                     {{^isLogin}} <!-- 로그인되지 않은 상태일 때 -->
-                        <<<<<<< HEAD
                         <button class="login-btn" style="width: 100px; height: 40px; margin: 5px;"><p><a
                                 href="/user/sign-in" style="color: gray;" class="link"> 로그인 </a></p></button>
                         <button class="login-btn" style="width: 120px; height: 40px; margin: 5px;"><p><a href=""
                                                                                                          style="color: gray;"
                                                                                                          class="link">
                             회원가입 </a></p></button>
-                        =======
-                        <button class="login-btn" style="width: 100px; height: 40px; margin: 5px;"><p><a
-                                href="/user/sign-in" style="color: gray;" class="link"> 로그인 </a></p></button>
-                        <button class="login-btn" style="width: 120px; height: 40px; margin: 5px;"><p><a href=""
-                                                                                                         style="color: gray;"
-                                                                                                         class="link">
-                            회원가입 </a></p></button>
-                        >>>>>>> dev_byj
                     {{/isLogin}}
                 </div>
             </div>
@@ -316,7 +305,7 @@
                         <p class="section-bar"> | </p>
                         <p><b><a href="/reviews/home">리뷰 찾아보기</a></b></p>
                         <p class="section-bar"> | </p>
-                        <p><b><a href="/notice">공지사항</a></b></p>
+                        <p><b><a href="/notice/1">공지사항</a></b></p>
                         <p class="section-bar"> | </p>
                         <p><b><a href="/user/faq">FAQ</a></b></p>
                     {{/isFreelancer}}
@@ -330,7 +319,7 @@
                         <p class="section-bar"> | </p>
                         <p><b><a href="/reviews/home">리뷰 찾아보기</a></b></p>
                         <p class="section-bar"> | </p>
-                        <p><b><a href="/notice">공지사항</a></b></p>
+                        <p><b><a href="/notice/1">공지사항</a></b></p>
                         <p class="section-bar"> | </p>
                         <p><b><a href="/user/faq">FAQ</a></b></p>
                     {{/isCompany}}
@@ -341,7 +330,7 @@
                         <p class="section-bar"> | </p>
                         <p><b><a href="/reviews/home">리뷰 찾아보기</a></b></p>
                         <p class="section-bar"> | </p>
-                        <p><b><a href="/notice">공지사항</a></b></p>
+                        <p><b><a href="/notice/1">공지사항</a></b></p>
                         <p class="section-bar"> | </p>
                         <p><b><a href="/user/faq">FAQ</a></b></p>
                     {{/isLogin}}
@@ -352,5 +341,3 @@
         </div>
 
         <div class="main-board">
-
-        </div>
