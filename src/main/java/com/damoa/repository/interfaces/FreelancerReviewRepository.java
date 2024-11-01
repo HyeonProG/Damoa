@@ -1,6 +1,7 @@
 package com.damoa.repository.interfaces;
 
 import com.damoa.dto.admin.FreelancerReviewDTO;
+import com.damoa.dto.admin.FreelancerReviewDetailDTO;
 import com.damoa.dto.DailyFreelancerReviewDTO;
 import com.damoa.dto.review.FreelancerMainDTO;
 import com.damoa.repository.model.FreelancerReview;
