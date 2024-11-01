@@ -25,6 +25,9 @@ public interface ChatListRepository {
      */
     void saveByChatList(ChatList chatList);
 
+    // function: chat_list_tb row delete
+    void deleteByChatList(int roomId);
+
     /*
      * function: 대화방 개설 시 최초 메시지 이후 수신자의 목록에 나타나도록 업데이트
      * @param senderId, reciverId
