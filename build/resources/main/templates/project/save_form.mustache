@@ -1,38 +1,39 @@
 {{>layout/header}}
-    <style type="text/css">
-        .second-box, .third-box, .forth-box {
-    display: none;
+<style type="text/css">
+    .second-box, .third-box, .forth-box {
+display: none;
 }
 .project-container1 {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+width: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
 }
 .skill-container {
-    width: 100%; /* 이 너비는 조정 가능합니다 */
-    display: flex;
-    flex-wrap: wrap; /* 줄 바꿈 허용 */
+width: 100%; /* 이 너비는 조정 가능합니다 */
+display: flex;
+flex-wrap: wrap; /* 줄 바꿈 허용 */
 }
 .skill-box {
-    width: 70px; /* 각 스킬 박스의 너비 */
-    margin: 3px;
-    padding: 2px;
-    border-radius: 15px;
-    background: white;
-    border: 1px solid #DEDEDE;
+width: 70px; /* 각 스킬 박스의 너비 */
+margin: 3px;
+padding: 2px;
+border-radius: 15px;
+background: white;
+border: 1px solid #DEDEDE;
 }
 .quitbox {
-    background: red;
+background: red;
 }
-    </style>
+</style>
 <div class="container mt-5">
     <h2>프로젝트 정보 입력</h2>
 
     <progress id="progressBar" max="100" value="0"></progress>
     <div class="project-container1">
         <div class="project-box first-box " id="box1">
-            <form action="/project/save" name="reqDTO" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
+            <form action="/project/save" name="reqDTO" method="POST" enctype="multipart/form-data"
+                  onsubmit="return validateForm()">
                 <input type="hidden" class="form-control" id="userId" name="userId" value="1" required>
                 <div class="form-group">
                     <label for="job">직군/직무</label>
@@ -62,9 +63,11 @@
                     <label for="minyears">연차</label>
                     <div class="form-group">
                         <label for="maxyears">최소 연차</label>
-                        <input type="number" min="1" max="50" class="form-control" id="maxYears" name="minYears" placeholder="최소 연차" required>
+                        <input type="number" min="1" max="50" class="form-control" id="maxYears" name="minYears"
+                               placeholder="최소 연차" required>
                         <label for="minyears">최대 연차</label>
-                        <input type="number" min="1" max="50" class="form-control" id="minYears" name="maxYears" placeholder="최대 연차" required>
+                        <input type="number" min="1" max="50" class="form-control" id="minYears" name="maxYears"
+                               placeholder="최대 연차" required>
                     </div>
 
                 </div>
@@ -74,7 +77,8 @@
             <input type="text" name="projectName" class="form-control" required>
             <h4>프로젝트 시작 희망일</h4>
             <div class="form-group">
-                <input type="date" id="project-start" name="projectStart" class="form-control" max="2077-06-20" min="2024-11-01"
+                <input type="date" id="project-start" name="projectStart" class="form-control" max="2077-06-20"
+                       min="2024-11-01"
                        value="2024-11-01" required>
             </div>
 
@@ -87,7 +91,8 @@
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <input type="number" min='1' max='50' class="form-control" id="expectedPeriod" name="expectedPeriod" required>
+                    <input type="number" min='1' max='50' class="form-control" id="expectedPeriod" name="expectedPeriod"
+                           required>
                 </div>
             </div>
 
@@ -183,7 +188,7 @@
                 <label for="agree">(필수)다모아 <a href="save-form">이용약관</a>에 동의합니다</label>
             </div>
 
-            <button type="submit" class="btn btn-primary">제출</button>
+            <button type="submit" class="btn btn-primary" onclick="checkPoint()">제출</button>
             </form>
         </div>
     </div>
@@ -195,82 +200,102 @@
 
 <script>
 
-            var progress = 0;
-            var currentBox = 0;
-            var boxes = [
-        document.getElementById("box1"),
-        document.getElementById("box2"),
-        document.getElementById("box3"),
-        document.getElementById("box4")
-    ];
+    var progress = 0;
+    var currentBox = 0;
+    var boxes = [
+document.getElementById("box1"),
+document.getElementById("box2"),
+document.getElementById("box3"),
+document.getElementById("box4")
+];
 
-    function updateVisibility() {
-        boxes.forEach((box, index) => {
-            box.style.display = index === currentBox ? 'block' : 'none';
-        });
+function updateVisibility() {
+boxes.forEach((box, index) => {
+    box.style.display = index === currentBox ? 'block' : 'none';
+});
 
-       // 진행 상황 업데이트
-            var progress = (currentBox / (boxes.length - 1)) * 100; // 0%에서 100%로
-            document.getElementById("progressBar").value = progress; // 프로그레스 바 업데이트
+// 진행 상황 업데이트
+    var progress = (currentBox / (boxes.length - 1)) * 100; // 0%에서 100%로
+    document.getElementById("progressBar").value = progress; // 프로그레스 바 업데이트
 
 
-    }
-
-    function next() {
-        if (currentBox < boxes.length - 1) {
-            currentBox++;
-            updateVisibility();
-        }
-    }
-
-    function before() {
-        if (currentBox > 0) {
-            currentBox--;
-            updateVisibility();
-        }
-    }
-
-    function validateForm() {
-    const minYears = document.getElementById('minyears').value;
-    const maxYears = document.getElementById('maxyears').value;
-
-    if (minYears && maxYears && parseInt(maxYears) < parseInt(minYears)) {
-        alert("최대 연차는 최소 연차보다 클 수 없습니다.");
-        return false; // 폼 제출 방지
-    }
-
-    return true; // 폼 제출 허용
 }
 
+function next() {
+if (currentBox < boxes.length - 1) {
+    currentBox++;
     updateVisibility();
+}
+}
+
+function before() {
+if (currentBox > 0) {
+    currentBox--;
+    updateVisibility();
+}
+}
+
+function validateForm() {
+const minYears = document.getElementById('minyears').value;
+const maxYears = document.getElementById('maxyears').value;
+
+if (minYears && maxYears && parseInt(maxYears) < parseInt(minYears)) {
+alert("최대 연차는 최소 연차보다 클 수 없습니다.");
+return false; // 폼 제출 방지
+}
+
+return true; // 폼 제출 허용
+}
+
+updateVisibility();
 
 
-    const selectElement = document.querySelector('.skill-form');
-    const skillsDiv = document.querySelector('.skill-container');
-    const hiddenInput = document.getElementById('totalSkills');
-    let selectedSkills = [];
+const selectElement = document.querySelector('.skill-form');
+const skillsDiv = document.querySelector('.skill-container');
+const hiddenInput = document.getElementById('totalSkills');
+let selectedSkills = [];
 
-    selectElement.addEventListener('change',function(){
-        const selectedValue = selectElement.value;
-        const selectedText = selectElement.options[selectElement.selectedIndex].text;
-        selectedSkills.push(selectedValue);
+selectElement.addEventListener('change',function(){
+const selectedValue = selectElement.value;
+const selectedText = selectElement.options[selectElement.selectedIndex].text;
+selectedSkills.push(selectedValue);
 
-        const newSkill = document.createElement('div');
-        newSkill.textContent=selectedText;
-        newSkill.classList.add('skill-box');
+const newSkill = document.createElement('div');
+newSkill.textContent=selectedText;
+newSkill.classList.add('skill-box');
 
-        skillsDiv.appendChild(newSkill);
-
-
-        hiddenInput.value = JSON.stringify(selectedSkills);
-        console.log(hiddenInput.value); // 스킬 추가 후 값 확인
-        hiddenInput.value = JSON.stringify(selectedSkills);
-    });
+skillsDiv.appendChild(newSkill);
 
 
-        </script>
+hiddenInput.value = JSON.stringify(selectedSkills);
+console.log(hiddenInput.value); // 스킬 추가 후 값 확인
+hiddenInput.value = JSON.stringify(selectedSkills);
+});
 
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+function checkPoint(){
+        fetch('/user/point')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('서버 응답이 올바르지 않습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("잔액 정보:", data);
+                if(data < 100000){
+                    if (confirm("등록시 100,000 포인트가 필요합니다. \n보유 포인트가 부족합니다. \n충전하시겠습니까?")) {
+                      newWindow = window.open('/toss/store', '_blank', 'width=650,height=650');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error("오류 발생:", error);
+            });
+        }
+
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

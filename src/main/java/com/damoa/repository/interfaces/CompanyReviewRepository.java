@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 /*
-* company 리뷰 기능
-* */
+ * company 리뷰 기능
+ * */
 @Mapper
 public interface CompanyReviewRepository {
 
@@ -34,6 +34,10 @@ public interface CompanyReviewRepository {
     int countCompanyReview();
 
     List<CompanyReviewDetailDTO> companyReviewDetail();
+
     // 일별 기업 리뷰 등록 수 데이터 가져오기
     List<DailyCompanyReviewDTO> getDailyCompanyReviewData(@Param("startDate") String startDate, @Param("endDate") String endDate);
+
+    // 기업 리뷰 카운트
+    int countComReview();
 }

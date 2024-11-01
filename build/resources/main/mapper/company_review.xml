@@ -49,5 +49,12 @@
         GROUP BY DATE_FORMAT(review_date, '%m-%d')
     </select>
 
+    <select id="countComReview" resultType="int">
+        SELECT count(*)
+        FROM company_review as c
+        JOIN user_tb as u on u.id = c.company_id
+        JOIN freelancer_tb as f on c.freelancer_id = f.id
+        JOIN project_tb as p on p.user_id = c.company_id
+    </select>
 </mapper>
 

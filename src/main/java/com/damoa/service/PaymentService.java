@@ -76,6 +76,7 @@ public class PaymentService {
     public Page<TossHistoryDTO> findAll(Pageable pageable) {
 
         int offset = pageable.getPageNumber() * pageable.getPageSize();
+
         List<TossHistoryDTO> paymentList = paymentHistoryRepository.viewAll(offset, pageable.getPageSize());
         int totalCount = paymentHistoryRepository.countAll();
         return new PageImpl<>(paymentList, pageable, totalCount);

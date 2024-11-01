@@ -5,6 +5,7 @@ import com.damoa.dto.admin.CompanyReviewDetailDTO;
 import com.damoa.dto.admin.FreelancerReviewDTO;
 import com.damoa.dto.DailyCompanyReviewDTO;
 import com.damoa.dto.DailyFreelancerReviewDTO;
+import com.damoa.dto.admin.NoticeDTO;
 import com.damoa.repository.interfaces.CompanyReviewRepository;
 import com.damoa.repository.interfaces.FreelancerReviewRepository;
 import com.damoa.repository.model.CompanyReview;
@@ -12,6 +13,9 @@ import com.damoa.repository.model.FreelancerReview;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -36,7 +40,7 @@ public class ReviewService {
 
         // 3. 모델에 List로 반환
         model.addAttribute("companyReview", companyReview);
-        model.addAttribute("freelancerReview",freelancerReview);
+        model.addAttribute("freelancerReview", freelancerReview);
         // 토탈 리뷰 갯수
         model.addAttribute("totalReviews", companyReview.size() + freelancerReview.size());
     }
@@ -59,11 +63,13 @@ public class ReviewService {
 
     // 프리랜서 리뷰 상세 조회 기능
     public void getByFreelancerId(int id, Model model) {
-            Optional<FreelancerReview> freelancerReviewreview = freelancerReviewRepo.findByFreelancerReviewId(id);
-            freelancerReviewreview.ifPresentOrElse(
-                    freelancerReview -> model.addAttribute("freelancerReview",freelancerReview),
-                    () -> { throw new NullPointerException("삭제된 리뷰 입니다."); }
-            );
+        Optional<FreelancerReview> freelancerReviewreview = freelancerReviewRepo.findByFreelancerReviewId(id);
+        freelancerReviewreview.ifPresentOrElse(
+                freelancerReview -> model.addAttribute("freelancerReview", freelancerReview),
+                () -> {
+                    throw new NullPointerException("삭제된 리뷰 입니다.");
+                }
+        );
     }
 
     // 회사 리뷰 상세 조회 기능
@@ -71,31 +77,36 @@ public class ReviewService {
         Optional<CompanyReview> companyReview = companyReviewRepo.findByCompanyReviewId(id);
         companyReview.ifPresentOrElse(
                 review -> model.addAttribute("companyReview", review),
-                () -> { throw new NullPointerException("삭제된 리뷰 입니다."); }
+                () -> {
+                    throw new NullPointerException("삭제된 리뷰 입니다.");
+                }
         );
     }
 
-    public List<CompanyReviewDTO> getComapanyReviews(int limit, int offset){
-        List<CompanyReviewDTO> companyReviews = companyReviewRepo.findCompanyReview(limit,offset);
-        return  companyReviews;
+    public Page<CompanyReviewDTO> getComapanyReviews(Pageable pageable) {
 
+        int offset = pageable.getPageNumber() * pageable.getPageSize();
+        List<CompanyReviewDTO> companyList = companyReviewRepo.findCompanyReview(pageable.getPageSize(), offset);
+        int totalCount = companyReviewRepo.countComReview();
+        return new PageImpl<>(companyList, pageable, totalCount);
     }
 
-    public int countReview(){
+    public int countReview() {
         return companyReviewRepo.countCompanyReview();
     }
 
-    public List<FreelancerReviewDTO> findFreelancerReview(int limit, int offset){
-        List<FreelancerReviewDTO> freelancerReviews = freelancerReviewRepo.findFreelancerReview(limit, offset);
-        return freelancerReviews;
-
+    public Page<FreelancerReviewDTO> findFreelancerReview(Pageable pageable) {
+        int offset = pageable.getPageNumber() * pageable.getPageSize();
+        List<FreelancerReviewDTO> freelancerReviews = freelancerReviewRepo.findFreelancerReview(pageable.getPageSize(), offset);
+        int totalCount = freelancerReviewRepo.countFreelancerReview();
+        return new PageImpl<>(freelancerReviews, pageable, totalCount);
     }
 
-    public int countFreelancerReview(){
+    public int countFreelancerReview() {
         return freelancerReviewRepo.countFreelancerReview();
     }
 
-    public List<CompanyReviewDetailDTO> getCompanyDetails(){
+    public List<CompanyReviewDetailDTO> getCompanyDetails() {
         List<CompanyReviewDetailDTO> companyReviewDetailDTO = companyReviewRepo.companyReviewDetail();
         return companyReviewDetailDTO;
 

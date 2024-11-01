@@ -50,7 +50,8 @@
 
     <!-- 결제내역   -->
     <select id="findPaymentDetailByUserId" resultType="com.damoa.dto.TossHistoryDTO">
-        SELECT * FROM toss_history_tb WHERE user_id = #{id}
+        SELECT * FROM toss_history_tb WHERE user_id = #{userId}
+        LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <!-- 업데이트 토스 히스토리 상태   -->
@@ -77,5 +78,35 @@
     <!-- @relation GoogleSheetsService 유저 PK 이름 조회 -->
     <select id="findByUserName">
         select * from user_tb where username = #{userName}
+    </select>
+
+    <select id="checkPoint" resultType="int">
+        SELECT point FROM user_tb WHERE id = #{id}
+    </select>
+
+    <!-- 마이 페이지 페이먼트 카운트-->
+    <select id="countMyPayment" resultType="int">
+        SELECT COUNT(*) FROM toss_history_tb
+        WHERE user_id = #{id}
+    </select>
+
+    <!-- alert_tb에 인서트 구문-->
+    <select id="insertByPaymentIdAndUserId">
+        INSERT INTO alert_tb(user_id, payment_id)
+        VALUES(#{userId}, #{paymentId})
+    </select>
+
+    <select id="findRefundRequest" resultType="com.damoa.dto.user.AlertDTO">
+        SELECT u.username,u.user_type, t.amount, a.created_at, a.checked
+        FROM alert_tb AS a
+        JOIN user_tb AS u ON a.user_id = u.id
+        JOIN toss_history_tb AS t ON t.id = a.payment_id
+    </select>
+    <select id="countRequestRefund">
+        SELECT count(*)
+        FROM alert_tb AS a
+        JOIN user_tb AS u ON a.user_id = u.id
+        JOIN toss_history_tb AS t ON t.id = a.payment_id
+        WHERE a.checked = 'X'
     </select>
 </mapper>
