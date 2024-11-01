@@ -2,6 +2,7 @@ package com.damoa.controller;
 
 import com.damoa.dto.ProjectSaveDTO;
 import com.damoa.dto.freelancer.FreelancerBasicInfoDTO;
+import com.damoa.dto.user.PrincipalDTO;
 import com.damoa.dto.user.ProjectListDTO;
 import com.damoa.dto.user.ProjectWaitDTO;
 import com.damoa.dto.user.SelectDTO;
@@ -465,9 +466,10 @@ public class ProjectController {
         model.addAttribute("session",user);
 
         // 유저 정보를 기반으로 프리랜서 정보 가져오기
-        FreelancerBasicInfoDTO userFreeInfo = freelancerService.findFreelancerBasicInfo(user.getId());
+        PrincipalDTO freelancerInfo = userService.findUserById(user.getId());
+        System.out.println("userID _ : " + freelancerInfo);
         // 프리랜서 id로 대기 중(마감x) 정보 가져오기
-        List<Integer> waitList = projectWaitService.getAllProjectByFreelacnerId(userFreeInfo.getUserId(),1);
+        List<Integer> waitList = projectWaitService.getAllProjectByFreelacnerId(freelancerInfo.getId(),1);
 
         // 대기 중인 정보들을 기반으로 프로젝트 정보들 불러오기
         List<Project> projectList = new ArrayList<>();
@@ -482,7 +484,7 @@ public class ProjectController {
             model.addAttribute("isCompany", user.getUserType().equals("company"));
         }
         model.addAttribute("isLogin", user);
-        return "freelancer/my_project_on_progress";
+        return "/freelancer/my_project_on_progress";
     }
 
     /**
@@ -496,10 +498,10 @@ public class ProjectController {
         model.addAttribute("session",user);
 
         // 유저 정보를 기반으로 프리랜서 정보 가져오기
-        FreelancerBasicInfoDTO userFreeInfo = freelancerService.findFreelancerBasicInfo(user.getId());
+        PrincipalDTO freelancerInfo = userService.findUserById(user.getId());
         // 프리랜서 id로 대기 중(마감x) 정보 가져오기
-        List<Integer> waitList1 = projectWaitService.getAllProjectByFreelacnerId(userFreeInfo.getUserId(),2);
-        List<Integer> waitList2 = projectWaitService.getAllProjectByFreelacnerId(userFreeInfo.getUserId(),3);
+        List<Integer> waitList1 = projectWaitService.getAllProjectByFreelacnerId(freelancerInfo.getId(),2);
+        List<Integer> waitList2 = projectWaitService.getAllProjectByFreelacnerId(freelancerInfo.getId(),3);
 
         // 대기 중인 정보들을 기반으로 프로젝트 정보들 불러오기
         List<Project> projectList1 = new ArrayList<>();
