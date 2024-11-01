@@ -75,7 +75,6 @@
         FROM ad_tb
         WHERE CURDATE() BETWEEN start_time AND end_time and end_time > curdate()
     </select>
-    
     <select id="checkPoint" resultType="int">
         SELECT point FROM user_tb WHERE id = #{id}
     </select>
