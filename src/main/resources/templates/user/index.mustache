@@ -18,22 +18,23 @@
     }
     .slider {
     width: 100%; /* 전체 너비 */
-}
-.project-box, .freelancer-box {
-    width: 200px; /* 각 슬라이드의 너비 */
-    margin: 0 10px; /* 좌우 간격 조정 */
-}.slick-next, .slick-prev {
-    background: none; /* 배경 제거 */
-    border: none; /* 외곽선 제거 */
-    outline: none; /* 포커스 시 외곽선 제거 */
-    cursor: pointer; /* 커서 스타일 변경 */
-}
-.slick-list{
-display: flex;
-}
-.slick-next img, .slick-prev img {
-    display: block; /* 이미지가 버튼의 전체 영역을 차지하도록 */
-}
+    }
+    .project-box, .freelancer-box {
+        width: 20px; /* 각 슬라이드의 너비 */
+        margin: 0 10px; /* 좌우 간격 조정 */
+    }
+    .slick-next, .slick-prev {
+        background: none; /* 배경 제거 */
+        border: none; /* 외곽선 제거 */
+        outline: none; /* 포커스 시 외곽선 제거 */
+        cursor: pointer; /* 커서 스타일 변경 */
+    }
+    .slick-list{
+        display: flex;
+    }
+    .slick-next img, .slick-prev img {
+        display: block; /* 이미지가 버튼의 전체 영역을 차지하도록 */
+    }
 
 
 </style>
@@ -61,9 +62,9 @@ display: flex;
         <p style="margin-left:10px;">프로젝트를 시작해볼까요?</p>
         <div class="project-container slider">
             {{#projectList}}
-                <div class="project-box" onclick="location.href='/project/detail/{{id}}'">
-                    <img src="images/logos/sample-img.png" style="border-radius:10px;  box-shadow: 2px 2px 5px #d0ccc9; width: 245px; cursor:pointer; margin-bottom: 20px;">
-                    <h6 style="color: #495057"><b>{{projectName}}</b></h6>
+                <div class="project-box" style="margin: 10px; width: 180px;" onclick="location.href='/project/detail/{{id}}'">
+                    <img src="images/logos/sample-img.png" style="border-radius:10px;  box-shadow: 2px 2px 5px #d0ccc9; width: 175px; margin: 10px; cursor:pointer;">
+                    <h6 style="color: #495057; width: 175px; "><b>{{projectName}}</b></h6>
                     <p>{{company}}</p>
                 </div>
             {{/projectList}}

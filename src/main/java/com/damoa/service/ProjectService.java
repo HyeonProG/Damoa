@@ -93,6 +93,10 @@ public class ProjectService {
      * @param offset
      * @return
      */
+    public List<Project> getProjectForPagingForMyPage2(int userId, int limit, int offset) {
+        return projectRepository.getProjectForPagingForMyPage2(userId, limit, offset);
+    }
+
     public List<Project> getProjectForPagingForMyPage(int userId, int limit, int offset) {
         return projectRepository.getProjectForPagingForMyPage(userId, limit, offset);
     }
@@ -135,5 +139,10 @@ public class ProjectService {
 
     public int findProjectIdByUserId(int userId) {
         return projectRepository.selectProjectIdByUserId(userId);
+    }
+
+    public void changeStatusById(int id) {
+        projectRepository.updateStatusById(id);
+        return;
     }
 }

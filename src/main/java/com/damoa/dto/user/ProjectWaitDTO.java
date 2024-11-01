@@ -16,25 +16,8 @@ import java.util.Date;
 public class ProjectWaitDTO {
     private int projectId;
     private int userId;
-    private String introduce;
-    private long minimumWage;
-    private long maximumWage;
-    private LocalDate startDate;
-    private String skill;
-    private MultipartFile file;
-    private String detail;
-
-    public static ProjectWait toProWait(ProjectWaitDTO projectWaitDTO){
-        return ProjectWait.builder()
-                .userId(projectWaitDTO.userId)
-                .projectId(projectWaitDTO.getProjectId())
-                .introduce(projectWaitDTO.getIntroduce())
-                .minimumWage(projectWaitDTO.minimumWage)
-                .maximumWage(projectWaitDTO.maximumWage)
-                .startDate(projectWaitDTO.startDate)
-                .detail(projectWaitDTO.detail)
-                .build();
-    }
+    private int freelancerId;
+    private String freelancerName;
 }
 
 
