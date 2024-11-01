@@ -104,9 +104,6 @@
             margin-left:5px;
             margin-right:15px;
         }
-        .link{
-            margin: 9px;
-        }
         .nav-line{
             box-shadow: 2px 2px 5px #d0ccc9;
         }
@@ -272,75 +269,74 @@
     <div class="main">
         <!-- 헤더 -->
         <div class="header">
-            <div class="upper-div">
-                <div class="search-div">
-                    <!-- 로고 -->
-                    <img class="title-img" src="/images/logos/damoa_title_image.png" onclick="location.href='/main'">
-                    <!--검색창-->
-                    <form class="search-bar" action="/search" method="post">
-                        <input class="search-box" type="text" name="keyword" id="keyword"
-                               placeholder="  프로젝트 중개는 역시 다모아!">
-                        <button class="search-btn" type="submit">검색</button>
-                    </form>
-                </div>
+            <div class="upper-div" style=" width: 2000px; height: 50px; display: flex; justify-content: space-evenly;">
+                <img class="title-img" style="width: 120px;" src="/images/logos/damoa_title_image.png"
+                     onclick="location.href='/main'">
                 <!-- 로그인, 회원가입 -->
                 <div style="display: flex;;">
                     {{#isLogin}} <!-- 로그인된 상태일 때 -->
-                        <button class="login-btn" style="width: 120px; height: 40px; margin: 5px;"><p><a href="/user/mypage" style="color: gray;" class="link">마이페이지</a></p></button>
-                        <button class="login-btn" style="width: 100px; height: 40px; margin: 5px;"><p><a href="/user/logout" style="color: gray;" class="link">로그아웃</a></p></button>
+                        <button class="login-btn" style="width: 120px; height: 40px; margin: 5px;"><p><a
+                                href="/user/mypage" style="color: gray;" class="link">마이페이지</a></p></button>
+                        <button class="login-btn" style="width: 100px; height: 40px; margin: 5px;"><p><a
+                                href="/user/logout" style="color: gray;" class="link">로그아웃</a></p></button>
                     {{/isLogin}}
                     {{^isLogin}} <!-- 로그인되지 않은 상태일 때 -->
-                        <button class="login-btn" style="width: 100px; height: 40px; margin: 5px;"><p><a href="/user/sign-in" style="color: gray;" class="link"> 로그인 </a></p></button>
-                        <button class="login-btn" style="width: 120px; height: 40px; margin: 5px;"> <p><a href="/user/sign-up" style="color: gray;" class="link"> 회원가입 </a></p></button>
+                        <button class="login-btn" style="width: 100px; height: 40px; margin: 5px;"><p><a
+                                href="/user/sign-in" style="color: gray;" class="link"> 로그인 </a></p></button>
+                        <button class="login-btn" style="width: 120px; height: 40px; margin: 5px;"><p><a href=""
+                                                                                                         style="color: gray;"
+                                                                                                         class="link">
+                            회원가입 </a></p></button>
                     {{/isLogin}}
                 </div>
             </div>
-            <hr>
-            <div class="nav-bar">
-                <div class="menu-list">
-                    <img class="menu-icon" src="/images/icons/menu_icon.png">
+            <div class="upper-div" style="margin-top: 10px;">
+                <div class="login-bar">
+                    <img src="/images/icons/menu_icon.png" style="width:30px;margin-bottom: 10px;">
                     {{#isFreelancer}} <!-- 프리랜서일 때 -->
-                        <h6><b><a href="/project/list/1">프로젝트 찾기</a></b></h6>
+                        <p><b><a href="/project/list/1">프로젝트 찾기</a></b></p>
                         <p class="section-bar"> | </p>
-                        <h6><b><a href="/freelancer/basic-info">프리랜서 등록</a></b></h6>
+                        <p><b><a href="/freelancer/basic-info">프리랜서 등록</a></b></p>
                         <p class="section-bar"> | </p>
-                        <h6><b><a href="/freelancer/list">프리랜서 찾기</a></b></h6>
+                        <p><b><a href="/freelancer/list">프리랜서 찾기</a></b></p>
                         <p class="section-bar"> | </p>
-                        <h6><b><a href="/reviews/home">리뷰 찾아보기</a></b></h6>
+                        <p><b><a href="/reviews/home">리뷰 찾아보기</a></b></p>
                         <p class="section-bar"> | </p>
-                        <h6><b><a href="/notice">공지사항</a></b></h6>
+                        <p><b><a href="/notice">공지사항</a></b></p>
                         <p class="section-bar"> | </p>
-                        <h6><b><a href="/user/faq">FAQ</a></b></h6>
+                        <p><b><a href="/user/faq">FAQ</a></b></p>
                     {{/isFreelancer}}
 
                     {{#isCompany}} <!-- 기업일 때 -->
-                        <h6><b><a href="/project/list/1">프로젝트 찾기</a></b></h6>
+                        <p><b><a href="/project/list/1">프로젝트 찾기</a></b></p>
                         <p class="section-bar"> | </p>
-                        <h6><b><a href="/project/save" onclick="checkPoint()">프로젝트 등록</a></b></h6>
+                        <p><b><a href="/project/save">프로젝트 등록</a></b></p>
                         <p class="section-bar"> | </p>
-                        <h6><b><a href="/freelancer/list">프리랜서 찾기</a></b></h6>
+                        <p><b><a href="/freelancer/list">프리랜서 찾기</a></b></p>
                         <p class="section-bar"> | </p>
-                        <h6><b><a href="/reviews/home">리뷰 찾아보기</a></b></h6>
+                        <p><b><a href="/reviews/home">리뷰 찾아보기</a></b></p>
                         <p class="section-bar"> | </p>
-                        <h6><b><a href="/notice">공지사항</a></b></h6>
+                        <p><b><a href="/notice">공지사항</a></b></p>
                         <p class="section-bar"> | </p>
-                        <h6><b><a href="/user/faq">FAQ</a></b></h6>
+                        <p><b><a href="/user/faq">FAQ</a></b></p>
                     {{/isCompany}}
                     {{^isLogin}}
-                        <h6><b><a href="/project/list/1">프로젝트 찾기</a></b></h6>
+                        <p><b><a href="/project/list/1">프로젝트 찾기</a></b></p>
                         <p class="section-bar"> | </p>
-                        <h6><b><a href="/freelancer/list">프리랜서 찾기</a></b></h6>
+                        <p><b><a href="/freelancer/list">프리랜서 찾기</a></b></p>
                         <p class="section-bar"> | </p>
-                        <h6><b><a href="/reviews/home">리뷰 찾아보기</a></b></h6>
+                        <p><b><a href="/reviews/home">리뷰 찾아보기</a></b></p>
                         <p class="section-bar"> | </p>
-                        <h6><b><a href="/notice">공지사항</a></b></h6>
+                        <p><b><a href="/notice">공지사항</a></b></p>
                         <p class="section-bar"> | </p>
-                        <h6><b><a href="/user/faq">FAQ</a></b></h6>
+                        <p><b><a href="/user/faq">FAQ</a></b></p>
                     {{/isLogin}}
                 </div>
             </div>
-            <hr class="nav-line">
+
+            <hr style=" background-color: #DEDEDE;">
         </div>
+
         <div class="main-board">
 
             <script>

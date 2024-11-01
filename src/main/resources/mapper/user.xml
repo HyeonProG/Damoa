@@ -99,4 +99,9 @@
         JOIN toss_history_tb AS t ON t.id = a.payment_id
         WHERE a.checked = 'X'
     </select>
+    <update id= "updateUserPoints">
+        update user_tb
+        set point = point - 10000
+        where id = #{id}
+    </update>
 </mapper>

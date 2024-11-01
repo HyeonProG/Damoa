@@ -256,4 +256,13 @@ public class UserService {
         int count = userRepository.countRequestRefund();
         return count;
     }
+
+    @Transactional
+    public int updateUserPoints(int id) {
+        if (userRepository.findById(id).getPoint() < 10000) {
+            throw new DataDeliveryException("포인트가 부족합니다.", HttpStatus.FORBIDDEN);
+        } else {
+            return userRepository.updateUserPoints(id);
+        }
+    }
 }
