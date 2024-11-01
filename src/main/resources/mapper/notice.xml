@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper
-    namespace="com.damoa.repository.interfaces.NoticeRepository">
+        namespace="com.damoa.repository.interfaces.NoticeRepository">
 
     <!-- 모든 공지 목록 가져오기 -->
     <select id="getAllNotice" resultType="com.damoa.repository.model.Notice">
@@ -19,7 +19,7 @@
     </select>
 
     <select id="findNoticeList" resultType="com.damoa.repository.model.Notice">
-        select * from notice_tb limit #{page} offset #{offset}
+        select * from notice_tb limit #{size} offset #{offset}
     </select>
 
     <select id="getNoticeCount" resultType="int">

@@ -1,6 +1,6 @@
 {{>layout/header}}
-{{>layout/chatbot}}
-{{>layout/chat}}
+<div id ="chatbot">{{>layout/chatbot}}</div>
+<div id ="chat">{{>layout/chat}}</div>
 <style>
     body{
     padding:0;
@@ -40,7 +40,7 @@
 </style>
 <div class="main-board-box">
     <div class="ad-board">
-        <div class="ad-bar">
+        <div class="ad-bar" style="padding: 10px 0;"> <!-- 위아래 패딩 추가 -->
             <img src="images/icons/left.png" class="icons" id="prevAd" style="cursor: pointer;">
             <div class="ad-outer">
                 <div class="ad-inner">
@@ -51,6 +51,7 @@
             </div>
             <img src="images/icons/right.png" class="icons" id="nextAd" style="cursor: pointer;">
         </div>
+
         <div class="ad-progress" style="margin-top:20px;">
             <h6 class="ad-progress-text" >1/5</h6>
         </div>
@@ -133,7 +134,7 @@
         }, 300); // 슬라이드 전환 효과와 동일한 시간으로 설정
     });
 });
-        // 사이드바 토글 기능
+    // 사이드바 토글 기능
     document.getElementById('toggleChatSidebar').addEventListener('click', function () {
         const chatbot = document.getElementById('chatbot');
         const chat = document.getElementById('chat');
@@ -145,7 +146,7 @@
     document.getElementById('closeChatSidebar').addEventListener('click', function () {
         const chatSidebar = document.getElementById('chatbot');
         const chatLayout = document.getElementById('chat');
-        
+
         chatLayout.style.display = 'block'; // 챗 레이아웃 보이기
     });
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Damoa</title>
 
@@ -12,17 +12,18 @@
         @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 
         body{
-             font-family: 'Dongle', 'Pretendard', sans-serif;
+            font-family: Pretendard;
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
             font-family: 'Dongle', sans-serif;
         }
-        a,p,h1,h2,h3,h4,h5{
+        a,p{
             text-decoration: none;
-            color: #495057;
-            margin-top: 0;
+            color: #8a837d;
+            padding-right:3px;
+            padding-left:3px;
         }
         h5,h3{
             font-weight: bolder;
@@ -30,13 +31,12 @@
             margin-right: 5px;
             padding-right:5px;
             padding-left:5px;
-            margin-bottom: -5px;
         }
         hr{
             margin-top:0px;
             margin-bottom:0px;
             padding:0px;
-            color: #ced4da;
+            color: #dfddda;
         }
         footer{
             width:100%;
@@ -56,47 +56,67 @@
             width: 100%;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
-        .header {
+        .header{
             width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center; /* 양쪽으로 균등 배치 */
         }
-
-        .upper-div {
-            width: 88%; /* 적절한 너비 설정 */
+        .upper-div{
+            width: 100%;
+            height: 120px;
+            padding: 5px;
             display: flex;
             align-items: center;
-            justify-content: center; /* 양쪽으로 균등 배치 */
+            justify-content: space-evenly;
         }
         .title-img{
             width: 200px;
         }
-        .login-bar{
-            width: 70%;
-            height: 50px;
+        .search-div{
             display: flex;
             align-items: center;
-            justify-content: space-evenly;
-            text-align:center;
-            margin-top: 10px;
-            margin-left:20px;
+            justify-content: center;
+        }
+        .search-box{
+            width: 300px;
+            height: 40px;
+            border: 3px solid #18A8F1;
+            border-radius: 25px;
+        }
+        .search-btn{
+            width: 50px;
+            border: none;
+            background-color: #18A8F1;
+            border-radius: 12px;
+            padding: 7px;
+            padding-right: 7px;
+            padding-left: 7px;
+            margin: 5px;
+            color: white;
+            box-shadow: 2px 2px 2px #d0ccc9;
+        }
+        .login-bar{
+            width: 500px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .nav-bar{
-            width:100%;
+            width:80%;
             height: 20px;
             text-align: center;
             display: flex;
             align-items: center;
+            justify-content: space-around;
         }
         .menu-list{
-            width: 50%;
+            width: 80%;
             display: flex;
             align-items: center;
-            margin-left:350px;
             text-align: center;
+            padding-left:110px;
         }
         .menu-icon{
             width: 20px;
@@ -121,7 +141,6 @@
 
 
         .main-board{
-            background: #FEFEFE;
         }
         .ad-board{
             display: flex;
@@ -134,24 +153,10 @@
             overflow-x: hidden;
         }
         .ad-inner{
-            width: 1050px;
             display: flex;
             transition: .3c ease-out;
-            margin: 0px auto;
-        }
-        .login-btn{
-            padding-top:8px;
-            text-align: center;
-            border: 1px solid #DEDEDE;
-            border-radius: 10px;
-            background: white;
-        }
-        .slick-prev:before,
-        .slick-next:before{
-            color: #8bc7e2;
         }
         .ad-img{
-        width: 1000px;
             margin-left:10px;
             margin-right:10px;
             border-radius: 20px;
@@ -162,15 +167,15 @@
             text-align: center;
         }
         .ad-progress{
-            width: 100px;
-            height: 30px;
+            width: 130px;
+            height: 40px;
             border-radius: 20px;
             box-shadow: 2px 2px 5px #d0ccc9;
             background: #6c6661;
-            margin-bottom: 60px;
+            margin: 10px;
         }
         .ad-progress-text {
-            margin-top:5px;
+            margin-top:10px;
             display: flex;
             text-align: center;
             justify-content: center;
@@ -183,6 +188,7 @@
         }
         .main-board{
             width:100%;
+            background-image: linear-gradient(to bottom , white, #f5f4f3);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -202,22 +208,23 @@
             display: flex;
             flex-direction: column;
             align-items: start;
-            margin-bottom: 70px;
+            margin-bottom: 20px;
         }
         .project-container, .freelancer-container{
-            width: 90%;
+            width: 100%;
             height: 10%;
             display: flex;
-            align-items: space-evenly;
-            text-align: left;
+            align-items: center;
+            text-align: center;
         }
         .project-box, .freelancer-box{
+            border: 1px solid #d0ccc9;
             border-radius: 15px;
-            width: 40%;
+            box-shadow: 2px 2px 5px #d0ccc9;
+            width: 30%;
             height: 100%;
             padding: 10px;
-            display: flex;
-            flex-direction: column;
+            margin: 15px;
         }
         .reccomend-asset-container{
             width: 100%;
@@ -227,11 +234,12 @@
             text-align: center;
         }
         .asset-box{
-            background-color: #f1f3f5;
+            border: 1px solid #d0ccc9;
+            border-radius: 15px;
+            box-shadow: 2px 2px 5px #d0ccc9;
             width: 50%;
             height: 130%;
-            padding: 30px;
-            border-radius: 10px;
+            padding: 10px;
             margin: 15px;
         }
         .section-bar{
@@ -240,7 +248,9 @@
             margin-right: 5px;
         }
 
+
     </style>
+
 
     <!-- font-awesome CSS -->
     <link rel="stylesheet"
@@ -272,8 +282,16 @@
     <div class="main">
         <!-- 헤더 -->
         <div class="header">
-            <div class="upper-div" style=" width: 2000px; height: 50px; display: flex; justify-content: space-evenly;">
-                <img class="title-img" style="width: 120px;" src="/images/logos/damoa_title_image.png" onclick="location.href='/main'">
+            <div class="upper-div">
+                <div class="search-div">
+                    <!-- 로고 -->
+                    <img class="title-img" src="../images/logos/damoa_title_image.png" onclick="location.href='/main'">
+                    <!--검색창-->
+                    <form class="search-bar" action="" method="get">
+                        <input class="search-box" type="text" placeholder="  프로젝트 중개는 역시 다모아!">
+                        <button class="search-btn" type="submit">검색</button>
+                    </form>
+                </div>
                 <!-- 로그인, 회원가입 -->
                 <div style="display: flex;;">
                     {{#isLogin}} <!-- 로그인된 상태일 때 -->
@@ -288,49 +306,32 @@
             </div>
             <div class="upper-div" style="margin-top: 10px;">
                 <div class="login-bar">
-                    <img src="/images/icons/menu_icon.png" style="width:30px;margin-bottom: 10px;">
-                    {{#isFreelancer}} <!-- 프리랜서일 때 -->
-                        <p><b><a href="/project/list/1">프로젝트 찾기</a></b></p>
-                        <p class="section-bar"> | </p>
-                        <p><b><a href="/freelancer/basic-info">프리랜서 등록</a></b></p>
-                        <p class="section-bar"> | </p>
-                        <p><b><a href="/freelancer/list">프리랜서 찾기</a></b></p>
-                        <p class="section-bar"> | </p>
-                        <p><b><a href="/reviews/home">리뷰 찾아보기</a></b></p>
-                        <p class="section-bar"> | </p>
-                        <p><b><a href="/notice/1">공지사항</a></b></p>
-                        <p class="section-bar"> | </p>
-                        <p><b><a href="/user/faq">FAQ</a></b></p>
-                    {{/isFreelancer}}
-
-                    {{#isCompany}} <!-- 기업일 때 -->
-                        <p><b><a href="/project/list/1">프로젝트 찾기</a></b></p>
-                        <p class="section-bar"> | </p>
-                        <p><b><a href="/project/save">프로젝트 등록</a></b></p>
-                        <p class="section-bar"> | </p>
-                        <p><b><a href="/freelancer/list">프리랜서 찾기</a></b></p>
-                        <p class="section-bar"> | </p>
-                        <p><b><a href="/reviews/home">리뷰 찾아보기</a></b></p>
-                        <p class="section-bar"> | </p>
-                        <p><b><a href="/notice/1">공지사항</a></b></p>
-                        <p class="section-bar"> | </p>
-                        <p><b><a href="/user/faq">FAQ</a></b></p>
-                    {{/isCompany}}
-                    {{^isLogin}}
-                        <p><b><a href="/project/list/1">프로젝트 찾기</a></b></p>
-                        <p class="section-bar"> | </p>
-                        <p><b><a href="/freelancer/list">프리랜서 찾기</a></b></p>
-                        <p class="section-bar"> | </p>
-                        <p><b><a href="/reviews/home">리뷰 찾아보기</a></b></p>
-                        <p class="section-bar"> | </p>
-                        <p><b><a href="/notice/1">공지사항</a></b></p>
-                        <p class="section-bar"> | </p>
-                        <p><b><a href="/user/faq">FAQ</a></b></p>
-                    {{/isLogin}}
+                    <p><a href="" class="link"> 로그인 </a></p>
+                    <p class="section-bar"> | </p>
+                    <p><a href="" class="link"> 회원가입 </a></p>
+                    <p class="section-bar"> | </p>
+                    <p><a href="" class="link"> 기업 서비스 </a></p>
+                    <p class="section-bar"> | </p>
+                    <p><a href="" class="link"> Our Story </a></p>
                 </div>
             </div>
-
-            <hr style=" background-color: #DEDEDE;">
+            <hr>
+            <div class="nav-bar">
+                <div class="menu-list">
+                    <img class="menu-icon" src="../images/icons/menu_icon.png">
+                    <h6><b><a href="/project/save">프로젝트 등록</a></b></h6>
+                    <p class="section-bar"> | </p>
+                    <h6><b><a href="">개발자 등록</a></b></h6>
+                    <p class="section-bar"> | </p>
+                    <h6><b><a href="/project/list/1">프로젝트 매칭</a></b></h6>
+                    <p class="section-bar"> | </p>
+                    <h6><b><a href="">개발자 찾기</a></b></h6>
+                    <p class="section-bar"> | </p>
+                    <h6><b><a href="/notice/1">공지사항</a></b></h6>
+                    <p class="section-bar"> | </p>
+                    <h6><b><a href="">마이 페이지</a></b></h6>
+                </div>
+            </div>
+            <hr class="nav-line">
         </div>
-
         <div class="main-board">

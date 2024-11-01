@@ -33,19 +33,19 @@ public class GoogleSheetsController {
         googleSheetsService.importReviews("12CoTTvlEsD-hJSbVOdwaQsMNneSVvfnMHxt3r24z6Lo", "A2:I11", UserType.FREELANCER);
     }
 
-    /*
+/*    *//*
      * 1분마다 회사 리뷰 데이터 자동으로 가져오기
-     */
+     *//*
     @Scheduled(fixedRate = 30000) // 30초(30,000 ms)마다 실행
     public void scheduleCompanyReviewImport() throws Exception {
         companyReviewImport();
     }
 
-    /*
+    *//*
      * 1분마다 프리랜서 리뷰 데이터 자동으로 가져오기
-     */
+     *//*
     @Scheduled(fixedRate = 30000)
     public void scheduleFreelancerReviewImport() throws Exception {
         freelancerReviewImport();
-    }
+    }*/
 }

@@ -2,15 +2,14 @@
 <html lang="en">
 <head>
     <style>
-        /* 기존 스타일들은 유지 */
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 30px;
         }
 
         .navbar {
-            padding: 10px;
+            padding: 15px;
             display: flex;
             justify-content: flex-end;
             position: relative;
@@ -18,14 +17,13 @@
         }
 
         .chat-icon {
-            background-color: #007BFF;
-            border: none;
+            background-color: white;
+            border: 2px solid #007BFF;
             border-radius: 50%;
-            padding: 10px;
+            padding: 0px;
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             transition: background-color 0.3s;
-            font-size: 24px;
             position: fixed;
             bottom: 100px;
             right: 20px;
@@ -36,87 +34,98 @@
             background-color: rgba(0, 123, 255, 0.8);
         }
 
-        /* 채팅 목록 헤더 */
+        .chat-icon img {
+            width: 57px;
+            height: 100%;
+        }
+
         .chat-list-header {
-            background-color: #007BFF; /* 파란색 배경 */
-            padding: 8px; /* 패딩 추가 */
-            color: white; /* 텍스트 색상 */
-            font-size: 22px; /* 글씨 크기 */
+            background-color: #007BFF;
+            padding: 12px;
+            color: white;
+            font-size: 33px;
             display: flex;
-            justify-content: space-between; /* 제목과 버튼을 양쪽으로 정렬 */
+            justify-content: space-between;
             align-items: center;
-            padding-left: 98px;
         }
 
         .chat-list-header p {
-            color: white; /* 텍스트 색상 */
-            margin: 0; /* 기본 여백 제거 */
-            text-align: left; /* 제목을 왼쪽 정렬 */
-            flex: 1; /* 제목 부분을 확장 */
+            color: white;
+            margin: 0;
+            margin-left: 140px;
+            text-align: left;
+            flex: 1;
         }
 
         .chat-list-header button {
             background: none;
             border: none;
             color: white;
-            font-size: 18px;
+            font-size: 27px;
             cursor: pointer;
         }
 
-        /* 채팅 목록 스타일 */
         #chat-list {
             display: none;
             position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 300px;
-            max-height: 500px;
-            overflow-y: auto;
+            bottom: 120px;
+            right: 30px;
+            width: 450px;
+            max-height: 750px;
+            overflow-y: scroll;
             background-color: #FFFFFF;
             border: 1px solid #007BFF;
-            border-radius: 10px;
+            border-radius: 15px;
             z-index: 999;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            padding-bottom: 10px; /* 추가된 패딩 */
+            padding-bottom: 15px;
         }
 
-        /* 채팅 목록의 각 항목 스타일 */
+        /* 스크롤바 숨기기 */
+        #chat-list::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+
+        #chat-list {
+            -ms-overflow-style: none;  /* IE, Edge 스크롤바 숨기기  */
+            scrollbar-width: none;  /* Firefox */
+        }
+
         .chat-item {
-            padding: 12px; /* 패딩을 크게 하여 터치 영역 증가 */
-            border-bottom: 1px solid #007BFF; /* 항목 사이 경계선 */
+            padding: 18px;
+            border-bottom: 1px solid #007BFF;
             cursor: pointer;
             display: flex;
             align-items: center;
             transition: background-color 0.3s ease;
-            text-align: left; /* 텍스트 왼쪽 정렬 */
+            text-align: left;
         }
 
         .chat-item p {
             margin: 0;
-            font-size: 15px; /* 텍스트 크기 조정 */
-            color: #333; /* 글자 색상 */
-            flex: 1; /* 글자 부분 확장 */
-            white-space: nowrap; /* 긴 이름 처리 */
-            overflow: hidden; /* 넘치는 텍스트 처리 */
-            text-overflow: ellipsis; /* ... 표시 */
+            font-size: 22px;
+            color: #333;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .chat-item:hover {
-            background-color: rgba(0, 123, 255, 0.2); /* 항목 선택 시 부드러운 배경 변화 */
+            background-color: rgba(0, 123, 255, 0.2);
         }
 
         .chat-item:last-child {
-            border-bottom: none; /* 마지막 항목에 경계선 제거 */
+            border-bottom: none;
         }
 
-        /* 채팅방 및 메시지 스타일들은 유지 */
         #chat-room {
             display: none;
             position: fixed;
-            bottom: 100px;
-            right: 20px;
-            width: 300px;
-            max-height: 500px;
+            bottom: 150px;
+            right: 30px;
+            width: 450px;
+            max-height: 750px;
             overflow: hidden;
             z-index: 999;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -124,13 +133,13 @@
 
         .back-bar {
             background-color: #007BFF;
-            padding: 10px;
+            padding: 15px;
             color: white;
-            font-size: 16px;
+            font-size: 24px;
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            border-radius: 8px;
+            border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
@@ -138,12 +147,12 @@
             background: none;
             border: none;
             color: white;
-            font-size: 18px;
+            font-size: 27px;
             cursor: pointer;
         }
 
         .back-bar p {
-            padding: 10px 10px;
+            padding: 15px 15px;
             margin: 0;
             color: white;
             text-align: left;
@@ -152,74 +161,150 @@
 
         #messages {
             background-color: #FFFFFF;
-            height: 350px; /* 높이를 400px에서 350px로 줄임 */
+            height: 525px;
             overflow-y: auto;
             border: 1px solid #007BFF;
-            padding: 10px;
-            margin-bottom: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
             display: flex;
             flex-direction: column-reverse;
-            border-radius: 10px;
+            border-radius: 15px;
         }
 
-         /* 메시지 스타일 */
+        /* 스크롤바 숨기기 */
+        #messages::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+
+        #messages {
+            -ms-overflow-style: none;  /* IE, Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
         .message {
-            padding: 10px; /* 메시지 안의 여백 */
-            border-radius: 10px; /* 모서리 둥글게 */
-            margin: 5px; /* 메시지 간의 여백 */
-            max-width: 70%; /* 메시지의 최대 너비 */
-            word-wrap: break-word; /* 긴 단어는 줄 바꿈 */
-        }
-
-        /* 오른쪽에 표시되는 메시지 스타일 */
-        #chat-room .message-right {
-            background-color: #007BFF; /* 메시지 배경색 */
-            color: white; /* 메시지 글자 색상 */
-            align-self: flex-end; /* 오른쪽 정렬 */
-            padding: 10px;
-            border-radius: 10px;
-            margin: 5px;
-            max-width: 70%;
+            padding: 15px;
+            border-radius: 15px;
+            margin: 8px;
+            max-width: 105%;
             word-wrap: break-word;
         }
 
-        /* 왼쪽에 표시되는 메시지 스타일 */
+        #chat-room .message-right {
+            background-color: #007BFF;
+            color: white;
+            align-self: flex-end;
+            padding: 15px;
+            border-radius: 15px;
+            margin: 8px;
+            max-width: 105%;
+            word-wrap: break-word;
+        }
+
         #chat-room .message-left {
-            background-color: #EAEAEA; /* 메시지 배경색 */
-            color: #333; /* 메시지 글자 색상 */
-            align-self: flex-start; /* 왼쪽 정렬 */
-            padding: 10px;
-            border-radius: 10px;
-            margin: 5px;
-            max-width: 70%;
+            background-color: #EAEAEA;
+            color: #333;
+            align-self: flex-start;
+            padding: 15px;
+            border-radius: 15px;
+            margin: 8px;
+            max-width: 105%;
             word-wrap: break-word;
         }
 
         .input-group {
             display: none;
             position: fixed;
-            bottom: 80px;
-            right: 20px;
+            bottom: 120px;
+            right: 30px;
             z-index: 999;
-            width: 300px;
+            width: 450px;
         }
 
         #message {
             flex: 1;
             border: 1px solid #007BFF;
-            border-radius: 5px;
-            padding: 10px;
-            padding-bottom: 10px;
-            font-size: 14px;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 21px;
             margin: 0;
+        }
+
+        .exit-button {
+            background-color: #007BFF;
+            border: none;
+            color: white;
+            font-size: 18px;
+            padding: 8px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-left: 15px;
+        }
+
+        .exit-button:hover {
+            background-color: #FF4040;
+        }
+
+        #confirm-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 375px;
+            background-color: white;
+            border: 1px solid #007BFF;
+            border-radius: 12px;
+            z-index: 1002;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .modal-content p {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .modal-buttons button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3;
+        }
+
+        #confirm-yes {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        #confirm-no {
+            background-color: #ccc;
+            color: #333;
+        }
+
+        /* 호버 효과 추가 */
+        #confirm-yes:hover {
+            background-color: #FF4040; /* 붉은 색 */
+        }
+
+        #confirm-no:hover {
+            background-color: #FF4040; /* 붉은 색 */
         }
     </style>
 </head>
 <body>
 <div class="navbar">
-    <button class="chat-icon" id="chat-icon" onclick="showChatList()">💬</button> <!-- 채팅 아이콘 -->
+    <button class="chat-icon" id="chat-icon" onclick="showChatList()">
+        <img src="/images/icons/chat-icon.png"/> <!-- 채팅 아이콘 이미지 -->
+    </button>
 </div>
-
 <div id="chat-list">
     <div class="chat-list-header">
         <p>채팅 목록</p>
@@ -227,9 +312,7 @@
     </div>
     <div id="chat-list-items">
         {{#chatList}}
-            <div class="chat-item">
-                <p>{{receiver}}님과의 채팅</p>
-            </div>
+            <div class="chat-item"></div>
         {{/chatList}}
     </div>
 </div>
@@ -245,6 +328,16 @@
     <input type="text" id="message" class="form-control" placeholder="메시지를 입력하세요..." />
 </div>
 
+<!-- 모달 창 -->
+<div id="confirm-modal" style="display: none;">
+    <div class="modal-content">
+        <p>채팅방을 나가시겠습니까?</p>
+        <div class="modal-buttons">
+            <button id="confirm-yes" onclick="deleteChatRoom()">예</button>
+            <button id="confirm-no" onclick="closeConfirmModal()">아니요</button>
+        </div>
+    </div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
@@ -302,7 +395,6 @@
         return `<div class='messages ${messagePosition}'>${message}</div>`;
     }
 
-
     // 메시지 전송 함수
     function sendMessage() {
         const messageInput = document.getElementById("message");
@@ -347,15 +439,16 @@
             return response.json(); // json으로 변환
         })
         .then(data => {
-            console.log('채팅목록 가져오기:', data);
-            
             const chatListContainer = document.getElementById('chat-list-items');
             chatListContainer.innerHTML = '';
 
             data.forEach(chat => {
                 const chatItem = document.createElement('div');
                 chatItem.className = 'chat-item';
-                chatItem.innerHTML = `<p>${chat.receiver}님과의 채팅</p>`;
+                chatItem.innerHTML = `
+                    <p>${chat.receiver}님과의 채팅</p>
+                    <button class="exit-button" onclick="openConfirmModal(event, '${chat.chatList.id}')">나가기</button>
+                `;
                 chatItem.onclick = () => {
 
                     // 목록 클릭시 클릭 된 list의 데이터 전역 변수에 저장
@@ -373,11 +466,35 @@
         .catch(error => console.error('잘못 된 접근 입니다.:', error));
     }
 
+    function fetchMessageList() {
+    console.log(`Fetching messages for roomId: ${roomId}`);
+        fetch(`/match/chat/messages?roomId=${roomId}`, {
+            method: 'GET',
+            credentials: 'include'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('메시지 목록을 조회하는데 실패했습니다.');
+            }
+            return response.json(); // json으로 변환
+        })
+        .then(messages => {
+            const messageDiv = document.getElementById('messages');
+
+            messages.forEach(chatMessage => {
+                const isSender = String(sessionUser) === (String)(chatMessage.senderId);
+                const messageBox = createMessageBox(chatMessage.message, isSender);
+                if (messageBox) {
+                    messageDiv.insertAdjacentHTML('afterBegin', messageBox);
+                }
+            });
+            messageDiv.scrollTop = messageDiv.scrollHeight;
+        })
+        .catch(error => console.error('메시지 목록 가져오는데 실패했습니다:', error));
+    }
+
     // 2. 채팅방 열기
     function openChatRoom(senderId, receiverId, receiverName) {
-
-        console.log('채팅방 열기 senderId:', senderId, 'receiverId:', receiverId, 'receiverName:', receiverName);
-
         // 채팅방 제목 업데이트
         document.getElementById('chat-header').textContent = `${receiverName}님과의 채팅`;
 
@@ -392,6 +509,9 @@
         } else {
             connect(); // 연결이 되어 있지 않다면 새로 연결
         }
+
+        // 이전 채팅 내역 가져오기
+        fetchMessageList();
     }
 
     // 채팅 목록 열기
@@ -416,6 +536,33 @@
         document.getElementById('chat-list').style.display = 'none';
         document.getElementById('chat-icon').style.display = 'block';
     };
+
+    function deleteChatRoom() {
+        const modal = document.getElementById("confirm-modal");
+        const roomId = modal.getAttribute("data-room-id");
+
+        closeConfirmModal(); // 모달 닫기
+
+        fetch(`/match/delete-chat-room?roomId=${roomId}`, {
+            method: 'delete',
+            credentials: 'include'
+        })
+        location.reload();
+    }
+
+    // 모달 열기 함수
+    function openConfirmModal(event, roomId) {
+        event.stopPropagation(); // 클릭 이벤트 전파 중단
+        const modal = document.getElementById('confirm-modal');
+        modal.style.display = 'block'; // 모달 보이기
+        modal.setAttribute("data-room-id", roomId); // deleteChatRoom(roomId) 사용
+    }
+
+    // 모달 닫기 함수
+    function closeConfirmModal() {
+        const modal = document.getElementById('confirm-modal');
+        modal.style.display = 'none'; // 모달 숨기기
+    }
 </script>
 
 </body>

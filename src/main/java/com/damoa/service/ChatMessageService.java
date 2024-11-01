@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,5 +46,10 @@ public class ChatMessageService {
 
         // 생성된 메시지를 DB에 저장
         chatMessageRepository.save(message);
+    }
+
+    // 채팅방 채팅 기록 조회 기능
+    public List<ChatMessage> findByMessageList(String roomId) {
+        return chatMessageRepository.findByRoomId(roomId);
     }
 }

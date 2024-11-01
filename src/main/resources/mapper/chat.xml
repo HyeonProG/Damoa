@@ -23,6 +23,7 @@
         WHERE sender_id = #{senderId} AND receiver_id = #{receiverId}
     </update>
 
+    <!-- 중복 채팅방 확인 쿼리 -->
     <select id="existsBySenderIdAndReceiverId">
         select count(*) > 0
         from chat_list_tb
@@ -30,4 +31,7 @@
         or (sender_id = #{receiverId} AND receiver_id = #{senderId})
     </select>
 
+    <delete id="deleteByChatList">
+        delete from chat_list_tb where id = #{id}
+    </delete>
 </mapper>

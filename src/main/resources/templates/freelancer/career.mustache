@@ -6,46 +6,45 @@
 
     <!-- 메인 콘텐츠 -->
     <div class="main-content">
-        <h1>프리랜서 경력 관리</h1>
+        <h1 class="text-center mb-4 font-weight-bold">프리랜서 경력 관리</h1>
 
-        <div class="card">
-            <div class="card-header">
-                <h5>등록된 경력</h5>
-            </div>
-            <div class="card-body">
-                <ul>
+        <div class="main-board">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title font-weight-bold">등록된 경력</h5>
                     {{#freelancerCareers}}
-                    <li>{{career}} 
+                    <ul>
+                        <li>{{career}} 
                         <!-- 경력 삭제 버튼 -->
-                        <form action="/freelancer/delete-career" method="post" style="display: inline;">
-                            <input type="hidden" name="careerId" value="{{id}}">
-                            <button type="submit">삭제</button>
-                        </form>
-                    </li>
+                            <form action="/freelancer/delete-career" method="post">
+                                <input type="hidden" name="careerId" value="{{id}}">
+                                <button type="submit">삭제</button>
+                            </form>
+                        </li>
+                    </ul>
                     {{/freelancerCareers}}
                     {{^freelancerCareers}}
-                    <li>등록된 경력이 없습니다.</li>
+                    <p class="text-muted">등록된 경력이 없습니다.</p>
                     {{/freelancerCareers}}
-                </ul>
+                </div>
             </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h5>경력 추가</h5>
-            </div>
-            <div class="card-body form-container">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                <h5 class="card-title font-weight-bold">경력 추가</h5>
+                <div class="form-container">
                 <!-- 경력 추가 폼 -->
-                <form action="/freelancer/insert-career" method="post">
-                    <label for="career">추가할 경력:</label>
-                    <select name="careerId" id="career" required>
-                        <option value="">경력 선택</option>
-                        {{#careers}}
-                        <option value="{{id}}">{{career}}</option>
-                        {{/careers}}
-                    </select>
-                    <button type="submit">추가</button>
-                </form>
+                    <form action="/freelancer/insert-career" method="post">
+                        <label for="career">추가할 경력:</label>
+                            <select name="careerId" id="career">
+                            <option value="">경력 선택</option>
+                            {{#careers}}
+                            <option value="{{id}}">{{career}}</option>
+                            {{/careers}}
+                            </select>
+                            <button type="submit">추가</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

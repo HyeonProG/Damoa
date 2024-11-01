@@ -64,4 +64,6 @@
         SELECT COUNT(*) FROM toss_history_tb
         WHERE status > 0
     </select>
+
+
 </mapper>

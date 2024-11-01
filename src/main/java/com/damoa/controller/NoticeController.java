@@ -1,9 +1,13 @@
 package com.damoa.controller;
 
 import com.damoa.repository.model.Notice;
+import com.damoa.repository.model.User;
 import com.damoa.service.NoticeService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,50 +25,40 @@ public class NoticeController {
     @Autowired
     public NoticeService noticeService;
 
-    @GetMapping("/notice/{currentPageNum}")
-    public String noticeListPage(@PathVariable(name = "currentPageNum", required = false) int currentPageNum,Model model){
+    @GetMapping("/notice")
+    public String noticeListPage(@PageableDefault(size = 5) Pageable pageable, Model model) {
+        User user = (User) session.getAttribute("principal");
         // 모든 공지 가져오기
-        List<Notice> allNotice = noticeService.getAllNotice();
-        int totalNotice = allNotice.size(); // 모든 공지 개수
-        int limit = 10; // 한 페이지 당 공지 수
-        int totalPages = totalNotice/limit; // 총 페이지 수
-        int offset; // 시작하는 게시글 id
+        Page<Notice> noticePage = noticeService.getAllNotice(pageable);
+        List<Notice> noticeList = noticePage.getContent();
 
-        if(currentPageNum == 0 || currentPageNum == 1){
-            currentPageNum = 1;
-            offset = 0;
-        } else {
-            offset = currentPageNum*limit+1;
+        int currentPage = noticePage.getNumber();
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", noticePage.getTotalPages());
+        model.addAttribute("nextPage", currentPage + 1 < noticePage.getTotalPages() ? currentPage + 1 : null);
+        model.addAttribute("prevPage", currentPage > 0 ? currentPage - 1 : null); // 이전 페이지 번호
+        model.addAttribute("pagination", noticePage);
+        model.addAttribute("noticeList", noticeList);
+
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
         }
-
-        System.out.println("limit"+limit);
-        System.out.println("offset"+offset);
-
-        // 공지 가져오기 (페이징 처리)
-        List<Notice> noticeList = noticeService.getNoticeList(limit,offset);
-
-        // 뷰에 데이터 전송
-        model.addAttribute("noticeList",noticeList);
-        model.addAttribute("totalNotice",totalNotice);
-        model.addAttribute("totalPages",totalPages);
-
-        if(currentPageNum<=1){
-            model.addAttribute("currentPageNum",2);
-            model.addAttribute("lastPage",1);
-            model.addAttribute("nextPage",3);
-        } else{
-            model.addAttribute("currentPageNum",currentPageNum);
-            model.addAttribute("lastPage",currentPageNum-1);
-            model.addAttribute("nextPage",currentPageNum+1);
-        }
+        model.addAttribute("isLogin", user);
         return "/user/user_notice_list";
     }
 
     @GetMapping("/notice/detail/{id}")
-    public String noticeDetailPage(@PathVariable("id")int id,  Model model){
+    public String noticeDetailPage(@PathVariable("id") int id, Model model) {
+        User user = (User) session.getAttribute("principal");
         Notice notice = noticeService.getNotice(id);
 
-        model.addAttribute("notice",notice);
+        model.addAttribute("notice", notice);
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+        }
+        model.addAttribute("isLogin", user);
         System.out.println(notice);
         return "/user/user_notice_detail";
     }

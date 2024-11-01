@@ -1,31 +1,31 @@
 package com.damoa.service;
 
-import java.util.HashMap;
-import java.util.List;
-
 import com.damoa.dto.TossHistoryDTO;
-import com.damoa.dto.admin.AdDTO;
-import com.damoa.repository.model.Ad;
-import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.damoa.dto.admin.FreelancerReviewDTO;
+import com.damoa.dto.user.AlertDTO;
 import com.damoa.dto.user.PrincipalDTO;
 import com.damoa.dto.user.UserSignInDTO;
 import com.damoa.dto.user.UserSignUpDTO;
 import com.damoa.handler.exception.DataDeliveryException;
 import com.damoa.repository.interfaces.FreelancerRepository;
 import com.damoa.repository.interfaces.UserRepository;
-import com.damoa.repository.model.Freelancer;
 import com.damoa.repository.model.User;
-
 import lombok.RequiredArgsConstructor;
 import net.nurigo.java_sdk.api.Message;
 import net.nurigo.java_sdk.exceptions.CoolsmsException;
+import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -203,9 +203,21 @@ public class UserService {
         return userRepository.findUserById(userId);
     }
 
-    public List<TossHistoryDTO> findPayHistoryById(int userId) {
-        List<TossHistoryDTO> dto = userRepository.findPaymentDetailByUserId(userId);
-        return dto;
+    // 프리랜서 목록 조회
+    public List<User> getAllFreelancers() {
+        return userRepository.findAllFreelancers();
+    }
+
+    // 기업 목록 조회
+    public List<User> getAllCompanies() {
+        return userRepository.findAllCompanies();
+    }
+
+    public Page<TossHistoryDTO> findPayHistoryById(int userId, Pageable pageable) {
+        int offset = pageable.getPageNumber() * pageable.getPageSize();
+        List<TossHistoryDTO> list = userRepository.findPaymentDetailByUserId(offset, pageable.getPageSize(), userId);
+        int totalCount = userRepository.countMyPayment(userId);
+        return new PageImpl<>(list, pageable, totalCount);
     }
 
     @Transactional
@@ -217,4 +229,44 @@ public class UserService {
         List<AdDTO> dto = userRepository.findAd();
         return dto;
     }
+    /*
+        유저 포인트 확인
+     */
+    public int checkPoint(int id) {
+        int point = userRepository.checkPoint(id);
+        return point;
+    }
+
+    /*
+        alert_tb에 인설트
+     */
+    @Transactional
+    public void insertAlert(int paymentId, int userId) {
+        userRepository.insertByPaymentIdAndUserId(paymentId, userId);
+    }
+
+    /**
+     * 방금 환불 요청한 유저 어드민 알림창에 띄워주기 위해서 AlertDTO찾는 메서드
+     *
+     * @return
+     */
+    public List<AlertDTO> findAlertList() {
+        List<AlertDTO> list = userRepository.findRefundRequest();
+
+        return list;
+    }
+
+    public int countAlert() {
+        int count = userRepository.countRequestRefund();
+        return count;
+    }
+    @Transactional
+    public int updateUserPoints(int id) {
+        if (userRepository.findById(id).getPoint() < 10000) {
+            throw new DataDeliveryException("포인트가 부족합니다.", HttpStatus.FORBIDDEN);
+        } else {
+            return userRepository.updateUserPoints(id);
+        }
+    }
+
 }

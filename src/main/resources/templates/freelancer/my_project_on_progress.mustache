@@ -41,6 +41,7 @@
         border-radius: 5px;
         background-color: #f9f9f9;
         font-size: 16px;
+        transition: background-color 0.3s;
     }
 
     .sidebar a:hover {
@@ -60,31 +61,35 @@
     .content h1 {
         font-size: 26px;
         margin-bottom: 20px;
+        text-align: center;
+        font-weight: bold;
     }
 
-    .user-info, .edit-info {
+    .project-list {
+        margin-bottom: 30px;
+    }
+
+    .project-item {
         background-color: #fff;
-        padding: 20px;
         border-radius: 10px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-    }
-
-    .user-info p, .edit-info p {
-        font-size: 16px;
-        margin: 10px 0;
-    }
-
-    .edit-info {
-        display: none;
-    }
-
-    .edit-info input {
-        width: 100%;
-        padding: 10px;
+        padding: 20px;
         margin-bottom: 10px;
-        border-radius: 5px;
-        border: 1px solid #ddd;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .project-item:hover {
+        background-color: #f1f1f1;
+    }
+
+    .project-item h6 {
+        font-size: 20px;
+        margin: 0;
+        color: #333;
     }
 
     .actions {
@@ -93,82 +98,77 @@
         margin-top: 20px;
     }
 
-    .btn {
+    button {
         padding: 10px 20px;
         border-radius: 5px;
-        text-decoration: none;
         cursor: pointer;
+        border: none;
+        color: white;
+        transition: background-color 0.3s;
+        font-size: 16px;
     }
 
     .btn-primary {
         background-color: #007bff;
-        color: white;
-        border: none;
-        transition: background-color 0.3s;
     }
 
     .btn-primary:hover {
         background-color: #0056b3;
     }
 
-    .btn-secondary {
-        background-color: #6c757d;
+    .btn-detail {
+        background-color: #007bff; /* 버튼 색상 변경 */
+    }
+
+    .btn-detail:hover {
+        background-color: #2779cf;
         color: white;
-        border: none;
-        transition: background-color 0.3s;
     }
 
-    .btn-secondary:hover {
-        background-color: #5a6268;
+    .form-container {
+        margin-top: 20px;
     }
 
-    .btn-danger {
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        transition: background-color 0.3s;
+    .form-container select,
+    .form-container button {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        margin-bottom: 10px;
+        font-size: 16px;
     }
 
-    .btn-danger:hover {
-        background-color: #c82333;
+    .text-muted {
+        color: #888;
+        text-align: center;
     }
 
-    /* a.purchase--btn에 버튼 스타일 적용 */
-.purchase--btn {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #007BFF;
-    text-decoration: none;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-    .purchase--btn:hover {
-        background-color: #0056b3;
+    .mb-4 {
+        margin-bottom: 1.5rem;
     }
 
-    .purchase--btn:active {
-        background-color: #004085;
+    .mb-3 {
+        margin-bottom: 1rem;
     }
 
+    .shadow-sm {
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
 </style>
+
 <div class="container">
     <!-- 사이드바 - 프리랜서 전용 메뉴 -->
     {{> layout/mypage}}
     <!-- 메인 컨텐츠 -->
     <div class="content">
-        <h1>프로젝트 목록</h1>
-
         <div>
-            <h4>진행 중인 프로젝트</h4>
+            <h4>신청 중인 프로젝트</h4>
+            <hr>
             {{#projectList}}
-                <div onclick="project/my-project/detail/{{id}}">
-                    <h6>{{projectName}}</h6>
-                    <button onclick="location.href='/project/detail/{{id}}'">자세한 정보 보러가기</button>
+                <div class="project-item" onclick="location.href='/project/detail/{{id}}'">
+                    <h6 style="display: inline;">{{projectName}}</h6>
+                    <button onclick="location.href='/project/detail/{{id}}'" class="btn-detail">상세 페이지</button>
                 </div>
             {{/projectList}}
         </div>
@@ -187,14 +187,13 @@
     });
 
     document.querySelectorAll('.purchase--btn').forEach(function(btn) {
-    btn.addEventListener('click', function(event) {
-        event.preventDefault();
-        if (confirm("포인트를 충전하시겠습니까?")) {
-            newWindow = window.open('/toss/store', '_blank', 'width=650,height=650');
-        }
+        btn.addEventListener('click', function(event) {
+            event.preventDefault();
+            if (confirm("포인트를 충전하시겠습니까?")) {
+                newWindow = window.open('/toss/store', '_blank', 'width=650,height=650');
+            }
+        });
     });
-});
-
 </script>
 
 {{> layout/footer }}

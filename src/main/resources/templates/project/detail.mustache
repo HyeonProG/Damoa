@@ -99,20 +99,10 @@
             <div style="margin-top:40px;">
                 <button class="btn btn-primary" id="chatRequestButton" style="width: 200px; margin: 5px;">1:1 채팅하기</button>
                 <button class="btn btn-secondary" style="width: 200px; margin: 5px;" onclick="location.href='/project/list/1'">목록으로 돌아가기</button>
-                <div class="owner-var make-wait-btn">
-                    <button class="btn btn-secondary " onclick="makeNewWaitList()" value={{project}}>매칭 신청하기</button>
+                <div class="owner-var" id="make-wait-btn" style="display: block;">
+                    <button type="button" id="register-matching" class="btn btn-secondary" onclick="makeNewWaitList()">매칭 신청하기</button>
                 </div>
-                <div id="finished-project" style="display: none;" class="wait-list">
-                    <form action="/project/finish-project" method="POST">
-                        <h2 >공고 마감하기</h2>
-                        {{#waitList}}
-                            <input type="hidden" name="projectId" value={{projectId}}>
-                            <input type="hidden" name="userId" value={{userId}}>
-                            <input type="hidden" name="freelancerId" value={{freelancerId}}>
-                            <input type="radio" name="freelancerName" value={{freelancerName}}>{{freelancerName}}</input>
-                        {{/waitList}}
-                        <button type="submit" class="submit-finish-btn">제출하기</button>
-                    </form>
+                <div id="finished-project" class="wait-list">
                 </div>
             </div>
         </div>
@@ -153,76 +143,107 @@
 
     var projectManage = document.createElement('div');
     projectManage.innerHTML = `
-        <button class="btn btn-primary" onclick="location.href='/project/update/{id}'">수정</button>
         <button class="btn btn-primary" onclick="deleteProject()">삭제</button>
         <button class="btn btn-primary" onclick="showWaitList()">공고 마감</button>
     `;
-    var buttonContainer = document.querySelector('.owner-var');
-    var finishButton = document.querySelector('.finished-project');
-    var waitBtn = document.querySelector('.make-wait-btn');
 
-     function showOwnerMenu(sessionId, companyId) {
-        if (sessionId !== "null" && companyId == sessionId) {
-        console.log("으아악");
-            buttonContainer.appendChild(projectManage);
-            finishButton.style.display = 'block';
-            waitBtn.style.display = 'none'; // Hide the wait button if the user is the owner
-        } else {
-            waitBtn.style.display = 'block'; // Show the wait button for other users
-        }
-    }
-    showOwnerMenu(sessionId,companyId);
+    var selectMatching = document.createElement('div');
+    selectMatching.innerHTML = `
+         <form action="/project/finish-project" method="POST">
+                        <h2 >공고 마감하기</h2>
+                         {{#waitList}}
+                        <input type="hidden" name="projectId" value={{projectId}}>
+                        <input type="hidden" name="userId" value={{userId}}>
+                        <input type="hidden" name="freelancerId" value={{freelancerId}}>
+                            <input type="radio" name="freelancerName" value={{freelancerName}}>{{freelancerName}}</input>
+    {{/waitList}}
+    <button type="submit" class="submit-finish-btn">제출하기</button>
+</form>
+`;
 
-    function sendWaitMake(userId, projectId) {
-    fetch('/project/make-new-wait', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userId: userId, projectId: projectId }),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json(); // JSON 형식으로 변환
-    })
-    .then(data => {
-        if (data.result === 0) {
-            alert('대기 신청이 완료되었습니다.');
-        } else if (data.result === 1) {
-            alert('이미 신청한 프로젝트입니다.');
-        }
-    })
-    .catch(error => {
-        console.error('신청 중 오류가 발생했습니다:', error);
-        alert('신청 중 오류가 발생했습니다: ' + error.message);
-    });
+var buttonContainer = document.querySelector('#register-matching');
+var finishButton = document.querySelector('#finished-project'); // 올바른 선택자인지 확인
+var waitBtn = document.querySelector('#make-wait-btn');
+
+function showOwnerMenu(sessionId, companyId) {
+if (sessionId !== "null" && companyId == sessionId) {
+console.log("소유자 메뉴 표시");
+finishButton.appendChild(projectManage);
+} else {
+waitBtn.style.display = 'block';
+}
+}
+showOwnerMenu(sessionId,companyId);
+
+function sendWaitMake(userId, projectId) {
+fetch('/project/make-new-wait', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json',
+},
+body: JSON.stringify({ userId: userId, projectId: projectId }),
+})
+.then(response => {
+if (!response.ok) {
+throw new Error('Network response was not ok');
+}
+return response.json(); // JSON 형식으로 변환
+})
+.then(data => {
+if (data.result === 0) {
+alert('대기 신청이 완료되었습니다.');
+} else if (data.result === 1) {
+alert('이미 신청한 프로젝트입니다.');
+}
+})
+.catch(error => {
+console.error('신청 중 오류가 발생했습니다:', error);
+alert('신청 중 오류가 발생했습니다: ' + error.message);
+});
 }
 
 
-    function makeNewWaitList(){
-        if (sessionId === "null") {
-            alert("로그인 후 신청가능합니다.");
-            return;
-        } else {
-            const confirmation = confirm("매칭 신청을 하시겠습니까?");
-                if (confirmation) {
-                sendWaitMake(sessionId, userId);
-            } else {
-                console.log("신청이 취소되었습니다.");
-            }
-        }
-    }
+function makeNewWaitList(){
+if (sessionId === "null") {
+alert("로그인 후 신청가능합니다.");
+return;
+} else {
+const confirmation = confirm("매칭 신청을 하시겠습니까?");
+if (confirmation) {
+sendWaitMake(sessionId, companyId);
+} else {
+console.log("신청이 취소되었습니다.");
+}
+}
+}
 
-    function showWaitList(){
-        const waitForm = document.querySelector('.wait-list');
-        const finishBtn = document.querySelector('.submit-finish-btn');
-        const waitList = "{{waitList}}";
-        waitForm.style.display = 'block';
-        if(waitList == null){
-            finishBtn.style.display = 'none';
-        }
+function showWaitList() {
+    // finishButton에서 selectMatching을 찾아서 보여주거나 숨깁니다.
+    if (finishButton.contains(selectMatching)) {
+        // 이미 있는 경우, 숨기기
+        finishButton.removeChild(selectMatching);
+    } else {
+        // 없는 경우, 추가하고 보여주기
+        finishButton.appendChild(selectMatching);
     }
+}
+
+
+    document.querySelector('.submit-finish-btn').addEventListener('click', function(event) {
+        const selectedRadio = document.querySelector('input[name="freelancerName"]:checked');
+
+        if (!selectedRadio) {
+            event.preventDefault(); // 폼 제출을 막음
+            alert("선택된 프리랜서가 없습니다."); // 경고창 띄우기
+        }
+    });
+
+    document.querySelector('.submit-finish-btn').addEventListener('click', function(event) {
+        const selectedRadio = document.querySelector('input[name="freelancerName"]:checked');
+        if (!selectedRadio) {
+            event.preventDefault(); // 폼 제출을 막음
+            alert("선택된 프리랜서가 없습니다."); // 경고창 띄우기
+        }
+    });
 </script>
 {{>layout/footer}}

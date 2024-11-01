@@ -1,7 +1,10 @@
 package com.damoa.controller;
 
 import com.damoa.dto.TossHistoryDTO;
-import com.damoa.dto.admin.*;
+import com.damoa.dto.admin.AdminSignInDTO;
+import com.damoa.dto.admin.CompanyReviewDTO;
+import com.damoa.dto.admin.FreelancerReviewDTO;
+import com.damoa.dto.admin.NoticeDTO;
 import com.damoa.dto.user.MonthlyRegisterDTO;
 import com.damoa.dto.user.MonthlyVisitorDTO;
 import com.damoa.handler.exception.DataDeliveryException;
@@ -29,7 +32,6 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -126,30 +128,22 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/management/{currentPageNum}")
-    public String UserListPage(@PathVariable(required = false) Integer currentPageNum, Model model) {
+    @GetMapping("/management")
+    public String UserListPage(@PageableDefault(size = 10) Pageable pageable, Model model) {
 
-        List<User> allUser = adminService.getAllUser();
-        int totalUser = allUser.size();
-        int limit = 10;
-        int totalPages = totalUser / limit;
-        int offset;
 
-        if (currentPageNum == null || currentPageNum <= 1) {
-            currentPageNum = 2;
-            offset = 0;
-        } else {
-            offset = limit * (currentPageNum - 1);
-        }
+        Page<User> userPage = adminService.getAllUser(pageable);
+        List<User> userList = userPage.getContent();
 
-        List<User> userList = adminService.getUserList(limit, offset);
 
+        // 페이지 정보를 계산하여 모델에 추가
+        int currentPage = userPage.getNumber(); // 현재 페이지 번호 (0부터 시작)
         model.addAttribute("userList", userList);
-        model.addAttribute("totalUser", totalUser);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("currentPageNum", currentPageNum);
-        model.addAttribute("beforePageNum", currentPageNum - 1);
-        model.addAttribute("nextPageNum", currentPageNum + 1);
+        model.addAttribute("currentPage", currentPage); // 페이지를 1부터 시작하기 위해 +1
+        model.addAttribute("totalPages", userPage.getTotalPages()); // 전체 페이지 수 추가
+        model.addAttribute("nextPage", currentPage + 1 < userPage.getTotalPages() ? currentPage + 1 : null);
+        model.addAttribute("prevPage", currentPage > 0 ? currentPage - 1 : null); // 이전 페이지 번호
+        model.addAttribute("pagination", userPage);
 
         return "/admin/admin_user_list";
     }
@@ -183,7 +177,7 @@ public class AdminController {
      * @param model
      * @return
      */
-    @GetMapping("/management")
+    @GetMapping("/Pay-Management")
     public String paymemtHistoryPage(@PageableDefault(size = 5) Pageable pageable, Model model) {
         // 결제 내역 조회
         Page<TossHistoryDTO> paymentPage = payService.findAll(pageable);
@@ -200,11 +194,12 @@ public class AdminController {
                 .map(payment -> formatPayment(payment, inputFormatter, outputFormatter, numberFormat))
                 .collect(Collectors.toList());
 
+
         // 페이지 정보를 계산하여 모델에 추가
         int currentPage = paymentPage.getNumber(); // 현재 페이지 번호 (0부터 시작)
-        model.addAttribute("currentPage", currentPage + 1); // 페이지를 1부터 시작하기 위해 +1
+        model.addAttribute("currentPage", currentPage); // 페이지를 1부터 시작하기 위해 +1
         model.addAttribute("totalPages", paymentPage.getTotalPages()); // 전체 페이지 수 추가
-        model.addAttribute("nextPage", currentPage + 1 < paymentPage.getTotalPages() ? currentPage + 1 : null); // 다음 페이지 (+2)
+        model.addAttribute("nextPage", currentPage + 1 < paymentPage.getTotalPages() ? currentPage + 1 : null);
         model.addAttribute("prevPage", currentPage > 0 ? currentPage - 1 : null); // 이전 페이지 번호
         model.addAttribute("pagination", paymentPage);
         model.addAttribute("paymentList", formattedPaymentList);
@@ -235,11 +230,11 @@ public class AdminController {
                 .map(payment -> formatPayment(payment, inputFormatter, outputFormatter, numberFormat)) // 메서드 호출
                 .collect(Collectors.toList());
 
-        // 페이지 정보를 계산하여 모델에 추가
+        /// 페이지 정보를 계산하여 모델에 추가
         int currentPage = paymentPage.getNumber(); // 현재 페이지 번호 (0부터 시작)
-        model.addAttribute("currentPage", currentPage + 1); // 페이지를 1부터 시작하기 위해 +1
+        model.addAttribute("currentPage", currentPage); // 페이지를 1부터 시작하기 위해 +1
         model.addAttribute("totalPages", paymentPage.getTotalPages()); // 전체 페이지 수 추가
-        model.addAttribute("nextPage", currentPage + 1 < paymentPage.getTotalPages() ? currentPage + 1 : null); // 다음 페이지 (+2)
+        model.addAttribute("nextPage", currentPage + 1 < paymentPage.getTotalPages() ? currentPage + 1 : null);
         model.addAttribute("prevPage", currentPage > 0 ? currentPage - 1 : null); // 이전 페이지 번호
         model.addAttribute("pagination", paymentPage);
         model.addAttribute("paymentList", formattedPaymentList);
@@ -253,79 +248,41 @@ public class AdminController {
      * @param model
      * @return
      */
-    @GetMapping("/list/company/{currentPageNum}") // URL의 {type} 부분을 변수로 처리
-    public String companyReviewList(@PathVariable(required = false) Integer currentPageNum, Model model) {
-        int pageSize = 6;
-        int offset;
+    @GetMapping("/list/company") // URL의 {type} 부분을 변수로 처리
+    public String companyReviewList(@PageableDefault(size = 5) Pageable pageable, Model model) {
 
-        int totallist = reviewService.countReview(); // 총몇개의 row 인지 확인
-        int totalPages = (int) Math.ceil((double) totallist / (double) pageSize); // 2.1 = 13 / 6
 
-        if (currentPageNum == null || currentPageNum <= 1) {
-            currentPageNum = 2;
-            offset = 0;
-        } else {
-            offset = (currentPageNum - 1) * pageSize;
-        }
-        int nextPageNum;
-        int beforePageNum;
+        Page<CompanyReviewDTO> reviewPage = reviewService.getComapanyReviews(pageable);
+        List<CompanyReviewDTO> reviewList = reviewPage.getContent();
 
-        if (currentPageNum >= totalPages - 1 && totalPages > 3) {
-            currentPageNum = totalPages - 1;
-            nextPageNum = currentPageNum + 1;
-            beforePageNum = currentPageNum - 1;
-        } else if (currentPageNum >= totalPages - 1) {
-            currentPageNum = 2;
-            nextPageNum = 3;
-            beforePageNum = 1;
-        }
-
-        List<CompanyReviewDTO> list = reviewService.getComapanyReviews(pageSize, offset);
-
-        model.addAttribute("list", list);
-        model.addAttribute("totallist", totallist);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("currentPageNum", currentPageNum);
-        model.addAttribute("beforePageNum", currentPageNum - 1);
-        model.addAttribute("nextPageNum", currentPageNum + 1);
+        int currentPage = reviewPage.getNumber();
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", reviewPage.getTotalPages()); // 전체 페이지 수 추가
+        model.addAttribute("nextPage", currentPage + 1 < reviewPage.getTotalPages() ? currentPage + 1 : null);
+        model.addAttribute("prevPage", currentPage > 0 ? currentPage - 1 : null); // 이전 페이지 번호
+        model.addAttribute("pagination", reviewPage);
+        model.addAttribute("reviewList", reviewList);
 
         return "admin/company_list";
     }
 
-    @GetMapping("/list/freelancer/{currentPageNum}")
-    public String freelancerReviewList(@PathVariable(required = false) Integer currentPageNum, Model model) {
-        int pageSize = 6;
-        int offset;
+    @GetMapping("/list/freelancer")
+    public String freelancerReviewList(@PageableDefault(size = 5) Pageable pageable, Model model) {
 
         int totallist = reviewService.countFreelancerReview(); // 총몇개의 row 인지 확인
-        int totalPages = (int) Math.ceil((double) totallist / (double) pageSize); // 2.1 = 13 / 6
 
-        if (currentPageNum == null || currentPageNum <= 1) {
-            currentPageNum = 2;
-            offset = 0;
-        } else {
-            offset = (currentPageNum - 1) * pageSize;
-        }
-        int nextPageNum;
-        int beforePageNum;
 
-        if (currentPageNum >= totalPages - 1 && totalPages > 3) {
-            currentPageNum = totalPages - 1;
-            nextPageNum = currentPageNum + 1;
-            beforePageNum = currentPageNum - 1;
-        } else if (currentPageNum >= totalPages - 1) {
-            currentPageNum = 2;
-            nextPageNum = 3;
-            beforePageNum = 1;
-        }
-        List<FreelancerReviewDTO> list = reviewService.findFreelancerReview(pageSize, offset);
 
-        model.addAttribute("list", list);
-        model.addAttribute("totallist", totallist);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("currentPageNum", currentPageNum);
-        model.addAttribute("beforePageNum", currentPageNum - 1);
-        model.addAttribute("nextPageNum", currentPageNum + 1);
+        Page<FreelancerReviewDTO> reviewPage = reviewService.findFreelancerReview(pageable);
+        List<FreelancerReviewDTO> reviewList = reviewPage.getContent();
+
+        int currentPage = reviewPage.getNumber();
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", reviewPage.getTotalPages()); // 전체 페이지 수 추가
+        model.addAttribute("nextPage", currentPage + 1 < reviewPage.getTotalPages() ? currentPage + 1 : null);
+        model.addAttribute("prevPage", currentPage > 0 ? currentPage - 1 : null); // 이전 페이지 번호
+        model.addAttribute("pagination", reviewPage);
+        model.addAttribute("reviewList", reviewList);
 
         return "admin/freelancer_list";
     }
@@ -375,7 +332,7 @@ public class AdminController {
      */
     // 결제 내역 포맷팅 메서드
     private TossHistoryDTO formatPayment(TossHistoryDTO payment, DateTimeFormatter inputFormatter,
-            DateTimeFormatter outputFormatter, NumberFormat numberFormat) {
+                                         DateTimeFormatter outputFormatter, NumberFormat numberFormat) {
         // String 타입의 requestedAt 필드 포맷팅
         String originalDateStr = payment.getRequestedAt();
         String formattedDate = OffsetDateTime.parse(originalDateStr, inputFormatter)
@@ -397,50 +354,30 @@ public class AdminController {
         return payment; // 포맷팅된 결제 내역 반환
     }
 
-    @GetMapping("/notice/{currentPageNum}")
-    public String noticeListPage(@PathVariable(name = "currentPageNum", required = false) int currentPageNum,Model model){
+    @GetMapping("/notice")
+    public String noticeListPage(@PageableDefault(size = 5) Pageable pageable, Model model) {
+
         // 모든 공지 가져오기
-        List<Notice> allNotice = noticeService.getAllNotice();
-        int totalNotice = allNotice.size(); // 모든 공지 개수
-        int limit = 10; // 한 페이지 당 공지 수
-        int totalPages = totalNotice/limit; // 총 페이지 수
-        int offset; // 시작하는 게시글 id
+        Page<NoticeDTO> notice = adminService.getAllNotice(pageable); // 모든 공지 개수
+        List<NoticeDTO> noticeList = notice.getContent();
 
-        if(currentPageNum == 0 || currentPageNum == 1){
-            currentPageNum = 1;
-            offset = 0;
-        } else {
-            offset = currentPageNum*limit+1;
-        }
+        /// 페이지 정보를 계산하여 모델에 추가
+        int currentPage = notice.getNumber(); // 현재 페이지 번호 (0부터 시작)
+        model.addAttribute("currentPage", currentPage); // 페이지를 1부터 시작하기 위해 +1
+        model.addAttribute("totalPages", notice.getTotalPages()); // 전체 페이지 수 추가
+        model.addAttribute("nextPage", currentPage + 1 < notice.getTotalPages() ? currentPage + 1 : null);
+        model.addAttribute("prevPage", currentPage > 0 ? currentPage - 1 : null); // 이전 페이지 번호
+        model.addAttribute("pagination", notice);
+        model.addAttribute("noticeList", noticeList);
 
-        System.out.println("limit"+limit);
-        System.out.println("offset"+offset);
-
-        // 공지 가져오기 (페이징 처리)
-        List<Notice> noticeList = noticeService.getNoticeList(limit,offset);
-
-        // 뷰에 데이터 전송
-        model.addAttribute("noticeList",noticeList);
-        model.addAttribute("totalNotice",totalNotice);
-        model.addAttribute("totalPages",totalPages);
-
-        if(currentPageNum<=1){
-            model.addAttribute("currentPageNum",1);
-            model.addAttribute("lastPage",1);
-            model.addAttribute("nextPage",3);
-        } else{
-            model.addAttribute("currentPageNum",currentPageNum);
-            model.addAttribute("lastPage",currentPageNum-1);
-            model.addAttribute("nextPage",currentPageNum+1);
-        }
         return "/admin/notice";
     }
 
     @GetMapping("/notice/detail/{id}")
-    public String noticeDetailPage(@PathVariable("id")int id,  Model model){
+    public String noticeDetailPage(@PathVariable("id") int id, Model model) {
         Notice notice = noticeService.getNotice(id);
 
-        model.addAttribute("notice",notice);
+        model.addAttribute("notice", notice);
         System.out.println(notice);
         return "/admin/notice_detail";
     }
@@ -513,4 +450,65 @@ public class AdminController {
 
     }
 
+
+    @GetMapping("/notice-update/{id}")
+    public String noticeUpdatePage(@PathVariable("id") int id, Model model) {
+        NoticeDTO dto = adminService.findNotice(id);
+
+        model.addAttribute("notice", dto);
+        return "/admin/admin_update_form";
+    }
+
+    @PostMapping("/notice-update/{id}")
+    public String reviseNotice(@PathVariable("id") int id, NoticeDTO dto) {
+        System.out.println(id);
+        System.out.println(dto.getTitle());
+        System.out.println(dto.getContent());
+
+        adminService.updateNotice(id, dto);
+        return "redirect:/admin/notice";
+    }
+
+    @DeleteMapping("/revision-notice/{id}")
+    public ResponseEntity<?> deleteNotice(@PathVariable("id") int id) {
+        adminService.deleteNotice(id);
+        return ResponseEntity.ok("삭제 요청이 성공적으로 처리되었습니다.");
+    }
+
+    /**
+     * 공지사항 작성하는 페이지
+     *
+     * @return
+     */
+    @GetMapping("/notice-creation")
+    public String noticeAddPage() {
+
+        return "/admin/notice_creating_form";
+    }
+
+    /**
+     * 게시글 작성 폼
+     *
+     * @param title
+     * @param content
+     * @return
+     */
+    @PostMapping("/notice-creation")
+    public String noticeAddProc(@RequestParam(name = "title") String title, @RequestParam(name = "content") String content) {
+        adminService.createNotice(title, content);
+        return "redirect:/admin/notice";
+    }
+
+    /**
+     * 공지 자세히보기 띄우기
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/noticeModal/{id}")
+    @ResponseBody
+    public NoticeDTO noticeModalPage(@PathVariable("id") int id) {
+        NoticeDTO dto = adminService.findNotice(id);
+        return dto;
+    }
 }

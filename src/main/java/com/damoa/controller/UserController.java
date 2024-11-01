@@ -11,9 +11,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.*;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +28,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,7 +43,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController extends TextWebSocketHandler {
 
     @Autowired
     private final UserService userService;
@@ -65,6 +75,27 @@ public class UserController {
     private String accessToken = "";
     private String httpHeader = "Bearer" + accessToken;
 
+
+    // 알림을 위한 로거 설정
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class);
+    // 어드민 세션 설정
+    private List<WebSocketSession> adminSessions = new ArrayList<>();
+
+    // 알람을 위한 내장 메세지
+    @Autowired
+    private final SimpMessagingTemplate simpMessagingTemplate;
+
+
+    @Override
+    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+        // 웹소켓 연결이 성공적으로 이루어졌음을 로그로 기록
+        logger.info("Socket 연결됨: ");
+
+        // 현재 연결된 웹소켓 세션을 adminSessions 리스트에 추가
+        // 이 리스트는 어드민 사용자들의 세션을 관리하는 데 사용
+        adminSessions.add(session);
+    }
+
     /**
      * 회원가입 페이지
      *
@@ -72,6 +103,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/sign-up")
+
     private String signUpPage(Model model) {
         // 카카오 로그인 URL 설정
         String kakaoLoginUrl = kakaoLoginUrl();
@@ -408,16 +440,28 @@ public class UserController {
     }
 
     @GetMapping("/faq")
-    public String qna(Model model) {
+    public String qna(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("principal");
         List<Faq> faqList = faqService.getAllQna();
         model.addAttribute("faqList", faqList);
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+        }
+        model.addAttribute("isLogin", user);
         return "user/faq_list";
     }
 
     @GetMapping("/faq-detail/{id}")
-    public String qnaDetail(@PathVariable(name = "id") int id, Model model) {
+    public String qnaDetail(@PathVariable(name = "id") int id, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("principal");
         Faq faq = faqService.getFaqById(id);
         model.addAttribute("faq", faq);
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+        }
+        model.addAttribute("isLogin", user);
         return "user/faq_detail";
     }
 
@@ -475,10 +519,19 @@ public class UserController {
         return "redirect:/user/mypage";
     }
 
+    /**
+     * 유저 마이페이지 결제내역
+     *
+     * @param principal
+     * @param pageable
+     * @param model
+     * @return
+     */
     @GetMapping("/income")
-    public String payDetailPage(@SessionAttribute(name = "principal") User principal, Model model) {
+    public String payDetailPage(@SessionAttribute(name = "principal") User principal, @PageableDefault(size = 5) Pageable pageable, Model model) {
 
-        List<TossHistoryDTO> paymentList = userService.findPayHistoryById(principal.getId());
+        Page<TossHistoryDTO> paymentPage = userService.findPayHistoryById(principal.getId(), pageable);
+        List<TossHistoryDTO> paymentList = paymentPage.getContent();
         boolean isFreelancer = principal.getUserType().equals("freelancer");
         boolean isCompany = principal.getUserType().equals("company");
 
@@ -491,7 +544,7 @@ public class UserController {
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
 
         // 각 결제 내역의 requestedAt과 amount를 포맷팅하여 새로운 리스트 생성
-        List<TossHistoryDTO> formattedPaymentList = paymentList.stream()
+        List<TossHistoryDTO> formattedPaymentList = paymentPage.stream()
                 .map(payment -> {
                     // String 타입의 requestedAt 필드 포맷팅
                     String originalDateStr = payment.getRequestedAt();
@@ -506,23 +559,69 @@ public class UserController {
                     return payment;
                 })
                 .collect(Collectors.toList());
-
+        int currentPage = paymentPage.getNumber();
+        model.addAttribute("paymentList", formattedPaymentList);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", paymentPage.getTotalPages()); // 전체 페이지 수 추가
+        model.addAttribute("nextPage", currentPage + 1 < paymentPage.getTotalPages() ? currentPage + 1 : null);
+        model.addAttribute("prevPage", currentPage > 0 ? currentPage - 1 : null); // 이전 페이지 번호
+        model.addAttribute("pagination", paymentPage);
         model.addAttribute("isFreelancer", isFreelancer);
         model.addAttribute("isCompany", isCompany);
-        model.addAttribute("paymentList", paymentList);
         model.addAttribute("isLogin", principal);
         return "user/paymentsDetail";
     }
 
     @ResponseBody
     @GetMapping("/fetchRefundStatus")
-    public ResponseEntity<Map<String, String>> updateRefundReqStatus(@RequestParam("id") int historyId) {
-        userService.updateTossHistoryStat(historyId);
+    public ResponseEntity<Map<String, String>> updateRefundReqStatus(@RequestParam("id") int paymentId, @RequestParam("userId") int userId) {
+        userService.updateTossHistoryStat(paymentId);
+        userService.insertAlert(paymentId, userId);
         Map<String, String> response = new HashMap<>();
         response.put("message", "업데이트 완료");
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 프로젝트 등록 헤더 클릭시 현재 보유중인 포인트 포멧해서 띄워주기
+     *
+     * @param principal
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/balance")
+    public String checkFormattedPoint(@SessionAttribute(name = "principal") User principal) {
+        int id = principal.getId();
+        int point = userService.checkPoint(id);
 
+        // 숫자 포맷 설정 (Locale.US를 사용하여 3자리마다 쉼표를 추가)
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+        String formattedPoint = numberFormat.format(point);
 
+        return formattedPoint;
+    }
+
+    /**
+     * 프로젝트 등록 제출했을 시 10만 포인트 이하면 제출창 띄워주기
+     *
+     * @param principal
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/point")
+    public int checkPoint(@SessionAttribute(name = "principal") User principal) {
+        int id = principal.getId();
+        int point = userService.checkPoint(id);
+
+        return point;
+    }
+
+    @ResponseBody
+    @MessageMapping("/requestRefund")
+    public void handleRefundRequest(TossHistoryDTO dto) {
+        int requestData = userService.countAlert();
+
+        // 어드민에게 환불 요청 알림
+        simpMessagingTemplate.convertAndSend("/topic/refundAlerts", requestData);
+    }
 }

@@ -51,5 +51,40 @@
         select * from ad_tb where status = 1
     </select>
 
+    <!-- 유저 카운트 -->
+    <select id="countUser" resultType="int">
+        SELECT COUNT(*) FROM user_tb
+    </select>
 
+    <!-- 어드민 공지 수정 -->
+    <update id="updateNotice">
+        UPDATE notice_tb SET title = #{title} , content = #{content} WHERE id = #{id}
+
+    </update>
+
+    <!-- 어드민 공지 삭제 -->
+    <delete id="deleteNoticeById">
+        DELETE FROM notice_tb WHERE id = #{id}
+    </delete>
+
+    <!-- 어드민 공지 추가 -->
+    <insert id="insertNotice">
+        INSERT INTO notice_tb (type, title, content, created_at) VALUES (1, #{title}, #{content}, now())
+    </insert>
+
+    <!-- 어드민 공지 아이디로 찾기 -->
+    <select id="findNoticeById">
+        SELECT * FROM notice_tb WHERE id = #{id}
+    </select>
+
+    <!-- 공지 수 카운트 -->
+    <select id="countNotice" resultType="int">
+        SELECT COUNT(*) FROM notice_tb
+    </select>
+
+    <!-- 모든 공지 리스트 보기 -->
+    <select id="viewAllNotice">
+        SELECT * FROM notice_tb
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
 </mapper>
