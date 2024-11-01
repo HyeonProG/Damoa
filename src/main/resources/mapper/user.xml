@@ -68,4 +68,11 @@
     <select id="findByUserName">
         select * from user_tb where username = #{userName}
     </select>
+
+    <update id = "updateUserPoints">
+        update user_tb
+        set point = point - 10000
+        where id = #{id}
+    </update>
+
 </mapper>

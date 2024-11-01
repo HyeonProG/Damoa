@@ -41,4 +41,7 @@ public interface UserRepository {
     void updateStatus(int id);
     // 사용자 ID로 사용자 정보 조회
     PrincipalDTO findUserById(int id);
+
+    // 프로젝트 등록 시 포인트 차감
+    public int updateUserPoints(int id);
 }
