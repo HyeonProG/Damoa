@@ -232,14 +232,43 @@ boxes.forEach((box, index) => {
     document.getElementById("progressBar").value = progress; // 프로그레스 바 업데이트
 
 
+    }
+
+    function next() {
+        if (currentBox < boxes.length - 1) {
+            currentBox++;
+            updateVisibility();
+        }
+    }
+
+    function before() {
+        if (currentBox > 0) {
+            currentBox--;
+            updateVisibility();
+        }
+    }
+
+    function validateForm() {
+    const minYears = document.getElementById('minyears').value;
+    const maxYears = document.getElementById('maxyears').value;
+
+    if (minYears && maxYears && parseInt(maxYears) < parseInt(minYears)) {
+        alert("최대 연차는 최소 연차보다 클 수 없습니다.");
+        return false; // 폼 제출 방지
+    }
+
+    // 포인트 차감 확인 메시지
+    const confirmMessage = "포인트 10만이 차감됩니다. 계속하시겠습니까?";
+    if (!confirm(confirmMessage)) {
+        return false; // 사용자가 취소하면 폼 제출 방지
+    }
+
+    return true; // 폼 제출 허용
 }
 
-function next() {
-if (currentBox < boxes.length - 1) {
-    currentBox++;
+
+
     updateVisibility();
-}
-}
 
 function before() {
 if (currentBox > 0) {
