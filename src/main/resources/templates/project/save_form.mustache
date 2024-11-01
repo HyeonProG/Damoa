@@ -252,8 +252,16 @@
         return false; // 폼 제출 방지
     }
 
+    // 포인트 차감 확인 메시지
+    const confirmMessage = "포인트 10만이 차감됩니다. 계속하시겠습니까?";
+    if (!confirm(confirmMessage)) {
+        return false; // 사용자가 취소하면 폼 제출 방지
+    }
+
     return true; // 폼 제출 허용
 }
+
+
 
     updateVisibility();
 
