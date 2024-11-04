@@ -27,7 +27,7 @@ public interface FreelancerReviewRepository {
     // GCP 프리랜서 리뷰 데이터 실행 후 MySQL로 데이터 insert
     void insertFreelancerReview(FreelancerReview freelancerReview);
 
-    List<FreelancerReviewDTO> findFreelancerReview(int limit, int offset);
+    List<FreelancerReviewDTO> findFreelancerReview(@Param("limit") int limit, @Param("offset") int offset);
 
     int countFreelancerReview();
     

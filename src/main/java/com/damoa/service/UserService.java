@@ -250,10 +250,11 @@ public class UserService {
         userRepository.updateStatus(historyId);
     }
 
-    public List<AdDTO> findAd(){
+    public List<AdDTO> findAd() {
         List<AdDTO> dto = userRepository.findAd();
         return dto;
     }
+
     /*
         유저 포인트 확인
      */
@@ -285,6 +286,7 @@ public class UserService {
         int count = userRepository.countRequestRefund();
         return count;
     }
+
     @Transactional
     public int updateUserPoints(int id) {
         if (userRepository.findById(id).getPoint() < 10000) {
@@ -293,5 +295,4 @@ public class UserService {
             return userRepository.updateUserPoints(id);
         }
     }
-
 }

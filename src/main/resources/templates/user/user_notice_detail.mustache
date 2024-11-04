@@ -7,19 +7,19 @@
         margin: 20px 0;
     }
     .notice-list-container {
-        width: 80%;
+        width: 60%;
+        min-height: 100px;
         max-height: 60vh;
         border-radius: 10px;
         background: white;
-        box-shadow: 2px 2px 5px #dee2e6;
         margin: auto; /* Center the container */
         padding: 20px; /* Added padding for better spacing */
     }
     .notice-box {
-        border: 1px solid gray;
+    box-shadow: 2px 2px 5px #dee2e6;
         border-radius: 10px;
         background: white;
-        box-shadow: 2px 2px 5px #dee2e6;
+        min-height: 20vh;
         margin: 10px 0; /* Margin between notice boxes */
         padding: 15px; /* Added padding for better spacing */
         transition: transform 0.2s; /* Smooth hover effect */
@@ -27,6 +27,15 @@
     .notice-box:hover {
         transform: scale(1.02); /* Scale effect on hover */
     }
+      /* Title Banner */
+        .sub-title {
+            background: #4ca9f4;
+            color: #ffffff;
+            font-weight: bold;
+            margin: 1em 0em;
+            padding: 15px 10px;
+            border-radius: 25px 25px 25px 0px;
+        }
 </style>
 
 <div class="notice-title">
@@ -34,13 +43,14 @@
 </div>
 
 <div class="notice-list-container">
+    <h3 class="sub-title">Notice</h3>
     {{#notice}}
         <div class="notice-box">
-            <h5>{{id}}</h5>
-            <h5>{{title}}</h5>
-            <p>{{createdAt}}</p>
-            <h5>{{content}}</h5>
-            <button onclick="location.href='/notice'">목록</button>
+            <h4><b>{{title}}</b></h4>
+            <p style="color: gray;">{{createdAt}}</p>
+            <p style="margin: 30px;">{{content}}</p>
+            <button class="btn btn-primary" onclick="location.href='/notice'">목록으로 돌아가기</button>
+
         </div>
     {{/notice}}
 </div>

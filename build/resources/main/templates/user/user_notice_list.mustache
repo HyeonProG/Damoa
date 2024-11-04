@@ -2,31 +2,77 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 <style type="text/css">
-    .notice-title {
-        text-align: center;
-        margin: 20px 0;
-    }
-    .notice-list-container {
-        width: 80%;
-        max-height: 60vh;
-        border-radius: 10px;
-        box-shadow: 2px 2px 5px #dee2e6;
-        padding: 20px;
-        margin: auto; /* Center the container */
-    }
-    .notice-box {
-        border: 1px solid #dee2e6;
-        border-radius: 10px;
-        background: #f8f9fa;
-        transition: background 0.3s;
-    }
-    .notice-box:hover {
-        background: #e9ecef;
-    }
-    .pagination {
-        justify-content: center;
-        margin: 20px 0;
-    }
+    /* Table Container */
+       .container {
+           background: #ffffff;
+           border-radius: 10px;
+           box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+           padding: 20px;
+       }
+
+       /* Table Style */
+
+       .table th {
+           background-color: #f6fafd;
+       }
+
+       .table td {
+           vertical-align: middle;
+           text-align: center;
+           background-color: white;
+       }
+
+       table {
+           width: 100%;
+           border-collapse: collapse;
+           box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+           border-radius: 10px;
+           overflow: hidden;
+       }
+
+       .table th, .table td {
+           padding: 10px;
+           text-align: left;
+       }
+
+       table thead {
+           background-color: rgba(164, 231, 255, 0.29);
+       }
+       
+       /* Title Banner */
+        .sub-title {
+            background: #4ca9f4;
+            color: #ffffff;
+            font-weight: bold;
+            margin: 1em 0em;
+            padding: 15px 10px;
+            border-radius: 25px 25px 25px 0px;
+        }
+   .notice-title {
+       text-align: center;
+       margin: 20px 0;
+   }
+   .notice-list-container {
+       width: 60%;
+       max-height: 60vh;
+       border-radius: 10px;
+       box-shadow: 2px 2px 5px #dee2e6;
+       padding: 20px;
+       margin: auto; /* Center the container */
+   }
+   .notice-box {
+       border: 1px solid #dee2e6;
+       border-radius: 10px;
+       background: #f8f9fa;
+       transition: background 0.3s;
+   }
+   .notice-box:hover {
+       background: #e9ecef;
+   }
+   .pagination {
+       justify-content: center;
+       margin: 20px 0;
+   }
 </style>
 
 <div class="notice-title">
@@ -35,6 +81,7 @@
 </div>
 
 <div class="notice-list-container">
+    <h3 class="sub-title">Notice</h3>
     <table class="table table-bordered notice-table">
         <thead>
         <tr>
@@ -84,6 +131,10 @@
                     nextPageItem.innerHTML = `<a class="page-link" href="?page={{nextPage}}">다음</a>`;
                     paginationContainer.appendChild(nextPageItem);
                 {{/nextPage}}
+
+
+
+
 
             </script>
         </ul>

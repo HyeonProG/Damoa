@@ -3,7 +3,7 @@
 <style>
     body {
         font-family: Arial, sans-serif;
-        background-color: #f8f9fa;
+        background-color: #ffffff;
         margin: 0;
         padding: 0;
     }
@@ -12,13 +12,13 @@
         display: flex;
         width: 100%;
         min-height: 100vh;
+        background-color: #f5f5f5;
         margin-top: 70px;
         padding-bottom: 20px;
     }
 
     .sidebar {
         width: 300px;
-        background-color: #ffffff;
         padding: 20px;
         border-right: 1px solid #ddd;
         box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -40,7 +40,7 @@
         border-radius: 5px;
         background-color: #f9f9f9;
         font-size: 16px;
-        transition: background-color 0.2s;
+        transition: background-color 0.3s;
     }
 
     .sidebar a:hover {
@@ -60,51 +60,32 @@
         font-size: 26px;
         margin-bottom: 20px;
         text-align: center;
-        color: #333;
     }
 
-    .completed-projects {
-        margin-top: 20px;
-    }
-
-    .project-list {
-        margin-bottom: 30px;
-    }
-
-    .project-item {
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        padding: 20px;
+    .content h4 {
+        font-size: 24px;
         margin-bottom: 10px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .project-item:hover {
-        background-color: #f1f1f1;
-    }
-
-    .project-item h6 {
-        font-size: 20px;
-        margin: 0;
         color: #333;
     }
 
-    .actions {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
-        justify-content: center;
+    .table th {
+        background-color: #f6fafd;
+        color: #333;
     }
 
-    .btn {
-        padding: 10px 20px;
-        border-radius: 5px;
+    .table td {
+        vertical-align: middle;
+    }
+
+    .btn-detail {
+        background-color: #007bff;
         color: white;
-        transition: background-color 0.3s;
         border: none;
-        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-detail:hover {
+        background-color: #0056b3;
     }
 
     .btn-primary {
@@ -114,41 +95,38 @@
     .btn-primary:hover {
         background-color: #0056b3;
     }
-
-    .btn-secondary {
-        background-color: #6c757d;
-    }
-
-    .btn-secondary:hover {
-        background-color: #5a6268;
-    }
-
-    .text-muted {
-        color: #888;
-        text-align: center;
-    }
 </style>
 
 <div class="container">
     <!-- 사이드바 - 프리랜서 전용 메뉴 -->
-    {{> layout/mypage}}
+    {{>layout/mypage}}
 
     <!-- 메인 컨텐츠 -->
     <div class="content">
-        <h1>완료된 프로젝트</h1>
-        <div class="completed-projects">
-            <div class="project-list">
-                {{#projectListForPaging2}}
-                    <div class="project-item" onclick="location.href='/project/detail/{{id}}'">
-                        <h6>{{projectName}}</h6>
-                        <div class="actions">
-                            <button class="btn btn-primary" onclick="location.href='project/my-project/detail/{{id}}'">상세보기</button>
-                            <button class="btn btn-secondary" onclick="confirmReview(event)">리뷰 남기기</button>
-                        </div>
-                    </div>
-                {{/projectListForPaging2}}
-            </div>
-        </div>
+        <h1><b>종료된 프로젝트</b></h1>
+        <hr>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>프로젝트 이름</th>
+                <th>자세한 정보 보러가기</th>
+                <th>리뷰 남기기</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#projectListForPaging2}}
+                <tr>
+                    <td>{{projectName}}</td>
+                    <td>
+                        <button class="btn btn-detail" onclick="location.href='/project/detail/{{id}}'">자세한 정보 보러가기</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="confirmReview(event)">리뷰 남기기</button>
+                    </td>
+                </tr>
+            {{/projectListForPaging2}}
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -156,7 +134,7 @@
     function confirmReview(event) {
         const userConfirmed = confirm("리뷰를 작성하시겠습니까?");
         if (userConfirmed) {
-            location.href = 'https://forms.gle/2v4qaBnYPo2esVBs6';
+            location.href = 'https://forms.gle/UnXAgmt1txfja3LFA';
         } else {
             event.stopPropagation();
         }

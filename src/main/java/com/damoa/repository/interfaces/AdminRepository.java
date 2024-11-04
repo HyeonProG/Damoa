@@ -32,7 +32,7 @@ public interface AdminRepository {
 
     public int updateAdById(int id, String title);
 
-    public List<Ad> getAdList(int pageSize, int offset);
+    public List<Ad> getAdList(@Param("pageSize") int pageSize, @Param("offset") int offset);
 
     public int countAd();
 

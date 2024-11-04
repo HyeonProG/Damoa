@@ -15,26 +15,25 @@ public class FaqService {
     @Autowired
     public FaqRepository faqRepository;
 
-    public List<Faq> getAllQna(){
+    public List<Faq> getAllQna() {
         return faqRepository.getAllQna();
     }
 
-    public Faq getFaqById(int id){
+    public Faq getFaqById(int id) {
         return faqRepository.findById(id);
     }
 
-    public int updateById(FaqUpdateDTO updateDTO){
-        return  faqRepository.updateById(updateDTO);
+    public int updateById(FaqUpdateDTO updateDTO) {
+        return faqRepository.updateById(updateDTO);
     }
 
-    public int createFaq(FaqSaveDTO dto){
+    public int createFaq(FaqSaveDTO dto) {
         return faqRepository.insert(dto.toFaq());
     }
 
-    public int delete(int id){
+    public int delete(int id) {
         return faqRepository.delete(id);
     }
-
 
 
 }
