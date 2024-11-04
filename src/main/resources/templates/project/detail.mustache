@@ -112,7 +112,7 @@
 <script>
     document.getElementById('chatRequestButton').addEventListener('click', function(){
         const sessionId = "{{#session.id}}{{session.id}}{{/session.id}}{{^session.id}}null{{/session.id}}"; // 현재 로그인 된 사용자 ID
-        const companyId = "{{project.id}}"; // 기업 ID
+        const companyId = "{{projectInfo.userId}}"; // 기업 ID
 
         if (sessionId === "null") {
             alert("로그인 후 신청가능합니다.");
