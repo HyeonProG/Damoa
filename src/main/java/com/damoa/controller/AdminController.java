@@ -1,11 +1,7 @@
 package com.damoa.controller;
 
 import com.damoa.dto.TossHistoryDTO;
-import com.damoa.dto.admin.AdDTO;
-import com.damoa.dto.admin.AdminSignInDTO;
-import com.damoa.dto.admin.CompanyReviewDTO;
-import com.damoa.dto.admin.FreelancerReviewDTO;
-import com.damoa.dto.admin.NoticeDTO;
+import com.damoa.dto.admin.*;
 import com.damoa.dto.user.MonthlyRegisterDTO;
 import com.damoa.dto.user.MonthlyVisitorDTO;
 import com.damoa.handler.exception.DataDeliveryException;
@@ -519,4 +515,34 @@ public class AdminController {
         adminService.updateAdById(id, title);
         return "redirect:/admin/ad/list";
     }
+
+    @GetMapping("/list/company/detail/{id}")
+    public String companyDetail(@PathVariable(name = "id") int id, Model model) {
+        CompanyReviewDetailDTO detail = reviewService.getCompanyDetails(id);
+        model.addAttribute("detail", detail);
+        return "admin/company_list_detail";
+    }
+
+    @PostMapping("/companyreview/delete/{id}")
+    public String deleteCompany(@PathVariable int id) {
+        reviewService.deleteCompanyReview(id);
+        return "redirect:/admin/list/company";
+    }
+
+
+    @GetMapping("/list/freelancer/detail/{id}")
+    public String freelancerDetail(@PathVariable(name = "id") int id, Model model) {
+        FreelancerReviewDetailDTO detailDTO = reviewService.getFreelancerDetails(id);
+        model.addAttribute("detailDTO", detailDTO);
+        return "admin/freelancer_list_detail";
+    }
+
+    @PostMapping("/freelancerreview/delete/{id}")
+    public String deleteFreelancer(@PathVariable int id) {
+        reviewService.deleteFreelancerReview(id);
+        return "redirect:/admin/list/freelancer";
+
+    }
+
+
 }

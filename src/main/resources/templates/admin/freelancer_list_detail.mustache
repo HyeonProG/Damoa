@@ -49,7 +49,7 @@
     </div>
 
     <div class="text-center mt-4">
-        <button class="btn btn-secondary" onclick="location.href='/admin/list/freelancer/1'">리뷰 목록으로 돌아가기</button>
+        <button class="btn btn-secondary" onclick="location.href='/admin/list/freelancer'">리뷰 목록으로 돌아가기</button>
         {{#detailDTO}}
             <form action="/admin/freelancerreview/delete/{{id}}" method="post" style="display:inline;">
                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
