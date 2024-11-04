@@ -83,7 +83,7 @@
 #### (7) 프리랜서 찾기 (목록)
 #### (8) 프리랜서 찾기 (디테일)
 #### (9) 1:1 채팅 기능
-<img src="https://github.com/user-attachments/assets/fac3ae63-7990-43d1-a30b-ebbd93dc5476" width="300" height="200" />
+![image chat1](https://github.com/user-attachments/assets/b1985f16-eaf2-4f08-a656-b7a60ed56cef)
 #### (10) 캐쉬 충전
 #### (11) 리뷰 게시판 (홈)
 #### (12) 리뷰 게시판 (목록)
