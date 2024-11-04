@@ -36,7 +36,7 @@
 |------|---|---|
 |SW|OS| Windows10 |
 ||Browser| Chrome 121.0.6167.161 |
-||Tool| IntelliJ |
+||Tool| IntelliJ | VScode |
 ||BackEnd| Java 17 & MySQL 8.0.26 & h2 & MongoDB & MyBatis |
 ||Template Engine| Mustache |
 ||Cloud| GCP |
