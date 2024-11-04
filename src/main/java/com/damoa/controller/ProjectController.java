@@ -56,6 +56,12 @@ public class ProjectController {
      */
     @GetMapping("/save")
     public String projectSavePage(Model model){
+        User user = (User) session.getAttribute("principal");
+        model.addAttribute("isLogin",user);
+        if (user != null) {
+            model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+            model.addAttribute("isCompany", user.getUserType().equals("company"));
+        }
         List<Skill> skillList = skillService.getAllSkill();
         model.addAttribute("skillList",skillList);
 
@@ -71,8 +77,6 @@ public class ProjectController {
     @PostMapping("/save")
     public String projectSaveProc(@ModelAttribute("reqDTO") ProjectSaveDTO reqDTO){
 
-        System.out.println("~~~~~~~~~~~~~");
-        System.out.println(reqDTO);
 
         
         projectService.createProject(reqDTO);
@@ -356,6 +360,9 @@ public class ProjectController {
 
         List<Project> projectListForPaging = projectService.getProjectForPagingForMyPage(user.getId(),limit,offset);
 
+        model.addAttribute("isLogin",user);
+        model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+        model.addAttribute("isCompany", user.getUserType().equals("company"));
         model.addAttribute("projectListForPaging",projectListForPaging);
         return "user/my_project";
     }
@@ -380,6 +387,10 @@ public class ProjectController {
         List<Project> projectListForPaging2 = projectService.getProjectForPagingForMyPage2(user.getId(),limit,offset);
 
         model.addAttribute("projectListForPaging2",projectListForPaging2);
+
+        model.addAttribute("isLogin",user);
+        model.addAttribute("isFreelancer", user.getUserType().equals("freelancer"));
+        model.addAttribute("isCompany", user.getUserType().equals("company"));
         return "user/my_project_finished";
     }
 

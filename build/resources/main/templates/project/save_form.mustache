@@ -22,6 +22,8 @@ border-radius: 15px;
 background: white;
 border: 1px solid #DEDEDE;
 }
+.form-group{
+margin: 20px; }
 .quitbox {
 background: red;
 }
@@ -74,16 +76,16 @@ background: red;
         </div>
         <div class="project-box second-box" id="box2">
             <h4>프로젝트 명</h4>
-            <input type="text" name="projectName" class="form-control" required>
+            <input style="margin-bottom: 20px;" type="text" name="projectName" class="form-control" required>
             <h4>프로젝트 시작 희망일</h4>
             <div class="form-group">
                 <input type="date" id="project-start" name="projectStart" class="form-control" max="2077-06-20"
                        min="2024-11-01"
-                       value="2024-11-01" required>
+                       value="2024-11-01" required style="margin-bottom: 20px;">
             </div>
 
             <h4>예상 기간</h4>
-            <div class="form-group row">
+            <div class="form-group row" style="margin-bottom: 20px;">
                 <div class="col-md-6">
                     <select name="expected-period" class="form-control" required>
                         <option value="months">개월</option>
@@ -97,20 +99,20 @@ background: red;
             </div>
 
             <h4>프로젝트 예산</h4>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 20px;">
                 <input type="radio" name="salaryType" value="월 단위" required> 월 단위
                 <input type="radio" name="salaryType" value="프로젝트 단위" required> 프로젝트 단위
             </div>
 
             <h4>근무 방식</h4>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 20px;">
                 <input type="radio" name="workingStyle" value="1" required> 원격 근무
                 <input type="radio" name="workingStyle" value="2" required> 원격,상주 모두 가능
                 <input type="radio" name="workingStyle" value="3" required> 상주 근무
             </div>
 
             <h4>추가 정보</h4>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 20px;">
                 <select name="meeting" class="form-control" required>
                     <option value="1">오프라인(협의불가능)</option>
                     <option value="2">오프라인(협의가능)</option>
@@ -119,7 +121,7 @@ background: red;
             </div>
             <div class="form-group">
                 <h4>근무 지역</h4>
-                <div class="address">
+                <div class="address" style="margin-bottom: 20px;">
                     <input type="radio" name="address" value="1" required> 서울
                     <input type="radio" name="address" value="2" required> 경기
                     <input type="radio" name="address" value="3" required> 인천
@@ -275,18 +277,6 @@ if (currentBox > 0) {
     currentBox--;
     updateVisibility();
 }
-}
-
-function validateForm() {
-const minYears = document.getElementById('minyears').value;
-const maxYears = document.getElementById('maxyears').value;
-
-if (minYears && maxYears && parseInt(maxYears) < parseInt(minYears)) {
-alert("최대 연차는 최소 연차보다 클 수 없습니다.");
-return false; // 폼 제출 방지
-}
-
-return true; // 폼 제출 허용
 }
 
 updateVisibility();

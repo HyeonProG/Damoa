@@ -62,7 +62,6 @@
                 <hr style="margin-bottom: 15px;">
                 <div class="main-title-box" style="margin-top:40px; width: 90%; margin-bottom: 50px;">
                     <h4 style="margin-bottom: 20px;"><b>기본 정보</b></h4>
-                    <h4 style="margin-bottom: 20px;"><b>{{id}}</b></h4>
                     <p style="margin:5px 0px;"><b>프로젝트 시작일 : </b> {{projectStart}} 예상 기간: {{period}}</p>
                     <p style="margin:5px 0px;"><b>지급 방식 : </b> {{workingStyle}}</p>
                     <p style="margin:5px 0px;"><b>근무 방식 : </b> {{workingStyle}}</p>
@@ -233,17 +232,22 @@ function showWaitList() {
         const selectedRadio = document.querySelector('input[name="freelancerName"]:checked');
 
         if (!selectedRadio) {
-            event.preventDefault(); // 폼 제출을 막음
-            alert("선택된 프리랜서가 없습니다."); // 경고창 띄우기
+            fetch('/project/finish-project', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ projectId: projectId }),
+        })
+        .then(response => {
+        alert('프로젝트가 마감되었습니다.');
+        })
         }
     });
 
-    document.querySelector('.submit-finish-btn').addEventListener('click', function(event) {
-        const selectedRadio = document.querySelector('input[name="freelancerName"]:checked');
-        if (!selectedRadio) {
-            event.preventDefault(); // 폼 제출을 막음
-            alert("선택된 프리랜서가 없습니다."); // 경고창 띄우기
-        }
-    });
+    function deleteProject(){
+
+    }
+
 </script>
 {{>layout/footer}}
