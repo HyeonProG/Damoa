@@ -254,8 +254,8 @@ public class UserController extends TextWebSocketHandler {
         kakaoResponseDTO = response2.getBody();
 
         // 최초 소셜 사용자인지 판별
-        PrincipalDTO principalDTO = userService.findByUserEmail(kakaoResponseDTO.getKakaoAccount().getEmail());
-        if (principalDTO == null) {
+        User user = userService.findByUserEmail(kakaoResponseDTO.getKakaoAccount().getEmail());
+        if (user == null) {
             PrintWriter out = response.getWriter();
             response.setCharacterEncoding("utf-8");
             response.setContentType("text/html; charset=utf-8");
@@ -264,7 +264,7 @@ public class UserController extends TextWebSocketHandler {
             return "/user/add_kakao_user_info"; // 추가 정보를 입력하는 페이지로 이동
         }
 
-        session.setAttribute("principal", principalDTO);
+        session.setAttribute("principal", user);
         return "redirect:/main";
     }
 
@@ -290,8 +290,8 @@ public class UserController extends TextWebSocketHandler {
         System.out.println("userSignUpDTO : " + userSignUpDTO.toString());
 
         // 추가로 이메일을 세션에 저장
-        PrincipalDTO principalDTO = userService.findByUserEmail(addKakaoUserInfoDTO.getEmail());
-        session.setAttribute("principal", principalDTO);
+        User user = userService.findByUserEmail(addKakaoUserInfoDTO.getEmail());
+        session.setAttribute("principal", user);
 
         return "redirect:/user/sign-in";
     }
@@ -333,8 +333,8 @@ public class UserController extends TextWebSocketHandler {
         googleResponseDTO = response2.getBody();
 
         // 최초 소셜 사용자인지 판별
-        PrincipalDTO principalDTO = userService.findByUserEmail(googleResponseDTO.getEmail());
-        if (principalDTO == null) {
+        User user = userService.findByUserEmail(googleResponseDTO.getEmail());
+        if (user == null) {
             PrintWriter out = response.getWriter();
             response.setCharacterEncoding("utf-8");
             response.setContentType("text/html; charset=utf-8");
@@ -343,7 +343,7 @@ public class UserController extends TextWebSocketHandler {
             return "/user/add_google_user_info"; // 추가 정보를 입력하는 페이지로 이동
         }
 
-        session.setAttribute("principal", principalDTO);
+        session.setAttribute("principal", user);
         return "redirect:/main";
 
     }
@@ -370,8 +370,8 @@ public class UserController extends TextWebSocketHandler {
         System.out.println("userSignUpDTO : " + userSignUpDTO.toString());
 
         // 추가로 이메일을 세션에 저장
-        PrincipalDTO principalDTO = userService.findByUserEmail(addGoogleUserInfoDTO.getEmail());
-        session.setAttribute("principal", principalDTO);
+        User user = userService.findByUserEmail(addGoogleUserInfoDTO.getEmail());
+        session.setAttribute("principal", user);
 
         return "redirect:/user/sign-in";
     }

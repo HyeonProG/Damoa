@@ -141,10 +141,10 @@ public class UserService {
      * @param email
      * @return
      */
-    public PrincipalDTO findByUserEmail(String email) {
+    public User findByUserEmail(String email) {
         User user = userRepository.findByEmail(email);
         if (user != null) {
-            PrincipalDTO principalDTO = PrincipalDTO.builder()
+            user = User.builder()
                     .id(user.getId())
                     .email(user.getEmail())
                     .username(user.getUsername())
@@ -152,7 +152,7 @@ public class UserService {
                     .socialType(user.getSocialType())
                     .userType(user.getUserType())
                     .build();
-            return principalDTO;
+            return user;
         }
         return null;
     }
