@@ -263,6 +263,7 @@ public class ProjectController {
         // Project -> ProjectDTO
         Project project = projectService.findProjectById(projectId);
         ProjectListDTO dto = toProjectListDTO(project);
+
         // 헤더 값 추가
         if (user != null) {
             model.addAttribute("isLogin",user);
