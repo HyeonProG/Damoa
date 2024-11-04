@@ -1,4 +1,4 @@
-# <다모아 : 1인 개발자-기업 간 양방향 매칭 플랫폼>
+![image](https://github.com/user-attachments/assets/3c70d8a7-6684-4206-acd2-81f63c2ba9f4)# <다모아 : 1인 개발자-기업 간 양방향 매칭 플랫폼>
 ### Springboot와 Mustache를 사용한 웹사이트 제작
 &nbsp; 
 &nbsp;
@@ -83,6 +83,7 @@
 #### (7) 프리랜서 찾기 (목록)
 #### (8) 프리랜서 찾기 (디테일)
 #### (9) 1:1 채팅 기능
+![image chat1](https://github.com/user-attachments/assets/fac3ae63-7990-43d1-a30b-ebbd93dc5476)
 #### (10) 캐쉬 충전
 #### (11) 리뷰 게시판 (홈)
 #### (12) 리뷰 게시판 (목록)
