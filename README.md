@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/3c70d8a7-6684-4206-acd2-81f63c2ba9f4)# <다모아 : 1인 개발자-기업 간 양방향 매칭 플랫폼>
+# <다모아 : 1인 개발자-기업 간 양방향 매칭 플랫폼>
 ### Springboot와 Mustache를 사용한 웹사이트 제작
 &nbsp; 
 &nbsp;
@@ -37,8 +37,9 @@
 |SW|OS| Windows10 |
 ||Browser| Chrome 121.0.6167.161 |
 ||Tool| IntelliJ |
-||BackEnd| Java 17 & MySQL 8.0.26 & h2 & redis & MyBatis |
+||BackEnd| Java 17 & MySQL 8.0.26 & h2 & MongoDB & MyBatis |
 ||Template Engine| Mustache |
+||Cloud| GCP |
 ||Version/Issue 관리| GitHub & GitBash |
 ||Communication| Discord & Notion |
 
@@ -51,6 +52,7 @@
 |spring-security|---|---|
 |Spring-starter-WebSocket|---|---|
 |STOMP|---|---|
+|SockJS|---|---|
 |Json|---|---|
 
 ### (2) 사용 외부 API
@@ -77,17 +79,20 @@
 #### (4) 프리랜서 등록
 #### (5) 프로젝트 찾기 (목록)
 ![Uploading Screenshot_1.jpg…]()
-
 #### (6) 프로젝트 찾기 (디테일)
 ![img1 daumcdn](https://github.com/user-attachments/assets/09fe2b11-6879-4db2-b25e-b4ebb3cb5a19)
 #### (7) 프리랜서 찾기 (목록)
 #### (8) 프리랜서 찾기 (디테일)
 #### (9) 1:1 채팅 기능
-![image chat1](https://github.com/user-attachments/assets/b1985f16-eaf2-4f08-a656-b7a60ed56cef)
+![image](https://github.com/user-attachments/assets/df6ac27c-a3f7-4527-9559-e59246eb7923)
+![image](https://github.com/user-attachments/assets/d6daad04-f52e-4429-ba98-f1b631585b3e)
 #### (10) 캐쉬 충전
 #### (11) 리뷰 게시판 (홈)
+![image](https://github.com/user-attachments/assets/8cb716d4-f0fe-46ac-861b-0b1983fb3466)
 #### (12) 리뷰 게시판 (목록)
+![image](https://github.com/user-attachments/assets/5ce1c3bb-44aa-400d-9f04-bc3030ea4f2e)
 #### (13) 리뷰 게시판 (디테일)
+![image](https://github.com/user-attachments/assets/389311ce-a717-4c77-8a06-cd8d3ffecfca)
 #### (14) FaQ 게시판 (목록)
 #### (15) FaQ 게시판 (디테일)
 #### (16) 공지사항 게시판 (목록)
