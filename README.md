@@ -35,6 +35,9 @@ https://north-marscapone-03a.notion.site/0767e38bb0be4688ab6edb9022d6de11?pvs=4
 [다모아ppt.pdf](https://github.com/user-attachments/files/17627227/ppt.pdf)
 &nbsp;
 
+## 보고서
+[다모아 프로젝트 보고서.pdf](https://github.com/user-attachments/files/17627806/default.pdf)
+
 ## 3️⃣ 서비스 환경 
 |유형|구분|서비스 배포 환경|
 |------|---|---|
@@ -73,13 +76,13 @@ https://north-marscapone-03a.notion.site/0767e38bb0be4688ab6edb9022d6de11?pvs=4
 |리뷰|구글 Sheets API|Google WorkSpace|구글 폼 리뷰 설문지 작성 및 스프레드 시트 연동|
 |챗봇|네이버 클로바 AI|Clova Developers Console|네이버 클로바 기반 AI 챗봇|
 
-## 4️⃣ 사이트맵
+## 5️⃣ 사이트맵
 ![007](https://github.com/user-attachments/assets/a0634534-2fce-439d-a58e-4ab2e2bc7ee3)
 
-## 5️⃣ ERD 다이어그램
+## 6️⃣ ERD 다이어그램
 ![006](https://github.com/user-attachments/assets/c360ff1e-4ca2-4cd6-92c9-bb544be30bf2)
 
-## 6️⃣ 주요 기능 및 화면 소개 &nbsp;
+## 7️⃣ 주요 기능 및 화면 소개 &nbsp;
 ### 1. 사용자 (기업/프리랜서)
 #### (1) 로그인 및 회원가입 (구글, 카카오 소셜 로그인)
 ![image](https://github.com/user-attachments/assets/a0da2f5a-a279-47f6-a311-19d5eb5ec79b)
