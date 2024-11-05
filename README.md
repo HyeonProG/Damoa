@@ -38,17 +38,16 @@ https://north-marscapone-03a.notion.site/0767e38bb0be4688ab6edb9022d6de11?pvs=4
 ## 보고서
 [다모아 프로젝트 보고서.pdf](https://github.com/user-attachments/files/17627806/default.pdf)
 
-## 3️⃣ 서비스 환경 
-|유형|구분|서비스 배포 환경|
-|------|---|---|
-|SW|OS| Windows10 |
-||Browser| Chrome 121.0.6167.161 |
-||Tool| IntelliJ & VScode |
-||BackEnd| Java 17 & MySQL 8.0.26 & h2 & MongoDB & MyBatis |
-||Template Engine| Mustache |
-||Cloud| GCP |
-||Version/Issue 관리| GitHub & GitBash |
-||Communication| Discord & Notion |
+## 3️⃣ Skills
+| 구분                          |    내용                                                                                          | 비고|
+|-------------------------------|----------------------------------------------------------------------------------------------------|-------------|
+| Languages   | [![My Skills](https://skillicons.dev/icons?i=java,js,html,css&theme=light)](https://skillicons.dev)| MyBatis & Mustache |
+| FrameWork   | [![My Skills](https://skillicons.dev/icons?i=spring&theme=light)](https://skillicons.dev)|
+| DB   | [![My Skills](https://skillicons.dev/icons?i=mysql,mongodb&theme=light)](https://skillicons.dev)|h2|
+|Cloud|[![My Skills](https://skillicons.dev/icons?i=gcp&theme=light)](https://skillicons.dev)|
+|IDE|[![My Skills](https://skillicons.dev/icons?i=idea,vscode&theme=light)](https://skillicons.dev)|
+|Collaboration|[![My Skills](https://skillicons.dev/icons?i=git,github&theme=light)](https://skillicons.dev)|GitHub DeskTop|
+|Communication|[![My Skills](https://skillicons.dev/icons?i=discord,notion&theme=light)](https://skillicons.dev)|
 
 ## 4️⃣ 사용 라이브러리 및 외부 API
 ### (1) 사용 라이브러리
