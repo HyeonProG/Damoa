@@ -51,22 +51,27 @@ https://north-marscapone-03a.notion.site/0767e38bb0be4688ab6edb9022d6de11?pvs=4
 ### (1) 사용 라이브러리
 |라이브러리 명|버전|용도|
 |------|---|---|
-|Lombok|---|---|
-|devtools|---|---|
-|spring-security|---|---|
-|Spring-starter-WebSocket|---|---|
-|STOMP|---|---|
-|SockJS|---|---|
-|Json|---|---|
+|jackson|2.15.0-rc1|ObjectMapper API를 통한 JSON 객체 활용|
+|Lombok|1.18.34|어노테이션을 활용한 간단한 메서드 사용 및 편의성 증가|
+|MySQL Connecter J|8.0.21|Java와 MySQL을 연결한 효율적인 데이터베이스 사용|
+|Chart.js|4.4.4|차트를 사용한 효과적인 데이터 시각화 및 대시보드 제작|
+|Spring Security Crypto|---|SpringBoot 기반의 간편한 인증 및 보안 처리|
+|Spring-Boot-Starter-Websocket|3.0.3|전 이중 통신 및 양방향 통신을 위한 연결 지향 통신 제공|
+|DevTools|3.2.10|개발 편의성(라이브 리로드)|
+|STOMP|2.3.3|WebSocket 메시지 프로토콜|
+|SocketJS|1.1.2|WebSocket 호환성 지원|
+|JSON|2021.03.07|JSON 데이터 처리|
+|jQuery|3.6.4|AJAX 호출 및 프론트엔드 편의성|
 
 ### (2) 사용 외부 API
 |기능|API 명|제공|용도|
 |------|---|---|---|
-|로그인|카카오 로그인|-----|-----|
-|로그인|구글 로그인|-----|-----|
-|결제 및 환불|Toss 결제 / 결제 취소 API|-----|-----|
-|리뷰|구글 Drive API|-----|-----|
-|리뷰|구글 Sheets API|-----|-----|
+|로그인|카카오 로그인|Kakao Devolpers|카카오 소셜 로그인을 통한 간편 로그인 기능|
+|로그인|구글 로그인|Google Cloud|구글 소셜 로그인을 통한 간편 로그인 기능|
+|휴대폰 문자 인증|CoolSms|CoolSms|문자 인증을 통한 보안 및 인증 처리|
+|결제 및 환불|Toss 결제 / 결제 취소 API|Toss Payments|사용자 결제 승인, 환불, 취소|
+|리뷰|구글 Sheets API|Google WorkSpace|구글 폼 리뷰 설문지 작성 및 스프레드 시트 연동|
+|챗봇|네이버 클로바 AI|Clova Developers Console|네이버 클로바 기반 AI 챗봇|
 
 ## 4️⃣ 사이트맵
 ![007](https://github.com/user-attachments/assets/a0634534-2fce-439d-a58e-4ab2e2bc7ee3)
